@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Setup automático para Railway
  * Se ejecuta una vez para inicializar la base de datos
@@ -108,11 +109,9 @@ try {
     echo "<li><strong>Secretaria:</strong> secretaria1 / secret123</li>";
     echo "</ul>";
     echo "<p><a href='index.php' style='background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>🚀 Acceder al Sistema</a></p>";
-
 } catch (Exception $e) {
     echo "<p style='color: red;'>❌ Error durante el setup: " . $e->getMessage() . "</p>";
     exit(1);
 }
 
 $conn->close();
-?>
