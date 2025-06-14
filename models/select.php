@@ -18,15 +18,24 @@ try {
         while ($fila = $respuesta->fetch_assoc()) {
             array_push($resultado, $fila);
         }
-    } else {
-        $resultado = array(); // Array vacío en lugar de string
     }
 
-    echo json_encode($resultado, JSON_UNESCAPED_UNICODE);
+    // Devolver respuesta en formato esperado por JavaScript
+    $response = array(
+        'success' => true,
+        'data' => $resultado,
+        'count' => count($resultado)
+    );
+
+    echo json_encode($response, JSON_UNESCAPED_UNICODE);
 } catch (Exception $e) {
-    // En caso de error, devolver un JSON con el error
-    $error = array('error' => 'Error al consultar datos: ' . $e->getMessage());
-    echo json_encode($error, JSON_UNESCAPED_UNICODE);
+    // En caso de error, devolver respuesta con error
+    $response = array(
+        'success' => false,
+        'error' => 'Error al consultar datos: ' . $e->getMessage(),
+        'data' => array()
+    );
+    echo json_encode($response, JSON_UNESCAPED_UNICODE);
 }
 
 // Cerrar conexión

@@ -21,7 +21,7 @@ if ($isLocal) {
     define('DB_USER', 'root');
     define('DB_PASS', '');
     define('DB_NAME', 'cuarto');
-    define('ENVIRONMENT', 'development');
+    define('ENVIRONMENT', 'estudiantes');
 } else {
     // Configuración de producción - ACTUALIZAR CON TUS DATOS REALES
     define('DB_HOST', 'sql123.infinityfree.com'); // Cambiar por tu host

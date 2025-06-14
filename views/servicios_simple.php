@@ -104,9 +104,7 @@ $es_admin = isAdmin();
     // Cargar estudiantes al cargar la página
     document.addEventListener('DOMContentLoaded', function() {
         cargarEstudiantes();
-    });
-
-    // Función para cargar estudiantes
+    }); // Función para cargar estudiantes
     function cargarEstudiantes() {
         fetch('models/select.php')
             .then(response => response.json())
@@ -115,7 +113,7 @@ $es_admin = isAdmin();
                     mostrarTablaEstudiantes(data.data);
                 } else {
                     document.getElementById('tablaEstudiantes').innerHTML =
-                        '<div class="alert alert-danger">Error al cargar estudiantes: ' + data.message + '</div>';
+                        '<div class="alert alert-danger">Error al cargar estudiantes: ' + (data.error || 'Error desconocido') + '</div>';
                 }
             })
             .catch(error => {

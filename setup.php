@@ -53,25 +53,31 @@ if (mysqli_num_rows($result) > 0) {
 } else {
     echo "⚠️ La tabla 'estudiantes' no existe. Creándola...<br>";
 
-    // Crear la tabla
+    // Crear la tabla con la nueva estructura
     $sql = "CREATE TABLE estudiantes (
-        cedula VARCHAR(20) PRIMARY KEY,
-        nombre VARCHAR(100) NOT NULL,
-        apellido VARCHAR(100) NOT NULL,
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        cedula VARCHAR(10) UNIQUE NOT NULL,
+        nombres VARCHAR(100) NOT NULL,
+        apellidos VARCHAR(100) NOT NULL,
+        email VARCHAR(100),
+        telefono VARCHAR(15),
+        carrera VARCHAR(100),
+        semestre INT,
+        fecha_nacimiento DATE,
         direccion TEXT,
-        telefono VARCHAR(20),
-        fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        estado ENUM('activo', 'inactivo') DEFAULT 'activo',
+        fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         fecha_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
 
     if (mysqli_query($conn, $sql)) {
         echo "✅ Tabla 'estudiantes' creada exitosamente<br>";
 
-        // Insertar datos de ejemplo
-        $sql_data = "INSERT INTO estudiantes (cedula, nombre, apellido, direccion, telefono) VALUES
-        ('1234567890', 'Juan', 'Pérez', 'Av. Principal 123', '0987654321'),
-        ('0987654321', 'María', 'González', 'Calle Secundaria 456', '0912345678'),
-        ('1122334455', 'Carlos', 'Rodríguez', 'Barrio Centro 789', '0998877665')";
+        // Insertar datos de ejemplo con la nueva estructura
+        $sql_data = "INSERT INTO estudiantes (cedula, nombres, apellidos, email, telefono, carrera, semestre, fecha_nacimiento, direccion) VALUES
+        ('1234567890', 'Juan Carlos', 'Pérez López', 'juan.perez@uta.edu.ec', '0987654321', 'Ingeniería en Sistemas', 5, '2000-03-15', 'Ambato, Ecuador'),
+        ('0987654321', 'María Elena', 'García Morales', 'maria.garcia@uta.edu.ec', '0998765432', 'Administración de Empresas', 3, '2001-07-22', 'Quito, Ecuador'),
+        ('1122334455', 'Carlos Alberto', 'Ramírez Silva', 'carlos.ramirez@uta.edu.ec', '0976543210', 'Ingeniería Industrial', 7, '1999-11-08', 'Riobamba, Ecuador')";
 
         if (mysqli_query($conn, $sql_data)) {
             echo "✅ Datos de ejemplo insertados<br>";
@@ -89,26 +95,24 @@ if (mysqli_num_rows($result) > 0) {
     echo "✅ La tabla 'usuarios' ya existe<br>";
 } else {
     echo "⚠️ La tabla 'usuarios' no existe. Creándola...<br>";
-
     $sql_usuarios = "CREATE TABLE usuarios (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        usuario VARCHAR(50) NOT NULL UNIQUE,
+        usuario VARCHAR(50) UNIQUE NOT NULL,
         password VARCHAR(255) NOT NULL,
         tipo_usuario ENUM('administrador', 'secretaria') NOT NULL,
         nombre_completo VARCHAR(100) NOT NULL,
         email VARCHAR(100),
         estado ENUM('activo', 'inactivo') DEFAULT 'activo',
-        fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+        fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        ultima_conexion TIMESTAMP NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
 
     if (mysqli_query($conn, $sql_usuarios)) {
-        echo "✅ Tabla 'usuarios' creada exitosamente<br>";
-
-        // Insertar usuarios por defecto
+        echo "✅ Tabla 'usuarios' creada exitosamente<br>";        // Insertar usuarios por defecto
         $sql_usuarios_data = "INSERT INTO usuarios (usuario, password, tipo_usuario, nombre_completo, email) VALUES
-        ('admin', MD5('admin123'), 'administrador', 'Administrator UTA', 'admin@uta.edu.ec'),
-        ('secretaria1', MD5('secret123'), 'secretaria', 'María González', 'maria.gonzalez@uta.edu.ec'),
-        ('secretaria2', MD5('secret456'), 'secretaria', 'Ana López', 'ana.lopez@uta.edu.ec')";
+        ('admin', MD5('admin123'), 'administrador', 'Administrador del Sistema', 'admin@uta.edu.ec'),
+        ('secretaria1', MD5('secret123'), 'secretaria', 'María González', 'secretaria1@uta.edu.ec'),
+        ('secretaria2', MD5('secret123'), 'secretaria', 'Ana Martínez', 'secretaria2@uta.edu.ec')";
 
         if (mysqli_query($conn, $sql_usuarios_data)) {
             echo "✅ Usuarios de ejemplo insertados<br>";
@@ -130,6 +134,13 @@ echo "</div>";
 echo "<div style='margin-top: 20px; padding: 15px; background: #e3f2fd; border: 1px solid #2196f3;'>";
 echo "<h3>🎉 ¡Configuración Completada!</h3>";
 echo "<p>Tu base de datos local está lista. Ahora puedes:</p>";
+echo "<h4>📋 Credenciales de acceso:</h4>";
+echo "<ul>";
+echo "<li><strong>Administrador:</strong> admin / admin123</li>";
+echo "<li><strong>Secretaria:</strong> secretaria1 / secret123</li>";
+echo "<li><strong>Secretaria:</strong> secretaria2 / secret123</li>";
+echo "</ul>";
+echo "<h4>🔗 Enlaces útiles:</h4>";
 echo "<ul>";
 echo "<li><a href='index.php'>🏠 Ir al proyecto principal</a></li>";
 echo "<li><a href='debug.php'>🔍 Ver información de debug</a></li>";
