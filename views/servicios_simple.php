@@ -10,12 +10,10 @@ $es_admin = isAdmin();
 ?>
 
 <div class="container-fluid">
-    <h2 class="mb-4">🎓 Gestión de Estudiantes</h2>
-
-    <!-- Información del usuario -->
+    <h2 class="mb-4">🎓 Gestión de Estudiantes</h2> <!-- Información del usuario -->
     <div class="alert alert-info mb-4">
-        <strong>👤 Bienvenido:</strong> <?php echo htmlspecialchars($usuario_info['nombre_completo']); ?>
-        <span class="badge bg-primary"><?php echo ucfirst($usuario_info['tipo_usuario']); ?></span>
+        <strong>👤 Bienvenido:</strong> <?php echo htmlspecialchars($usuario_info['nombre_completo'] ?? 'Usuario'); ?>
+        <span class="badge bg-primary"><?php echo ucfirst($usuario_info['tipo_usuario'] ?? 'usuario'); ?></span>
     </div>
 
     <!-- Botones de acción -->

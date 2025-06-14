@@ -49,7 +49,7 @@ function getUsuarioInfo()
         return [
             'id' => $_SESSION['usuario_id'],
             'usuario' => $_SESSION['usuario_nombre'],
-            'tipo' => $_SESSION['usuario_tipo'],
+            'tipo_usuario' => $_SESSION['usuario_tipo'], // Corregido para consistencia
             'nombre_completo' => $_SESSION['nombre_completo']
         ];
     }
