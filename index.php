@@ -1,4 +1,7 @@
 <?php
+// Iniciar output buffering para prevenir problemas de headers
+ob_start();
+
 // Incluir la configuración de rutas
 require_once "config/config.php";
 
@@ -10,4 +13,12 @@ requireFile('controller', 'controller.php');
 requireFile('model', 'model.php');
 
 $mvc = new MvcController();
+
+// Manejar acciones ANTES de cargar el template
+$mvc->handleActions();
+
+// Cargar el template solo si no hubo redirecciones
 $mvc->template();
+
+// Enviar el buffer
+ob_end_flush();

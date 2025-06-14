@@ -84,9 +84,18 @@ function requireAdmin()
  */
 function logout()
 {
-    session_start();
-    session_unset();
+    // Iniciar sesión si no está iniciada
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+      session_unset();
     session_destroy();
+    
+    // Limpiar buffer si existe antes de redirigir
+    if (ob_get_level()) {
+        ob_clean();
+    }
+    
     header('Location: index.php');
     exit();
 }
@@ -104,4 +113,40 @@ function mostrarUsuarioLogueado()
         echo " <a href='logout.php' class='btn btn-sm btn-outline-danger ms-2'>Cerrar Sesión</a>";
         echo "</div>";
     }
+}
+
+/**
+ * Función de login
+ */
+function login($usuario, $password)
+{
+    // Incluir conexión a base de datos
+    require_once 'config/database.php';
+    
+    if (empty($usuario) || empty($password)) {
+        return false;
+    }
+
+    // Buscar usuario en la base de datos
+    $sql = "SELECT id, usuario, password, tipo_usuario, nombre_completo, estado FROM usuarios WHERE usuario = ? AND estado = 'activo'";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $usuario);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    if ($row = mysqli_fetch_assoc($result)) {
+        // Verificar contraseña (usando MD5 como está en la BD)
+        if (md5($password) === $row['password']) {
+            // Login exitoso - crear sesión
+            $_SESSION['usuario_id'] = $row['id'];
+            $_SESSION['usuario_nombre'] = $row['usuario'];
+            $_SESSION['usuario_tipo'] = $row['tipo_usuario'];
+            $_SESSION['nombre_completo'] = $row['nombre_completo'];
+            $_SESSION['login_time'] = time();
+            
+            return true;
+        }
+    }
+    
+    return false;
 }
