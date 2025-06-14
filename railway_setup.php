@@ -6,13 +6,19 @@
  */
 
 // Solo ejecutar en Railway o si se pasa parámetro específico
-if (!isset($_ENV['RAILWAY_ENVIRONMENT']) && !isset($_GET['force'])) {
+if (!isset($_ENV['RAILWAY_ENVIRONMENT']) && !isset($_GET['force']) && !isset($_ENV['MYSQL_HOST'])) {
     die("Este script solo se ejecuta en Railway o con parámetro force=1");
 }
 
-require_once 'config/database_railway.php';
-
 echo "<h1>🚂 Setup de Railway - UTA MVC System</h1>";
+
+// Mostrar información de diagnóstico
+echo "<h2>📊 Información del entorno:</h2>";
+echo "<p><strong>RAILWAY_ENVIRONMENT:</strong> " . ($_ENV['RAILWAY_ENVIRONMENT'] ?? 'No definida') . "</p>";
+echo "<p><strong>MYSQL_HOST:</strong> " . ($_ENV['MYSQL_HOST'] ?? $_SERVER['MYSQL_HOST'] ?? 'No definida') . "</p>";
+echo "<p><strong>MYSQL_DATABASE:</strong> " . ($_ENV['MYSQL_DATABASE'] ?? $_SERVER['MYSQL_DATABASE'] ?? 'No definida') . "</p>";
+
+require_once 'config/database_railway.php';
 
 try {
     // Crear tabla usuarios

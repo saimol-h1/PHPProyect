@@ -6,8 +6,22 @@
  */
 
 // Detectar si estamos en Railway
-if (isset($_ENV['RAILWAY_ENVIRONMENT']) || isset($_ENV['MYSQL_URL']) || isset($_SERVER['MYSQL_URL'])) {
-    // Configuración para Railway
+if (isset($_ENV['RAILWAY_ENVIRONMENT']) || isset($_ENV['MYSQL_HOST']) || isset($_SERVER['MYSQL_HOST'])) {
+    // Configuración para Railway usando variables individuales
+    $host = $_ENV['MYSQL_HOST'] ?? $_SERVER['MYSQL_HOST'];
+    $user = $_ENV['MYSQL_USER'] ?? $_SERVER['MYSQL_USER'];
+    $pass = $_ENV['MYSQL_PASSWORD'] ?? $_SERVER['MYSQL_PASSWORD'];
+    $name = $_ENV['MYSQL_DATABASE'] ?? $_SERVER['MYSQL_DATABASE'];
+    $port = $_ENV['MYSQL_PORT'] ?? $_SERVER['MYSQL_PORT'] ?? 3306;
+
+    define('DB_HOST', $host);
+    define('DB_USER', $user);
+    define('DB_PASS', $pass);
+    define('DB_NAME', $name);
+    define('DB_PORT', $port);
+    define('ENVIRONMENT', 'production');
+} elseif (isset($_ENV['MYSQL_URL']) || isset($_SERVER['MYSQL_URL'])) {
+    // Fallback: Railway con MYSQL_URL
     $mysql_url = $_ENV['MYSQL_URL'] ?? $_SERVER['MYSQL_URL'];
     $url_parts = parse_url($mysql_url);
 

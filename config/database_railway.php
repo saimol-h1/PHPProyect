@@ -6,8 +6,15 @@
  */
 
 // Configuración para Railway (usa variables de entorno)
-if (isset($_ENV['MYSQL_URL']) || isset($_SERVER['MYSQL_URL'])) {
-    // Railway proporciona MYSQL_URL
+if (isset($_ENV['MYSQL_HOST']) || isset($_SERVER['MYSQL_HOST'])) {
+    // Railway proporciona variables individuales
+    $host = $_ENV['MYSQL_HOST'] ?? $_SERVER['MYSQL_HOST'];
+    $port = $_ENV['MYSQL_PORT'] ?? $_SERVER['MYSQL_PORT'] ?? 3306;
+    $database = $_ENV['MYSQL_DATABASE'] ?? $_SERVER['MYSQL_DATABASE'];
+    $username = $_ENV['MYSQL_USER'] ?? $_SERVER['MYSQL_USER'];
+    $password = $_ENV['MYSQL_PASSWORD'] ?? $_SERVER['MYSQL_PASSWORD'];
+} elseif (isset($_ENV['MYSQL_URL']) || isset($_SERVER['MYSQL_URL'])) {
+    // Fallback: Railway proporciona MYSQL_URL
     $mysql_url = $_ENV['MYSQL_URL'] ?? $_SERVER['MYSQL_URL'];
     $url_parts = parse_url($mysql_url);
 
