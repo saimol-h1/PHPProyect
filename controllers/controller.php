@@ -41,7 +41,7 @@ class MvcController
         if (isset($_POST['usuario']) && isset($_POST['password'])) {
             $usuario = $_POST['usuario'];
             $password = $_POST['password'];
-              if (login($usuario, $password)) {
+            if (login($usuario, $password)) {
                 // Login exitoso, redirigir al inicio
                 ob_clean(); // Limpiar buffer antes de redirigir
                 header('Location: index.php?action=inicio&login=success');
@@ -59,7 +59,8 @@ class MvcController
     {
         // Las funciones de auth.php ya están disponibles desde index.php
         includeFile('view', 'template.php');
-    }    public function EnlacesPaginasController()
+    }
+    public function EnlacesPaginasController()
     {
         // La acción ya fue determinada en handleActions()
         $enlacesPagina = new EnlacesPagina();

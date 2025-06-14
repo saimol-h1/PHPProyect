@@ -88,14 +88,14 @@ function logout()
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
-      session_unset();
+    session_unset();
     session_destroy();
-    
+
     // Limpiar buffer si existe antes de redirigir
     if (ob_get_level()) {
         ob_clean();
     }
-    
+
     header('Location: index.php');
     exit();
 }
@@ -122,7 +122,7 @@ function login($usuario, $password)
 {
     // Incluir conexión a base de datos
     require_once 'config/database.php';
-    
+
     if (empty($usuario) || empty($password)) {
         return false;
     }
@@ -143,10 +143,10 @@ function login($usuario, $password)
             $_SESSION['usuario_tipo'] = $row['tipo_usuario'];
             $_SESSION['nombre_completo'] = $row['nombre_completo'];
             $_SESSION['login_time'] = time();
-            
+
             return true;
         }
     }
-    
+
     return false;
 }
