@@ -6,7 +6,18 @@
 
 // Obtener la ruta base del proyecto
 define('BASE_PATH', dirname(__DIR__));
-define('BASE_URL', dirname($_SERVER['SCRIPT_NAME']));
+
+// Detectar si estamos en Railway o entorno de producción
+if (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'railway.app') !== false) {
+    // En Railway, usar ruta raíz
+    define('BASE_URL', '');
+    define('ROOT_URL', '/');
+} else {
+    // Desarrollo local
+    $scriptDir = dirname($_SERVER['SCRIPT_NAME']);
+    define('BASE_URL', $scriptDir);
+    define('ROOT_URL', $scriptDir . '/');
+}
 
 // Definir las rutas principales del proyecto
 define('CONTROLLERS_PATH', BASE_PATH . '/controllers/');
@@ -17,10 +28,9 @@ define('JS_PATH', BASE_PATH . '/jquery/');
 define('IMG_PATH', BASE_PATH . '/img/');
 
 // URLs para el frontend
-define('CSS_URL', BASE_URL . '/css/');
-define('JS_URL', BASE_URL . '/jquery/');
-define('IMG_URL', BASE_URL . '/img/');
-define('ROOT_URL', BASE_URL . '/');
+define('CSS_URL', ROOT_URL . 'css/');
+define('JS_URL', ROOT_URL . 'jquery/');
+define('IMG_URL', ROOT_URL . 'img/');
 
 /**
  * Función para generar rutas relativas seguras
@@ -60,6 +70,10 @@ function getUrl($type, $file = '')
         case 'model':
             return ROOT_URL . 'models/' . $file;
         case 'root':
+            // Si el archivo ya contiene index.php, usar tal como está
+            if (strpos($file, 'index.php') !== false) {
+                return ROOT_URL . $file;
+            }
             return ROOT_URL . $file;
         default:
             return ROOT_URL . $file;
@@ -90,4 +104,15 @@ function requireFile($type, $file)
     } else {
         die("Error: No se encontró el archivo requerido $path");
     }
+}
+
+/**
+ * Función específica para generar URLs de acciones del MVC
+ */
+function getActionUrl($action = '')
+{
+    if (empty($action)) {
+        return ROOT_URL . 'index.php';
+    }
+    return ROOT_URL . 'index.php?action=' . $action;
 }

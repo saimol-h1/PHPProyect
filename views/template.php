@@ -35,24 +35,23 @@ require_once 'config/auth.php';
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?php echo getUrl('root', 'index.php?action=inicio'); ?>">
+                <ul class="navbar-nav me-auto">                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo getActionUrl('inicio'); ?>">
                             <i class="fas fa-home"></i> Inicio
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?php echo getUrl('root', 'index.php?action=nosotros'); ?>">
+                        <a class="nav-link" href="<?php echo getActionUrl('nosotros'); ?>">
                             <i class="fas fa-users"></i> Nosotros
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?php echo getUrl('root', 'index.php?action=servicios'); ?>">
+                        <a class="nav-link" href="<?php echo getActionUrl('servicios'); ?>">
                             <i class="fas fa-cogs"></i> Servicios
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?php echo getUrl('root', 'index.php?action=contactanos'); ?>">
+                        <a class="nav-link" href="<?php echo getActionUrl('contactanos'); ?>">
                             <i class="fas fa-envelope"></i> Contáctanos
                         </a>
                     </li>
@@ -69,7 +68,7 @@ require_once 'config/auth.php';
                 <?php else: ?>
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="<?php echo getUrl('root', 'index.php?action=login'); ?>">
+                            <a class="nav-link" href="<?php echo getActionUrl('login'); ?>">
                                 <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
                             </a>
                         </li>
