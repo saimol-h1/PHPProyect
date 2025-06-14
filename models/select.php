@@ -9,8 +9,8 @@ header('Access-Control-Allow-Headers: Content-Type');
 require_once '../config/database.php';
 
 try {
-    // Primero verificar la estructura de la tabla
-    $sql = "SELECT * FROM estudiantes ORDER BY id ASC";
+    // Usar las columnas reales de la tabla
+    $sql = "SELECT * FROM estudiantes ORDER BY nombres ASC";
     $respuesta = $conn->query($sql);
     $resultado = array();
 

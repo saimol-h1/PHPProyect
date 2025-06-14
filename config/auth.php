@@ -107,7 +107,7 @@ function mostrarUsuarioLogueado()
 {
     if (isLoggedIn()) {
         $info = getUsuarioInfo();
-        $tipoCapitalizado = ucfirst($info['tipo']);
+        $tipoCapitalizado = ucfirst($info['tipo_usuario'] ?? 'usuario');
         echo "<div class='usuario-logueado alert alert-info mb-0'>";
         echo "<i class='fas fa-user'></i> Bienvenido {$tipoCapitalizado}: <strong>{$info['nombre_completo']}</strong>";
         echo " <a href='logout.php' class='btn btn-sm btn-outline-danger ms-2'>Cerrar Sesión</a>";

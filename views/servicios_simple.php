@@ -38,15 +38,14 @@ $es_admin = isAdmin();
             </div>
             <div class="card-body">
                 <form id="formEstudiante">
-                    <input type="hidden" id="estudianteId" name="id">
-                    <div class="row">
+                    <input type="hidden" id="estudianteId" name="id">                    <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="nombre" class="form-label">Nombre:</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" required>
+                            <label for="nombres" class="form-label">Nombres:</label>
+                            <input type="text" class="form-control" id="nombres" name="nombres" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="apellido" class="form-label">Apellido:</label>
-                            <input type="text" class="form-control" id="apellido" name="apellido" required>
+                            <label for="apellidos" class="form-label">Apellidos:</label>
+                            <input type="text" class="form-control" id="apellidos" name="apellidos" required>
                         </div>
                     </div>
                     <div class="row">
@@ -135,11 +134,10 @@ $es_admin = isAdmin();
             html = `
             <div class="table-responsive">
                 <table class="table table-striped table-hover">
-                    <thead class="table-dark">
-                        <tr>
+                    <thead class="table-dark">                        <tr>
                             <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Apellido</th>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
                             <th>Cédula</th>
                             <th>Carrera</th>
                             <th>Email</th>
@@ -150,11 +148,10 @@ $es_admin = isAdmin();
         `;
 
             estudiantes.forEach(estudiante => {
-                html += `
-                <tr>
+                html += `                <tr>
                     <td>${estudiante.id}</td>
-                    <td>${estudiante.nombre}</td>
-                    <td>${estudiante.apellido}</td>
+                    <td>${estudiante.nombres}</td>
+                    <td>${estudiante.apellidos}</td>
                     <td>${estudiante.cedula}</td>
                     <td>${estudiante.carrera}</td>
                     <td>${estudiante.email}</td>
