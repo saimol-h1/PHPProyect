@@ -38,7 +38,8 @@ $es_admin = isAdmin();
             </div>
             <div class="card-body">
                 <form id="formEstudiante">
-                    <input type="hidden" id="estudianteId" name="id">                    <div class="row">
+                    <input type="hidden" id="estudianteId" name="id">
+                    <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="nombres" class="form-label">Nombres:</label>
                             <input type="text" class="form-control" id="nombres" name="nombres" required>
