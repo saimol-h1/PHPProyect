@@ -20,7 +20,7 @@ class MvcController
         // Debug temporal
         if (isset($_GET['debug'])) {
             echo "<!-- DEBUG handleActions: action=" . ($_GET['action'] ?? 'no_action') . ", enlacesController=" . $this->enlacesController . " -->";
-        }// Verificar autenticación ANTES de procesar la vista
+        } // Verificar autenticación ANTES de procesar la vista
         if ($this->enlacesController === "servicios") {
             // Si no está logueado, redirigir al login
             if (!isLoggedIn()) {
