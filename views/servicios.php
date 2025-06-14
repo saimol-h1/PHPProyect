@@ -1,162 +1,333 @@
+<?php
+// Incluir sistema de autenticación
+require_once 'config/auth.php';
+
+// Verificar que el usuario esté logueado
+requireLogin();
+
+$usuario_info = getUsuarioInfo();
+$es_admin = isAdmin();
+?>
+
 <!DOCTYPE html>
-<html>
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
-    <title>UTA Cuarto</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios - Gestión de Estudiantes</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
-    <h2>Manejo de Estudiantes</h2>
+    <div class="container-fluid mt-3">
+        <!-- Información del usuario logueado -->
+        <?php mostrarUsuarioLogueado(); ?>
 
-    <table id="dg" title="My Users" class="easyui-datagrid" style="width:700px;height:250px"
-        url="models/select.php"
-        toolbar="#toolbar" pagination="true"
-        rownumbers="true" fitColumns="true" singleSelect="true">
-        <thead>
-            <tr>
-                <th field="cedula" width="50">Cédula</th>
-                <th field="nombre" width="50">Nombre</th>
-                <th field="apellido" width="50">Apellido</th>
-                <th field="direccion" width="50">Dirección</th>
-                <th field="telefono" width="50">Teléfono</th>
-            </tr>
-        </thead>
-    </table>
-    <div id="toolbar">
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newUser()">Nuevo usuario</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editUser()">Editar usuario</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyUser()">Eliminar usuario</a>
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h4><i class="fas fa-users"></i> Gestión de Estudiantes</h4>
+                    </div>
+                    <div class="card-body">
+
+                        <?php if ($es_admin): ?>
+                            <!-- Botones de administrador -->
+                            <div class="mb-3">
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAgregar">
+                                    <i class="fas fa-plus"></i> Agregar Estudiante
+                                </button>
+                                <button type="button" class="btn btn-info" onclick="cargarEstudiantes()">
+                                    <i class="fas fa-refresh"></i> Actualizar Lista
+                                </button>
+                            </div>
+                        <?php else: ?>
+                            <!-- Botones de secretaria (solo lectura) -->
+                            <div class="mb-3">
+                                <button type="button" class="btn btn-info" onclick="cargarEstudiantes()">
+                                    <i class="fas fa-refresh"></i> Actualizar Lista
+                                </button>
+                                <div class="alert alert-warning">
+                                    <i class="fas fa-info-circle"></i> Modo solo lectura - Contacte al administrador para realizar cambios
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- Tabla de estudiantes -->
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover" id="tablaEstudiantes">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Cédula</th>
+                                        <th>Nombre</th>
+                                        <th>Apellido</th>
+                                        <th>Dirección</th>
+                                        <th>Teléfono</th>
+                                        <?php if ($es_admin): ?>
+                                            <th>Acciones</th>
+                                        <?php endif; ?>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="<?php echo $es_admin ? '6' : '5'; ?>" class="text-center">
+                                            <div class="spinner-border" role="status">
+                                                <span class="visually-hidden">Cargando...</span>
+                                            </div>
+                                            Cargando estudiantes...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div id="dlg" class="easyui-dialog" style="width:400px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
-        <form id="fm" method="post" novalidate style="margin:0;padding:20px 50px">
-            <h3>User Information</h3>
-
-            <div style="margin-bottom:10px">
-                <input name="cedula" class="easyui-textbox" required="true" label="Cédula:" style="width:100%">
+    <?php if ($es_admin): ?>
+        <!-- Modal para agregar estudiante -->
+        <div class="modal fade" id="modalAgregar" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Agregar Nuevo Estudiante</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form id="formAgregar">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="cedula" class="form-label">Cédula</label>
+                                <input type="text" class="form-control" id="cedula" name="cedula" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="nombre" name="nombre" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="apellido" class="form-label">Apellido</label>
+                                <input type="text" class="form-control" id="apellido" name="apellido" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="direccion" class="form-label">Dirección</label>
+                                <textarea class="form-control" id="direccion" name="direccion" rows="2"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="telefono" class="form-label">Teléfono</label>
+                                <input type="text" class="form-control" id="telefono" name="telefono">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-success">Guardar</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div style="margin-bottom:10px">
-                <input name="nombre" class="easyui-textbox" required="true" label="Nombre:" style="width:100%">
-            </div>
-            <div style="margin-bottom:10px">
-                <input name="apellido" class="easyui-textbox" required="true" label="Apellido:" style="width:100%">
-            </div>
-            <div style="margin-bottom:10px">
-                <input name="direccion" class="easyui-textbox" required="true" label="Dirección:" style="width:100%">
-            </div>
-            <div style="margin-bottom:10px">
-                <input name="telefono" class="easyui-textbox" required="true" label="Teléfono:" style="width:100%">
-            </div>
+        </div>
 
-        </form>
-    </div>
-    <div id="dlg-buttons">
-        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
-    </div>
-    <script type="text/javascript">
-        var url;
+        <!-- Modal para editar estudiante -->
+        <div class="modal fade" id="modalEditar" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Editar Estudiante</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form id="formEditar">
+                        <div class="modal-body">
+                            <input type="hidden" id="edit_cedula_original" name="cedula_original">
+                            <div class="mb-3">
+                                <label for="edit_cedula" class="form-label">Cédula</label>
+                                <input type="text" class="form-control" id="edit_cedula" name="cedula" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit_nombre" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="edit_nombre" name="nombre" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit_apellido" class="form-label">Apellido</label>
+                                <input type="text" class="form-control" id="edit_apellido" name="apellido" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit_direccion" class="form-label">Dirección</label>
+                                <textarea class="form-control" id="edit_direccion" name="direccion" rows="2"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit_telefono" class="form-label">Teléfono</label>
+                                <input type="text" class="form-control" id="edit_telefono" name="telefono">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Actualizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
 
-        function newUser() {
-            $('#dlg').dialog('open').dialog('center').dialog('setTitle', 'New User');
-            $('#fm').form('clear');
-            url = 'models/guardar.php';
-        }
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
-        function editUser() {
-            var row = $('#dg').datagrid('getSelected');
-            if (row) {
-                $('#dlg').dialog('open').dialog('center').dialog('setTitle', 'Edit User');
-                $('#fm').form('load', row);
-                url = 'models/editar.php?cedula=' + row.cedula;
-            }
-        }
+    <script>
+        const esAdmin = <?php echo $es_admin ? 'true' : 'false'; ?>;
 
-        function saveUser() {
-            $('#fm').form('submit', {
-                url: url,
-                iframe: false,
-                onSubmit: function() {
-                    return $(this).form('validate');
-                },
-                success: function(result) {
-                    try {
-                        var result = JSON.parse(result);
-                        if (result.errorMsg) {
-                            $.messager.show({
-                                title: 'Error',
-                                msg: result.errorMsg
-                            });
-                        } else {
-                            $('#dlg').dialog('close'); // close the dialog
-                            $('#dg').datagrid('reload'); // reload the user data
-                            $.messager.show({
-                                title: 'Éxito',
-                                msg: 'Usuario guardado exitosamente'
-                            });
-                        }
-                    } catch (e) {
-                        // Si no es JSON válido, asumir éxito si no hay error obvio
-                        $('#dlg').dialog('close');
-                        $('#dg').datagrid('reload');
-                        $.messager.show({
-                            title: 'Éxito',
-                            msg: 'Usuario guardado exitosamente'
+        $(document).ready(function() {
+            cargarEstudiantes();
+
+            <?php if ($es_admin): ?>
+                // Form para agregar
+                $('#formAgregar').on('submit', function(e) {
+                    e.preventDefault();
+                    agregarEstudiante();
+                });
+
+                // Form para editar
+                $('#formEditar').on('submit', function(e) {
+                    e.preventDefault();
+                    editarEstudiante();
+                });
+            <?php endif; ?>
+        });
+
+        function cargarEstudiantes() {
+            $.ajax({
+                url: 'models/select.php',
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    let tbody = $('#tablaEstudiantes tbody');
+                    tbody.empty();
+
+                    if (Array.isArray(data) && data.length > 0) {
+                        data.forEach(function(estudiante) {
+                            let acciones = '';
+                            if (esAdmin) {
+                                acciones = `
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" onclick="editarModal('${estudiante.cedula}', '${estudiante.nombre}', '${estudiante.apellido}', '${estudiante.direccion}', '${estudiante.telefono}')">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger" onclick="eliminarEstudiante('${estudiante.cedula}')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                `;
+                            }
+
+                            tbody.append(`
+                                <tr>
+                                    <td>${estudiante.cedula}</td>
+                                    <td>${estudiante.nombre}</td>
+                                    <td>${estudiante.apellido}</td>
+                                    <td>${estudiante.direccion || ''}</td>
+                                    <td>${estudiante.telefono || ''}</td>
+                                    ${acciones}
+                                </tr>
+                            `);
                         });
+                    } else {
+                        let colspan = esAdmin ? '6' : '5';
+                        tbody.append(`<tr><td colspan="${colspan}" class="text-center">No hay estudiantes registrados</td></tr>`);
                     }
                 },
                 error: function() {
-                    $.messager.show({
-                        title: 'Error',
-                        msg: 'Error al conectar con el servidor'
-                    });
+                    let colspan = esAdmin ? '6' : '5';
+                    $('#tablaEstudiantes tbody').html(`<tr><td colspan="${colspan}" class="text-center text-danger">Error al cargar los datos</td></tr>`);
                 }
             });
         }
 
-        function destroyUser() {
-            var row = $('#dg').datagrid('getSelected');
-            if (row) {
-                $.messager.confirm('Confirmar', '¿Está seguro de que desea eliminar este usuario?', function(r) {
-                    if (r) {
-                        $.get('models/eliminar.php', {
-                            cedula: row.cedula
-                        }, function(result) {
-                            try {
-                                // Intentar parsear como JSON
-                                if (typeof result === 'string') {
-                                    result = JSON.parse(result);
-                                }
-                                if (result.success) {
-                                    $('#dg').datagrid('reload');
-                                    $.messager.show({
-                                        title: 'Éxito',
-                                        msg: 'Usuario eliminado exitosamente'
-                                    });
-                                } else {
-                                    $.messager.show({
-                                        title: 'Error',
-                                        msg: result.errorMsg || 'Error al eliminar usuario'
-                                    });
-                                }
-                            } catch (e) {
-                                $('#dg').datagrid('reload');
-                                $.messager.show({
-                                    title: 'Éxito',
-                                    msg: 'Usuario eliminado exitosamente'
-                                });
-                            }
-                        }).fail(function() {
-                            $.messager.show({
-                                title: 'Error',
-                                msg: 'Error al conectar con el servidor'
-                            });
-                        });
+        <?php if ($es_admin): ?>
+            function agregarEstudiante() {
+                $.ajax({
+                    url: 'models/guardar.php',
+                    type: 'POST',
+                    data: $('#formAgregar').serialize(),
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            alert(response.message);
+                            $('#modalAgregar').modal('hide');
+                            $('#formAgregar')[0].reset();
+                            cargarEstudiantes();
+                        } else {
+                            alert('Error: ' + response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error AJAX:', xhr.responseText);
+                        alert('Error al agregar estudiante: ' + error);
                     }
                 });
             }
-        }
+
+            function editarModal(cedula, nombre, apellido, direccion, telefono) {
+                $('#edit_cedula_original').val(cedula);
+                $('#edit_cedula').val(cedula);
+                $('#edit_nombre').val(nombre);
+                $('#edit_apellido').val(apellido);
+                $('#edit_direccion').val(direccion);
+                $('#edit_telefono').val(telefono);
+                $('#modalEditar').modal('show');
+            }
+
+            function editarEstudiante() {
+                $.ajax({
+                    url: 'models/editar.php',
+                    type: 'POST',
+                    data: $('#formEditar').serialize(),
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            alert(response.message);
+                            $('#modalEditar').modal('hide');
+                            cargarEstudiantes();
+                        } else {
+                            alert('Error: ' + response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error AJAX:', xhr.responseText);
+                        alert('Error al actualizar estudiante: ' + error);
+                    }
+                });
+            }
+
+            function eliminarEstudiante(cedula) {
+                if (confirm('¿Está seguro de eliminar este estudiante?')) {
+                    $.ajax({
+                        url: 'models/eliminar.php',
+                        type: 'GET',
+                        data: {
+                            cedula: cedula
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.success) {
+                                alert(response.message);
+                                cargarEstudiantes();
+                            } else {
+                                alert('Error: ' + response.message);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error AJAX:', xhr.responseText);
+                            alert('Error al eliminar estudiante: ' + error);
+                        }
+                    });
+                }
+            }
+        <?php endif; ?>
     </script>
 </body>
 

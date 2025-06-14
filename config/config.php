@@ -57,6 +57,8 @@ function getUrl($type, $file = '')
             return JS_URL . $file;
         case 'img':
             return IMG_URL . $file;
+        case 'model':
+            return ROOT_URL . 'models/' . $file;
         case 'root':
             return ROOT_URL . $file;
         default:

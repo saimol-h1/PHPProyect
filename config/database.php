@@ -5,8 +5,17 @@
  * Crear este archivo cuando despliegues a producción
  */
 
-// Configuración para desarrollo (local)
-if ($_SERVER['HTTP_HOST'] == 'localhost' || strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false) {
+// Configuración para desarrollo (local) - Mejorada
+$isLocal = (
+    $_SERVER['HTTP_HOST'] == 'localhost' ||
+    strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false ||
+    strpos($_SERVER['HTTP_HOST'], '::1') !== false ||
+    $_SERVER['SERVER_NAME'] == 'localhost' ||
+    strpos($_SERVER['HTTP_HOST'], '.local') !== false ||
+    strpos($_SERVER['HTTP_HOST'], 'xampp') !== false
+);
+
+if ($isLocal) {
     // Configuración local
     define('DB_HOST', 'localhost');
     define('DB_USER', 'root');
@@ -32,12 +41,31 @@ if (ENVIRONMENT == 'development') {
     ini_set('log_errors', 1);
 }
 
-// Conexión a la base de datos
+// Conexión a la base de datos con mejor manejo de errores
 $conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 if (!$conn) {
     if (ENVIRONMENT == 'development') {
-        die("Connection failed: " . mysqli_connect_error());
+        // En desarrollo mostramos información detallada
+        echo "<div style='background: #ffebee; padding: 20px; border: 1px solid #f44336; margin: 20px;'>";
+        echo "<h3>❌ Error de Conexión a Base de Datos</h3>";
+        echo "<strong>Host:</strong> " . DB_HOST . "<br>";
+        echo "<strong>Usuario:</strong> " . DB_USER . "<br>";
+        echo "<strong>Base de datos:</strong> " . DB_NAME . "<br>";
+        echo "<strong>Error MySQL:</strong> " . mysqli_connect_error() . "<br>";
+        echo "<strong>Entorno:</strong> " . ENVIRONMENT . "<br>";
+        echo "<strong>URL actual:</strong> " . $_SERVER['HTTP_HOST'] . "<br>";
+        echo "<hr>";
+        echo "<h4>💡 Posibles soluciones:</h4>";
+        echo "<ul>";
+        echo "<li>Verifica que XAMPP esté ejecutándose</li>";
+        echo "<li>Verifica que el servicio MySQL esté activo</li>";
+        echo "<li>Verifica que la base de datos 'cuarto' exista</li>";
+        echo "<li>Ejecuta el script SQL en phpMyAdmin</li>";
+        echo "</ul>";
+        echo "<a href='debug.php' style='padding: 10px; background: #2196f3; color: white; text-decoration: none;'>🔍 Ver Debug Completo</a>";
+        echo "</div>";
+        die();
     } else {
         die("Error de conexión a la base de datos. Contacte al administrador.");
     }

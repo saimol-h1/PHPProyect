@@ -1,41 +1,95 @@
+<?php
+// Incluir sistema de autenticación
+require_once 'config/auth.php';
+?>
 <html>
 
 <head>
-    <title>UTA</title>
+    <title>UTA - Universidad Técnica de Ambato</title>
     <link rel="stylesheet" href="<?php echo getUrl('css', 'style.css'); ?>">
-    <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/default/easyui.css">
-    <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/icon.css">
-    <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/color.css">
-    <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/demo/demo.css">
-    <script type="text/javascript" src="https://www.jeasyui.com/easyui/jquery.min.js"></script>
-    <script type="text/javascript" src="https://www.jeasyui.com/easyui/jquery.easyui.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
-    <header>
-        <img src="<?php echo getUrl('img', 'utabanner.svg'); ?>" width="90%" alt="banner">
-    </header>
-    <nav>
-        <ul>
-            <li><a href="<?php echo getUrl('root', 'index.php?action=inicio'); ?>">Inicio</a></li>
-            <li><a href="<?php echo getUrl('root', 'index.php?action=nosotros'); ?>">Nosotros</a></li>
-            <li><a href="<?php echo getUrl('root', 'index.php?action=servicios'); ?>">Servicios</a></li>
-            <li><a href="<?php echo getUrl('root', 'index.php?action=contactanos'); ?>">Contactanos</a></li>
-        </ul>
-    </nav>
-    <section>
-        <?php
-        // Include the MVC controller using configured paths
-        requireFile('controller', 'controller.php');
+    <!-- Información del usuario logueado (si existe) -->
+    <?php if (isLoggedIn()): ?>
+        <div class="container-fluid">
+            <?php mostrarUsuarioLogueado(); ?>
+        </div>
+    <?php endif; ?>
 
-        // Create an instance of the MvcController
+    <header>
+        <div class="container-fluid text-center">
+            <img src="<?php echo getUrl('img', 'utabanner.svg'); ?>" width="90%" alt="Universidad Técnica de Ambato" class="img-fluid">
+        </div>
+    </header>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo getUrl('root', 'index.php?action=inicio'); ?>">
+                            <i class="fas fa-home"></i> Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo getUrl('root', 'index.php?action=nosotros'); ?>">
+                            <i class="fas fa-users"></i> Nosotros
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo getUrl('root', 'index.php?action=servicios'); ?>">
+                            <i class="fas fa-cogs"></i> Servicios
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo getUrl('root', 'index.php?action=contactanos'); ?>">
+                            <i class="fas fa-envelope"></i> Contáctanos
+                        </a>
+                    </li>
+                </ul>
+
+                <?php if (isLoggedIn()): ?>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="logout.php">
+                                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                            </a>
+                        </li>
+                    </ul>
+                <?php else: ?>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo getUrl('root', 'index.php?action=login'); ?>">
+                                <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                            </a>
+                        </li>
+                    </ul>
+                <?php endif; ?>
+            </div>
+        </div>
+    </nav>
+    <section class="container-fluid mt-3">
+        <?php
+        // Include the MVC controller to handle page routing
         $mvc = new MvcController();
         $mvc->EnlacesPaginasController();
         ?>
     </section>
-    <footer>
-        Derechos Reservados @Cuarto SW
-    </footer>
+
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

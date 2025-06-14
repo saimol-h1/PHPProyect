@@ -6,14 +6,15 @@
     <title>UTA Cuarto</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <!-- jQuery - REQUERIDO para AJAX -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
     <div class="container mt-4">
         <h2 class="mb-4">Lista de Estudiantes</h2>
 
-        <!-- Tabla -->cd
+        <!-- Tabla -->
         <div class="table-responsive">
             <table id="dg" class="table table-striped table-hover">
                 <thead class="table-dark">
@@ -26,6 +27,14 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            <div class="spinner-border spinner-border-sm" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                            Cargando datos...
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -42,6 +51,7 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
+                    console.log('Datos recibidos:', data); // Debug
                     var tbody = $('#dg tbody');
                     tbody.empty();
 
@@ -61,8 +71,9 @@
                         tbody.append('<tr><td colspan="5" class="text-center">No hay datos disponibles</td></tr>');
                     }
                 },
-                error: function() {
-                    $('#dg tbody').html('<tr><td colspan="5" class="text-center text-danger">Error al cargar los datos</td></tr>');
+                error: function(xhr, status, error) {
+                    console.error('Error AJAX:', xhr.responseText); // Debug
+                    $('#dg tbody').html('<tr><td colspan="5" class="text-center text-danger">Error al cargar los datos: ' + error + '</td></tr>');
                 }
             });
         }
