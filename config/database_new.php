@@ -66,7 +66,6 @@ try {
 
     // Configurar charset
     $conn->set_charset("utf8mb4");
-
 } catch (Exception $e) {
     // Log del error
     error_log("Error de base de datos: " . $e->getMessage());
@@ -96,5 +95,3 @@ define('DB_PASS', $password);
 define('DB_NAME', $database);
 define('DB_PORT', $port);
 define('ENVIRONMENT', $environment);
-
-?>

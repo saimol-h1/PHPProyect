@@ -1,6 +1,5 @@
 <?php
-// Incluir sistema de autenticación
-require_once 'config/auth.php';
+// La autenticación se maneja en el controlador
 ?>
 <html>
 
