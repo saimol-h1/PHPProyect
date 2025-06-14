@@ -1,6 +1,7 @@
 <?php
 class EnlacesPagina
-{    public function enlacesPaginasModel($enlacesModel)
+{
+    public function enlacesPaginasModel($enlacesModel)
     {
         $validPages = ["inicio", "nosotros", "contactanos", "servicios", "login", "unauthorized"];
 
