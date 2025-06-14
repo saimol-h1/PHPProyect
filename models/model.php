@@ -6,9 +6,14 @@ class EnlacesPagina
         $validPages = ["inicio", "nosotros", "contactanos", "servicios", "login", "unauthorized"];
 
         if (in_array($enlacesModel, $validPages)) {
-            $module = getPath('view', $enlacesModel . ".php");
+            // Usar versiones simples para las vistas principales
+            if (in_array($enlacesModel, ["inicio", "nosotros", "contactanos", "servicios"])) {
+                $module = getPath('view', $enlacesModel . "_simple.php");
+            } else {
+                $module = getPath('view', $enlacesModel . ".php");
+            }
         } else {
-            $module = getPath('view', "inicio.php");
+            $module = getPath('view', "inicio_simple.php");
         }
 
         return $module;

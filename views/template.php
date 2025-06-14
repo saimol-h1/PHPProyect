@@ -80,9 +80,13 @@
     </nav>
     <section class="container-fluid mt-3">
         <?php
-        // Include the MVC controller to handle page routing
-        $mvc = new MvcController();
-        $mvc->EnlacesPaginasController();
+        // El contenido se renderiza desde el controlador principal
+        global $mvcController;
+        if (isset($mvcController)) {
+            $mvcController->EnlacesPaginasController();
+        } else {
+            echo "<h1>Error: Controlador no disponible</h1>";
+        }
         ?>
     </section>
 

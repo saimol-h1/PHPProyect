@@ -17,6 +17,10 @@ $mvc = new MvcController();
 // Manejar acciones ANTES de cargar el template
 $mvc->handleActions();
 
+// Hacer el controlador disponible globalmente para el template
+global $mvcController;
+$mvcController = $mvc;
+
 // Cargar el template solo si no hubo redirecciones
 $mvc->template();
 
