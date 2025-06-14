@@ -1,0 +1,14 @@
+# Archivos temporales y de prueba
+tmp/
+test_*.php
+debug_*.php
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Configuración local (si existe)
+config/local.php
