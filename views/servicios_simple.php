@@ -65,6 +65,26 @@ $es_admin = isAdmin();
                             <input type="email" class="form-control" id="email" name="email" required>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="telefono" class="form-label">Teléfono:</label>
+                            <input type="text" class="form-control" id="telefono" name="telefono">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="semestre" class="form-label">Semestre:</label>
+                            <input type="number" class="form-control" id="semestre" name="semestre" min="1" max="10">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento:</label>
+                            <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="direccion" class="form-label">Dirección:</label>
+                            <input type="text" class="form-control" id="direccion" name="direccion">
+                        </div>
+                    </div>
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-success">
                             <i class="fas fa-save"></i> Guardar
@@ -133,13 +153,15 @@ $es_admin = isAdmin();
             html = `
             <div class="table-responsive">
                 <table class="table table-striped table-hover">
-                    <thead class="table-dark">                        <tr>
+                    <thead class="table-dark">
+                        <tr>
                             <th>ID</th>
                             <th>Nombres</th>
                             <th>Apellidos</th>
                             <th>Cédula</th>
                             <th>Carrera</th>
                             <th>Email</th>
+                            <th>Teléfono</th>
                             ${esAdmin ? '<th>Acciones</th>' : ''}
                         </tr>
                     </thead>
@@ -147,19 +169,21 @@ $es_admin = isAdmin();
         `;
 
             estudiantes.forEach(estudiante => {
-                html += `                <tr>
+                html += `
+                <tr>
                     <td>${estudiante.id}</td>
                     <td>${estudiante.nombres}</td>
                     <td>${estudiante.apellidos}</td>
                     <td>${estudiante.cedula}</td>
                     <td>${estudiante.carrera}</td>
                     <td>${estudiante.email}</td>
+                    <td>${estudiante.telefono || 'N/A'}</td>
                     ${esAdmin ? `
                         <td>
-                            <button class="btn btn-sm btn-warning me-1" onclick="editarEstudiante(${estudiante.id})">
+                            <button class="btn btn-sm btn-warning me-1" onclick="editarEstudiante(${estudiante.id})" title="Editar">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <button class="btn btn-sm btn-danger" onclick="eliminarEstudiante(${estudiante.id})">
+                            <button class="btn btn-sm btn-danger" onclick="eliminarEstudiante(${estudiante.id})" title="Eliminar">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </td>
@@ -193,22 +217,132 @@ $es_admin = isAdmin();
         }
 
         function editarEstudiante(id) {
-            // Implementar lógica de edición
-            console.log('Editar estudiante:', id);
+            // Cargar datos del estudiante para edición
+            fetch(`models/editar.php?id=${id}`)
+                .then(response => response.text()) // Primero obtener como texto
+                .then(text => {
+                    // Limpiar posibles warnings de PHP antes del JSON
+                    const jsonStart = text.indexOf('{');
+                    const cleanText = jsonStart !== -1 ? text.substring(jsonStart) : text;
+
+                    try {
+                        return JSON.parse(cleanText);
+                    } catch (e) {
+                        console.error('Error parsing JSON:', cleanText);
+                        throw new Error('Respuesta inválida del servidor');
+                    }
+                })
+                .then(data => {
+                    if (data.success) {
+                        const estudiante = data.data;
+
+                        // Llenar el formulario con los datos del estudiante
+                        document.getElementById('estudianteId').value = estudiante.id;
+                        document.getElementById('nombres').value = estudiante.nombres;
+                        document.getElementById('apellidos').value = estudiante.apellidos;
+                        document.getElementById('cedula').value = estudiante.cedula;
+                        document.getElementById('carrera').value = estudiante.carrera;
+                        document.getElementById('email').value = estudiante.email;
+                        document.getElementById('telefono').value = estudiante.telefono || '';
+                        document.getElementById('semestre').value = estudiante.semestre || '';
+                        document.getElementById('fecha_nacimiento').value = estudiante.fecha_nacimiento || '';
+                        document.getElementById('direccion').value = estudiante.direccion || '';
+
+                        // Cambiar título y mostrar formulario
+                        document.getElementById('tituloFormulario').textContent = '✏️ Editar Estudiante';
+                        document.getElementById('formularioEstudiante').style.display = 'block';
+
+                        // Scroll hacia el formulario
+                        document.getElementById('formularioEstudiante').scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    } else {
+                        alert('Error al cargar los datos del estudiante: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error de conexión al cargar los datos del estudiante: ' + error.message);
+                });
         }
+
 
         function eliminarEstudiante(id) {
-            if (confirm('¿Estás seguro de eliminar este estudiante?')) {
-                // Implementar lógica de eliminación
-                console.log('Eliminar estudiante:', id);
-            }
-        }
+            if (confirm('¿Estás seguro de eliminar este estudiante? Esta acción no se puede deshacer.')) {
+                fetch('models/eliminar.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `id=${id}`
+                    })
+                    .then(response => response.text()) // Primero obtener como texto
+                    .then(text => {
+                        // Limpiar posibles warnings de PHP antes del JSON
+                        const jsonStart = text.indexOf('{');
+                        const cleanText = jsonStart !== -1 ? text.substring(jsonStart) : text;
 
-        // Manejar envío del formulario
+                        try {
+                            return JSON.parse(cleanText);
+                        } catch (e) {
+                            console.error('Error parsing JSON:', cleanText);
+                            throw new Error('Respuesta inválida del servidor');
+                        }
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            alert('Estudiante eliminado: ' + (data.eliminado || 'Exitosamente'));
+                            cargarEstudiantes(); // Recargar la lista
+                        } else {
+                            alert('Error al eliminar estudiante: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error de conexión al eliminar estudiante: ' + error.message);
+                    });
+            }
+        } // Manejar envío del formulario
         document.getElementById('formEstudiante').addEventListener('submit', function(e) {
             e.preventDefault();
-            // Implementar lógica de guardado
-            console.log('Guardar estudiante');
+
+            const formData = new FormData(this);
+            const estudianteId = document.getElementById('estudianteId').value;
+
+            // Determinar si es edición o creación
+            const url = estudianteId ? 'models/editar.php' : 'models/guardar.php';
+            const accion = estudianteId ? 'actualizado' : 'creado';
+
+            fetch(url, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text()) // Primero obtener como texto
+                .then(text => {
+                    // Limpiar posibles warnings de PHP antes del JSON
+                    const jsonStart = text.indexOf('{');
+                    const cleanText = jsonStart !== -1 ? text.substring(jsonStart) : text;
+
+                    try {
+                        return JSON.parse(cleanText);
+                    } catch (e) {
+                        console.error('Error parsing JSON:', cleanText);
+                        throw new Error('Respuesta inválida del servidor');
+                    }
+                })
+                .then(data => {
+                    if (data.success) {
+                        alert(`Estudiante ${accion} exitosamente: ` + (data.estudiante || data.message));
+                        ocultarFormulario();
+                        cargarEstudiantes(); // Recargar la lista
+                    } else {
+                        alert('Error al guardar estudiante: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error de conexión al guardar estudiante: ' + error.message);
+                });
         });
     <?php endif; ?>
 </script>

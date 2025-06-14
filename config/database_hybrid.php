@@ -47,8 +47,8 @@ if (isset($_ENV['RAILWAY_ENVIRONMENT']) || isset($_ENV['MYSQL_HOST']) || isset($
         define('DB_HOST', 'localhost');
         define('DB_USER', 'root');
         define('DB_PASS', '');
-        define('DB_NAME', 'practicamvc');  // Cambiar a 'cuarto' si prefieres
-        define('DB_PORT', 3306);
+        define('DB_NAME', 'cuarto');  // Cambiar a 'cuarto' si prefieres
+        define('DB_PORT', 9040);
         define('ENVIRONMENT', 'development');
     } else {
         // Configuración de producción para otros hostings
