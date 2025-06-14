@@ -4,13 +4,12 @@ class MvcController
 {
     public function template()
     {
+        // Las funciones de auth.php ya están disponibles desde index.php
         includeFile('view', 'template.php');
     }
-
     public function EnlacesPaginasController()
     {
-        // Incluir sistema de autenticación al inicio
-        require_once 'config/auth.php';
+        // Las funciones de auth.php ya están disponibles desde index.php
 
         // get post
         if (isset($_GET['action'])) {

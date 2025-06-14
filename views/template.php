@@ -1,5 +1,6 @@
 <?php
-// La autenticación se maneja en el controlador
+// Las funciones de autenticación están disponibles desde el controlador
+// No incluir auth.php aquí para evitar conflictos de headers
 ?>
 <html>
 
