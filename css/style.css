@@ -46,7 +46,7 @@ header {
     color: var(--uta-primary);
     text-align: center;
     border-bottom: 3px solid var(--uta-secondary);
-    padding-bottom: 6px;
+    padding-bottom: 16px;
 }
 
 nav ul {
@@ -124,7 +124,6 @@ footer {
 /* Estilos para títulos */
 h1,
 h2,
-h3,
 h4,
 h5,
 h6 {

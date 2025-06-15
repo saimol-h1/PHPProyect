@@ -5,6 +5,7 @@
     background: linear-gradient(135deg, var(--uta-primary, #901B21) 0%, var(--uta-primary-dark, #7A1619) 100%) !important;
     border-color: var(--uta-primary, #901B21) !important;
     box-shadow: 0 2px 4px rgba(144, 27, 33, 0.2) !important;
+    color: #FFFFFF !important;
 }
 
 .btn-primary:hover,
@@ -12,8 +13,9 @@
 .btn-primary:active {
     background: linear-gradient(135deg, var(--uta-primary-light, #A52A31) 0%, var(--uta-primary, #901B21) 100%) !important;
     border-color: var(--uta-primary-light, #A52A31) !important;
-    box-shadow: 0 4px 8px rgba(144, 27, 33, 0.3) !important;
+    box-shadow: 0 4px 8px rgba(252, 249, 249, 0.3) !important;
     transform: translateY(-1px);
+    color: #FFFFFF !important;
 }
 
 .btn-secondary {
@@ -32,8 +34,8 @@
 }
 
 .btn-success {
-    background: var(--uta-success, #28A745) !important;
-    border-color: var(--uta-success, #28A745) !important;
+    background: var(--uta-success, #FFFFFF) !important;
+    border-color: var(--uta-success, #FFFFFF) !important;
 }
 
 .btn-danger {
@@ -110,7 +112,7 @@
 
 /* Enlaces */
 a {
-    color: var(--uta-primary, #901B21) !important;
+    color: var(#FFFFFF, #901B21) !important;
 }
 
 a:hover {
@@ -120,6 +122,7 @@ a:hover {
 /* Badges */
 .badge-primary {
     background-color: var(--uta-primary, #901B21) !important;
+    color: #FFFFFF !important;
 }
 
 .badge-secondary {
@@ -152,6 +155,7 @@ a:hover {
 .page-item.active .page-link {
     background-color: var(--uta-primary, #901B21) !important;
     border-color: var(--uta-primary, #901B21) !important;
+    color: #FFFFFF !important;
 }
 
 .page-link {
@@ -200,6 +204,7 @@ a:hover {
 
 .bg-uta-primary {
     background-color: var(--uta-primary, #901B21) !important;
+    color: #FFFFFF !important;
 }
 
 .bg-uta-secondary {

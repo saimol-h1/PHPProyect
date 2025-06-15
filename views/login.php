@@ -264,9 +264,7 @@
             padding: 1.5rem;
         }
 
-        .login-header {
-            padding: 1.5rem 1rem;
-        }
+
     }
 </style>
 
@@ -274,7 +272,7 @@
     <div class="login-card fade-in">
         <div class="login-header">
             <img src="<?php echo getUrl('img', 'escudo-uta.svg'); ?>" alt="UTA" style="width: 60px; height: 60px; margin-bottom: 10px; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));">
-            <h3>Universidad Técnica de Ambato</h3>
+            <h3 class="login-title">Universidad Técnica de Ambato</h3>
             <p>Sistema de Gestión Académica</p>
         </div>
 

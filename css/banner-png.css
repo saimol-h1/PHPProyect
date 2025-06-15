@@ -35,7 +35,7 @@
     margin: 10px;
     z-index: 10;
     animation: fadeIn 0.5s ease-in;
-    border: 2px solid var(--uta-secondary, #FFD700);
+    border: 2px solid #E0E0E0;
     box-shadow: 0 4px 15px rgba(144, 27, 33, 0.4);
 }
 
@@ -52,32 +52,34 @@
 }
 
 .user-info-overlay .text-white {
+    color: #FFFFFF !important;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
     font-weight: 500;
     font-size: 0.9rem;
 }
 
 .user-info-overlay .text-white small {
-    color: var(--uta-secondary, #FFD700) !important;
+    color: #E0E0E0 !important;
     font-size: 0.7rem;
     opacity: 0.9;
     font-style: italic;
 }
 
 .user-info-overlay .btn-outline-light {
-    border: 2px solid var(--uta-secondary, #FFD700);
+    border: 2px solid #E0E0E0;
     transition: all 0.3s ease;
     font-size: 0.8rem;
     padding: 0.25rem 0.5rem;
     background: rgba(255, 255, 255, 0.1);
+    color: #FFFFFF !important;
 }
 
 .user-info-overlay .btn-outline-light:hover {
-    background-color: var(--uta-secondary, #FFD700);
-    color: var(--uta-primary, #901B21);
-    border-color: var(--uta-secondary, #FFD700);
+    background-color: #E0E0E0;
+    color: var(--uta-primary, #901B21) !important;
+    border-color: #E0E0E0;
     transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(255, 215, 0, 0.3);
+    box-shadow: 0 2px 4px rgba(224, 224, 224, 0.3);
 }
 
 /* Fallback para cuando no hay imagen */
@@ -125,7 +127,7 @@
         background: rgba(144, 27, 33, 0.9);
         text-align: center;
         border-radius: 0;
-        border-top: 2px solid var(--uta-secondary, #FFD700);
+        border-top: 2px solid #E0E0E0;
     }
 
     .user-info-overlay .text-white {
@@ -157,13 +159,13 @@
 /* Estilo especial para cuando el usuario está logueado */
 .usuario-logueado {
     background: rgba(255, 255, 255, 0.1) !important;
-    border: 1px solid rgba(255, 215, 0, 0.3) !important;
+    border: 1px solid rgba(224, 224, 224, 0.3) !important;
     backdrop-filter: blur(10px);
     margin-bottom: 0 !important;
 }
 
 .usuario-logueado i {
-    color: #FFD700;
+    color: #E0E0E0;
 }
 
 /* Mejoras para la navegación */
@@ -214,7 +216,7 @@
 .banner-loading::before {
     content: "🏛️ Cargando Universidad Técnica de Ambato...";
     animation: pulse 2s ease-in-out infinite;
-    color: var(--uta-secondary, #FFD700);
+    color: #FFFFFF;
 }
 
 @keyframes pulse {
