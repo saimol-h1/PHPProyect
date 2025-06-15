@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Optimización Banner UTA</title>
+
+    <!-- PRELOAD CRÍTICO: Banner UTA -->
+    <link rel="preload" href="img/BannerUta.png" as="image" type="image/png">
+
+    <!-- CSS crítico inline -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .banner-container {
+            position: relative;
+            width: 100%;
+            min-height: 120px;
+            background: linear-gradient(135deg, #901B21 0%, #B22429 50%, #701418 100%);
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(144, 27, 33, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .banner-img {
+            width: 100%;
+            height: auto;
+            min-height: 100px;
+            max-height: 150px;
+            object-fit: cover;
+            display: block;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .banner-img.loaded {
+            opacity: 1;
+        }
+
+        .banner-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            z-index: 2;
+            opacity: 0.9;
+        }
+
+        .banner-placeholder i {
+            animation: bannerPulse 2s infinite;
+            margin-right: 10px;
+            font-size: 2rem;
+        }
+
+        @keyframes bannerPulse {
+            0% {
+                opacity: 0.6;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+
+            100% {
+                opacity: 0.6;
+                transform: scale(1);
+            }
+        }
+
+        .user-overlay {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            z-index: 10;
+            background: rgba(144, 27, 33, 0.9);
+            padding: 8px 15px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .test-content {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .performance-info {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .status.loading {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+
+        .status.loaded {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        @media (max-width: 768px) {
+            .banner-container {
+                min-height: 80px;
+            }
+
+            .banner-img {
+                max-height: 100px;
+            }
+
+            .banner-placeholder {
+                font-size: 1rem;
+            }
+
+            .user-overlay {
+                position: static;
+                margin: 5px;
+                text-align: center;
+                border-radius: 0;
+                border-top: 2px solid #E0E0E0;
+            }
+        }
+    </style>
+
+    <!-- CSS no crítico con carga diferida -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"
+        media="print" onload="this.media='all'">
+    <noscript>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    </noscript>
+</head>
+
+<body>
+    <header>
+        <div class="banner-container">
+            <!-- Placeholder mientras carga -->
+            <div id="banner-placeholder" class="banner-placeholder">
+                <i class="fas fa-university"></i>
+                Universidad Técnica de Ambato
+            </div>
+
+            <!-- Banner optimizado -->
+            <img id="banner-img" src="img/BannerUta.png" alt="Universidad Técnica de Ambato" class="banner-img"
+                loading="eager" decoding="async" onload="showBanner()" onerror="handleBannerError()">
+
+            <!-- Usuario demo -->
+            <div class="user-overlay">
+                <i class="fas fa-user"></i> Juan Pérez - Administrador
+            </div>
+        </div>
+    </header>
+
+    <div class="test-content">
+        <h1>🚀 Test de Optimización del Banner UTA</h1>
+
+        <div class="performance-info">
+            <h3>📊 Métricas de Rendimiento</h3>
+            <div id="status-loading" class="status loading">
+                ⏳ Cargando banner PNG...
+            </div>
+            <div id="status-loaded" class="status loaded" style="display: none;">
+                ✅ Banner cargado exitosamente!
+            </div>
+            <div id="status-error" class="status error" style="display: none;">
+                ❌ Error al cargar el banner
+            </div>
+
+            <p><strong>Tiempo de carga:</strong> <span id="load-time">Midiendo...</span></p>
+            <p><strong>Tamaño de archivo:</strong> <span id="file-size">Calculando...</span></p>
+            <p><strong>Cache del navegador:</strong> <span id="cache-status">Verificando...</span></p>
+        </div>
+
+        <div class="performance-info">
+            <h3>⚡ Optimizaciones Implementadas</h3>
+            <ul>
+                <li><strong>Preload:</strong> El banner se precarga en el &lt;head&gt;</li>
+                <li><strong>CSS crítico inline:</strong> Estilos necesarios en línea</li>
+                <li><strong>Placeholder animado:</strong> Contenido visible mientras carga</li>
+                <li><strong>Carga diferida:</strong> CSS no crítico se carga después</li>
+                <li><strong>Loading eager:</strong> Prioridad alta para la imagen</li>
+                <li><strong>Fallback robusto:</strong> Manejo de errores</li>
+                <li><strong>Cache strategy:</strong> Detección de cache del navegador</li>
+            </ul>
+        </div>
+
+        <div class="performance-info">
+            <h3>📱 Pruebas Recomendadas</h3>
+            <ol>
+                <li>Abrir en incógnito (sin cache)</li>
+                <li>Throttling de red lenta</li>
+                <li>Diferentes tamaños de pantalla</li>
+                <li>Simular error de red</li>
+                <li>Recargar página (con cache)</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        // Variables para métricas
+        let startTime = performance.now();
+        let bannerLoaded = false;
+
+        // Función optimizada para mostrar banner
+        function showBanner() {
+            if (bannerLoaded) return;
+
+            const endTime = performance.now();
+            const loadTime = Math.round(endTime - startTime);
+
+            const placeholder = document.getElementById('banner-placeholder');
+            const banner = document.getElementById('banner-img');
+            const statusLoading = document.getElementById('status-loading');
+            const statusLoaded = document.getElementById('status-loaded');
+            const loadTimeSpan = document.getElementById('load-time');
+
+            if (placeholder && banner) {
+                bannerLoaded = true;
+
+                // Actualizar UI
+                placeholder.style.transition = 'opacity 0.3s ease-out';
+                placeholder.style.opacity = '0';
+
+                setTimeout(() => {
+                    placeholder.style.display = 'none';
+                    banner.classList.add('loaded');
+
+                    // Mostrar métricas
+                    statusLoading.style.display = 'none';
+                    statusLoaded.style.display = 'block';
+                    loadTimeSpan.textContent = `${loadTime}ms`;
+
+                    // Calcular tamaño aproximado
+                    calculateFileSize();
+
+                }, 300);
+            }
+        }
+
+        // Función para manejar errores
+        function handleBannerError() {
+            const placeholder = document.getElementById('banner-placeholder');
+            const statusLoading = document.getElementById('status-loading');
+            const statusError = document.getElementById('status-error');
+
+            if (placeholder) {
+                placeholder.innerHTML = '<i class="fas fa-university"></i><br>Universidad Técnica de Ambato<br><small style="font-size: 0.8rem;">Sistema Académico</small>';
+                statusLoading.style.display = 'none';
+                statusError.style.display = 'block';
+            }
+        }
+
+        // Calcular tamaño del archivo
+        function calculateFileSize() {
+            const banner = document.getElementById('banner-img');
+            const fileSizeSpan = document.getElementById('file-size');
+
+            if (banner && banner.complete) {
+                // Estimación básica del tamaño
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = banner.naturalWidth;
+                canvas.height = banner.naturalHeight;
+
+                try {
+                    ctx.drawImage(banner, 0, 0);
+                    const dataURL = canvas.toDataURL('image/png');
+                    const sizeInBytes = Math.round((dataURL.length * 3) / 4);
+                    const sizeInKB = Math.round(sizeInBytes / 1024);
+                    fileSizeSpan.textContent = `~${sizeInKB} KB`;
+                } catch (e) {
+                    fileSizeSpan.textContent = 'No disponible';
+                }
+            }
+        }
+
+        // Verificar cache
+        function checkCacheStatus() {
+            const banner = document.getElementById('banner-img');
+            const cacheSpan = document.getElementById('cache-status');
+
+            if (banner && banner.complete && banner.naturalHeight !== 0) {
+                cacheSpan.textContent = '✅ En cache';
+                cacheSpan.style.color = '#28a745';
+            } else {
+                cacheSpan.textContent = '📥 Descargando';
+                cacheSpan.style.color = '#ffc107';
+            }
+        }
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function () {
+            checkCacheStatus();
+
+            const bannerImg = document.getElementById('banner-img');
+
+            // Verificar si ya está cargada
+            if (bannerImg && bannerImg.complete && bannerImg.naturalHeight !== 0) {
+                showBanner();
+                return;
+            }
+
+            // Timeout de seguridad
+            setTimeout(() => {
+                if (!bannerLoaded) {
+                    handleBannerError();
+                }
+            }, 5000);
+        });
+
+        // Cargar CSS no crítico después del banner
+        window.addEventListener('load', function () {
+            const links = document.querySelectorAll('link[media="print"]');
+            links.forEach(link => {
+                link.media = 'all';
+            });
+        });
+    </script>
+</body>
+
+</html>
