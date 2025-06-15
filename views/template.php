@@ -6,9 +6,15 @@
 
 <head>
     <title>UTA - Universidad Técnica de Ambato</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="<?php echo getUrl('img', 'favicon.svg'); ?>">
     <link rel="stylesheet" href="<?php echo getUrl('css', 'style.css'); ?>">
+    <link rel="stylesheet" href="<?php echo getUrl('css', 'banner-png.css'); ?>">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Tema UTA personalizado -->
+    <link rel="stylesheet" href="<?php echo getUrl('css', 'uta-theme.css'); ?>">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- jQuery -->
@@ -16,16 +22,31 @@
 </head>
 
 <body>
-    <!-- Información del usuario logueado (si existe) -->
-    <?php if (isLoggedIn()): ?>
-        <div class="container-fluid">
-            <?php mostrarUsuarioLogueado(); ?>
-        </div>
-    <?php endif; ?>
-
     <header>
-        <div class="container-fluid text-center">
-            <img src="<?php echo getUrl('img', 'utabanner.svg'); ?>" width="90%" alt="Universidad Técnica de Ambato" class="img-fluid">
+        <div class="container-fluid p-0 position-relative">
+            <!-- Banner ocupa todo el ancho -->
+            <div class="banner-full-width uta-banner">
+                <img src="<?php echo getUrl('img', 'BannerUta.png'); ?>"
+                    alt="Universidad Técnica de Ambato"
+                    class="img-fluid w-110 banner-full-logo"
+                    onerror="this.parentElement.innerHTML='<div class=\'banner-fallback\'><i class=\'fas fa-university me-2\'></i>Universidad Técnica de Ambato</div>'">
+            </div>
+
+            <!-- Información del usuario superpuesta -->
+            <!-- <?php if (isLoggedIn()): ?>
+                <div class="user-info-overlay position-absolute top-0 end-0 p-3">
+                    <span class="text-white">
+                        <i class="fas fa-user"></i>
+                        <?php echo htmlspecialchars($_SESSION['nombre_completo'] ?? 'Usuario'); ?>
+                        <small class="d-block text-muted">
+                            <?php echo ucfirst($_SESSION['tipo_usuario'] ?? 'usuario'); ?>
+                        </small>
+                    </span>
+                    <a href="<?php echo getUrl('', 'logout.php'); ?>" class="btn btn-sm btn-outline-light ms-2">
+                        <i class="fas fa-sign-out-alt"></i> Salir
+                    </a>
+                </div>
+            <?php endif; ?> -->
         </div>
     </header>
 

@@ -1,25 +1,61 @@
 /* Estilos generales para el proyecto MVC UTA */
 
+/* Paleta de colores UTA basada en #901B21 */
+:root {
+    --uta-primary: #901B21;
+    /* Rojo principal UTA */
+    --uta-primary-dark: #7A1619;
+    /* Rojo oscuro */
+    --uta-primary-light: #A52A31;
+    /* Rojo claro */
+
+    /* Dorado UTA */
+    --uta-accent: #2C3E50;
+    /* Azul gris oscuro */
+    --uta-accent-light: #34495E;
+    /* Azul gris */
+    --uta-background: #F8F9FA;
+    /* Fondo claro */
+    --uta-text: #2C3E50;
+    /* Texto principal */
+    --uta-text-light: #6C757D;
+    /* Texto secundario */
+    --uta-white: #FFFFFF;
+    /* Blanco */
+    --uta-success: #28A745;
+    /* Verde éxito */
+
+    /* Amarillo advertencia */
+    --uta-danger: #DC3545;
+    /* Rojo peligro */
+    --uta-info: #17A2B8;
+    /* Azul información */
+}
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: var(--uta-background);
+    color: var(--uta-text);
+    line-height: 1.6;
 }
 
 header {
-    background-color: #2c3e50;
-    color: white;
+    background-color: var(--uta-white);
+    color: var(--uta-primary);
     text-align: center;
-    padding: 1rem;
+    border-bottom: 3px solid var(--uta-secondary);
+    padding-bottom: 6px;
 }
 
 nav ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    background-color: #34495e;
+    background: linear-gradient(135deg, var(--uta-primary) 0%, var(--uta-primary-dark) 100%);
     overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 nav li {
@@ -28,39 +64,78 @@ nav li {
 
 nav li a {
     display: block;
-    color: white;
+    color: var(--uta-white);
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
+    font-weight: 500;
 }
 
 nav li a:hover {
-    background-color: #2c3e50;
+    background-color: var(--uta-primary-light);
+    color: var(--uta-secondary);
+    transform: translateY(-1px);
 }
 
 section {
     margin: 20px;
     padding: 20px;
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: var(--uta-white);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(144, 27, 33, 0.1);
+    border-left: 4px solid var(--uta-primary);
 }
 
 footer {
-    background-color: #2c3e50;
-    color: white;
+    background: linear-gradient(135deg, var(--uta-accent) 0%, var(--uta-accent-light) 100%);
+    color: var(--uta-white);
     text-align: center;
-    padding: 1rem;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+/* Estilos para botones con paleta UTA */
+.btn-uta-primary {
+    background: linear-gradient(135deg, var(--uta-primary) 0%, var(--uta-primary-dark) 100%);
+    border: none;
+    color: var(--uta-white);
+    transition: all 0.3s ease;
+}
+
+.btn-uta-primary:hover {
+    background: linear-gradient(135deg, var(--uta-primary-light) 0%, var(--uta-primary) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(144, 27, 33, 0.3);
+}
+
+.btn-uta-secondary {
+    background: var(--uta-secondary);
+    border: 2px solid var(--uta-primary);
+    color: var(--uta-primary);
+    font-weight: 600;
+}
+
+.btn-uta-secondary:hover {
+    background: var(--uta-primary);
+    color: var(--uta-white);
+}
+
+/* Estilos para títulos */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--uta-primary);
+    font-weight: 600;
 }
 
 h1 {
-    color: #2c3e50;
-    border-bottom: 2px solid #3498db;
+    border-bottom: 3px solid var(--uta-secondary);
     padding-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 /* Responsive design */

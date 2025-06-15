@@ -1,7 +1,7 @@
 <style>
     /* Estilos específicos para el login dentro del template */
     .login-page-container {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, var(--uta-primary, #901B21) 0%, var(--uta-primary-dark, #7A1619) 50%, var(--uta-accent, #2C3E50) 100%);
         min-height: 70vh;
         display: flex;
         align-items: center;
@@ -19,7 +19,7 @@
         right: -30%;
         width: 100%;
         height: 200%;
-        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,215,0,0.1)"/></svg>') repeat;
         animation: float 20s ease-in-out infinite;
     }
 
@@ -55,7 +55,7 @@
     }
 
     .login-header {
-        background: linear-gradient(135deg, #2c3e50 0%, #3498db 50%, #9b59b6 100%);
+        background: linear-gradient(135deg, var(--uta-primary, #901B21) 0%, var(--uta-primary-dark, #7A1619) 50%, var(--uta-accent, #2C3E50) 100%);
         color: white;
         padding: 2.5rem 2rem;
         text-align: center;
@@ -69,7 +69,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><polygon points="0,100 100,0 100,100" fill="rgba(255,255,255,0.05)"/></svg>');
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><polygon points="0,100 100,0 100,100" fill="rgba(255,215,0,0.05)"/></svg>');
     }
 
     .login-header .university-icon {
@@ -138,21 +138,21 @@
     }
 
     .login-card .btn-primary {
-        background: linear-gradient(135deg, #3498db, #2980b9);
+        background: linear-gradient(135deg, var(--uta-primary, #901B21), var(--uta-primary-dark, #7A1619));
         border: none;
         border-radius: 12px;
         padding: 0.8rem 2rem;
         font-weight: 600;
         font-size: 1rem;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        box-shadow: 0 4px 15px rgba(144, 27, 33, 0.3);
         width: 100%;
     }
 
     .login-card .btn-primary:hover {
-        background: linear-gradient(135deg, #2980b9, #1f4e79);
+        background: linear-gradient(135deg, var(--uta-primary-light, #A52A31), var(--uta-primary, #901B21));
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        box-shadow: 0 6px 20px rgba(144, 27, 33, 0.4);
     }
 
     .login-card .btn-outline-secondary {
@@ -273,7 +273,7 @@
 <div class="login-page-container">
     <div class="login-card fade-in">
         <div class="login-header">
-            <i class="fas fa-university university-icon"></i>
+            <img src="<?php echo getUrl('img', 'escudo-uta.svg'); ?>" alt="UTA" style="width: 60px; height: 60px; margin-bottom: 10px; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));">
             <h3>Universidad Técnica de Ambato</h3>
             <p>Sistema de Gestión Académica</p>
         </div>
