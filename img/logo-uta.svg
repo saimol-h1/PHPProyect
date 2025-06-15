@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="100" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo principal -->
+  <rect width="400" height="100" fill="#8B1538"/>
+  
+  <!-- Escudo/Logo circular -->
+  <g transform="translate(15, 15)">
+    <!-- Círculo exterior dorado -->
+    <circle cx="35" cy="35" r="32" fill="#D4AF37" stroke="#B8860B" stroke-width="2"/>
+    
+    <!-- Círculo interior -->
+    <circle cx="35" cy="35" r="26" fill="#8B1538"/>
+    
+    <!-- Elementos del escudo -->
+    <g transform="translate(35, 35)">
+      <!-- Libro central -->
+      <rect x="-12" y="-8" width="24" height="16" fill="#D4AF37" rx="2"/>
+      <line x1="-8" y1="-4" x2="8" y2="-4" stroke="#8B1538" stroke-width="1"/>
+      <line x1="-8" y1="0" x2="8" y2="0" stroke="#8B1538" stroke-width="1"/>
+      <line x1="-8" y1="4" x2="8" y2="4" stroke="#8B1538" stroke-width="1"/>
+      
+      <!-- Elementos laterales (simbolizando conocimiento) -->
+      <circle cx="-18" cy="-10" r="3" fill="#D4AF37"/>
+      <circle cx="18" cy="-10" r="3" fill="#D4AF37"/>
+      
+      <!-- Elementos inferiores -->
+      <polygon points="-15,-18 0,-22 15,-18 10,-15 -10,-15" fill="#D4AF37"/>
+    </g>
+    
+    <!-- Texto alrededor del escudo -->
+    <path id="circle-text" d="M 35,8 A 27,27 0 1,1 34.9,8" fill="none"/>
+    <text font-family="Arial, sans-serif" font-size="6" fill="#D4AF37" font-weight="bold">
+      <textPath href="#circle-text" startOffset="25%">
+        UNIVERSIDAD TÉCNICA
+      </textPath>
+    </text>
+  </g>
+  
+  <!-- Texto principal -->
+  <g transform="translate(85, 20)">
+    <text x="0" y="20" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="white">
+      UNIVERSIDAD
+    </text>
+    <text x="0" y="45" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#D4AF37">
+      TÉCNICA DE AMBATO
+    </text>
+    
+    <!-- Línea decorativa -->
+    <line x1="0" y1="55" x2="280" y2="55" stroke="#D4AF37" stroke-width="2"/>
+    
+    <!-- Texto adicional -->
+    <text x="0" y="75" font-family="Arial, sans-serif" font-size="12" fill="white" opacity="0.9">
+      Sistema de Gestión Académica
+    </text>
+  </g>
+  
+  <!-- Elementos decorativos -->
+  <g opacity="0.1">
+    <circle cx="350" cy="20" r="15" fill="white"/>
+    <circle cx="370" cy="60" r="10" fill="white"/>
+    <circle cx="320" cy="80" r="8" fill="white"/>
+  </g>
+</svg>

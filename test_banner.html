@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Test - Banner UTA PNG</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/banner-png.css">
+    <link rel="stylesheet" href="css/uta-theme.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .test-info {
+            background: linear-gradient(135deg, var(--uta-primary, #901B21) 0%, var(--uta-primary-dark, #7A1619) 100%);
+            color: white;
+            border-left: 4px solid var(--uta-secondary, #FFD700);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container-fluid p-0 position-relative">
+            <!-- Banner ocupa todo el ancho -->
+            <div class="banner-full-width uta-banner">
+                <img src="img/BannerUta.png" alt="Universidad Técnica de Ambato"
+                    class="img-fluid w-100 banner-full-logo"
+                    onerror="this.parentElement.innerHTML='<div class=\'banner-fallback\'><i class=\'fas fa-university me-2\'></i>Universidad Técnica de Ambato</div>'">
+            </div>
+
+            <!-- Información del usuario superpuesta -->
+            <div class="user-info-overlay position-absolute top-0 end-0 p-3">
+                <span class="text-white">
+                    <i class="fas fa-user"></i>
+                    Juan Pérez González
+                    <small class="d-block text-muted">
+                        Administrador
+                    </small>
+                </span>
+                <a href="#" class="btn btn-sm btn-outline-light ms-2">
+                    <i class="fas fa-sign-out-alt"></i> Salir
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">UTA Sistema</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="#">Inicio</a>
+                <a class="nav-link" href="#">Estudiantes</a>
+                <a class="nav-link" href="#">Acerca de</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="alert test-info">
+                    <h4><i class="fas fa-check-circle"></i> Test del Banner PNG - Paleta UTA</h4>
+                    <p>Este es un archivo de prueba para verificar que:</p>
+                    <ul>
+                        <li>✅ El banner PNG ocupa todo el ancho del header</li>
+                        <li>✅ La información del usuario se muestra superpuesta</li>
+                        <li>✅ El diseño es responsive</li>
+                        <li>✅ Los efectos visuales funcionan correctamente</li>
+                        <li>✅ <strong>Paleta de colores UTA aplicada (#901B21)</strong></li>
+                    </ul>
+                    <p><strong>Redimensiona la ventana del navegador</strong> para probar la responsividad.</p>
+                    <p><strong>Paleta de colores:</strong></p>
+                    <div class="row mt-3">
+                        <div class="col-md-3">
+                            <div
+                                style="background: var(--uta-primary, #901B21); padding: 10px; text-align: center; border-radius: 4px;">
+                                <small>Primario<br>#901B21</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div
+                                style="background: var(--uta-secondary, #FFD700); padding: 10px; text-align: center; border-radius: 4px; color: #901B21;">
+                                <small>Secundario<br>#FFD700</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div
+                                style="background: var(--uta-primary-dark, #7A1619); padding: 10px; text-align: center; border-radius: 4px;">
+                                <small>Primario Oscuro<br>#7A1619</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div
+                                style="background: var(--uta-primary-light, #A52A31); padding: 10px; text-align: center; border-radius: 4px;">
+                                <small>Primario Claro<br>#A52A31</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección de demostración de componentes con paleta UTA -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <h2 class="text-uta-primary"><i class="fas fa-palette"></i> Demostración de Componentes UTA</h2>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div class="card fade-in-uta">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-mouse-pointer"></i> Botones UTA</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-primary"><i class="fas fa-save"></i> Primario</button>
+                                <button class="btn btn-secondary"><i class="fas fa-edit"></i> Secundario</button>
+                                <button class="btn btn-success"><i class="fas fa-check"></i> Éxito</button>
+                                <button class="btn btn-warning"><i class="fas fa-exclamation-triangle"></i>
+                                    Advertencia</button>
+                                <button class="btn btn-danger"><i class="fas fa-trash"></i> Peligro</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card fade-in-uta">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-exclamation"></i> Alertas UTA</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-primary" role="alert">
+                                <i class="fas fa-info-circle"></i> Alerta primaria UTA
+                            </div>
+                            <div class="alert alert-secondary" role="alert">
+                                <i class="fas fa-star"></i> Alerta secundaria UTA
+                            </div>
+                            <div class="alert alert-success" role="alert">
+                                <i class="fas fa-check-circle"></i> Operación exitosa
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-8">
+                    <div class="card fade-in-uta">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-table"></i> Tabla de Estudiantes (Demo)</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nombre</th>
+                                        <th>Email</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Juan Pérez</td>
+                                        <td>juan@uta.edu.ec</td>
+                                        <td><span class="badge badge-primary">Activo</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>María González</td>
+                                        <td>maria@uta.edu.ec</td>
+                                        <td><span class="badge badge-secondary">Pendiente</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Carlos Silva</td>
+                                        <td>carlos@uta.edu.ec</td>
+                                        <td><span class="badge badge-primary">Activo</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card fade-in-uta">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-cog"></i> Formulario Demo</h5>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label class="form-label text-uta-primary">Nombre:</label>
+                                    <input type="text" class="form-control" placeholder="Ingrese su nombre">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-uta-primary">Email:</label>
+                                    <input type="email" class="form-control" placeholder="correo@uta.edu.ec">
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="acepto">
+                                        <label class="form-check-label" for="acepto">
+                                            Acepto términos UTA
+                                        </label>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100 pulse-uta">
+                                    <i class="fas fa-paper-plane"></i> Enviar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

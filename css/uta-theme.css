@@ -1,0 +1,255 @@
+/* Estilos globales UTA para componentes del sistema MVC */
+
+/* Bootstrap overrides con paleta UTA */
+.btn-primary {
+    background: linear-gradient(135deg, var(--uta-primary, #901B21) 0%, var(--uta-primary-dark, #7A1619) 100%) !important;
+    border-color: var(--uta-primary, #901B21) !important;
+    box-shadow: 0 2px 4px rgba(144, 27, 33, 0.2) !important;
+    color: #FFFFFF !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background: linear-gradient(135deg, var(--uta-primary-light, #A52A31) 0%, var(--uta-primary, #901B21) 100%) !important;
+    border-color: var(--uta-primary-light, #A52A31) !important;
+    box-shadow: 0 4px 8px rgba(252, 249, 249, 0.3) !important;
+    transform: translateY(-1px);
+    color: #FFFFFF !important;
+}
+
+.btn-secondary {
+    background: var(--uta-secondary, #FFD700) !important;
+    border-color: var(--uta-secondary, #FFD700) !important;
+    color: var(--uta-primary, #901B21) !important;
+    font-weight: 600;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus,
+.btn-secondary:active {
+    background: var(--uta-primary, #901B21) !important;
+    border-color: var(--uta-primary, #901B21) !important;
+    color: var(--uta-white, #FFFFFF) !important;
+}
+
+.btn-success {
+    background: var(--uta-success, #FFFFFF) !important;
+    border-color: var(--uta-success, #FFFFFF) !important;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #DC3545 0%, var(--uta-primary, #901B21) 100%) !important;
+    border-color: #DC3545 !important;
+}
+
+.btn-warning {
+    background: var(--uta-warning, #FFC107) !important;
+    border-color: var(--uta-warning, #FFC107) !important;
+    color: var(--uta-primary, #901B21) !important;
+}
+
+.btn-info {
+    background: var(--uta-info, #17A2B8) !important;
+    border-color: var(--uta-info, #17A2B8) !important;
+}
+
+/* Alertas */
+.alert-primary {
+    background-color: rgba(144, 27, 33, 0.1) !important;
+    border-color: var(--uta-primary, #901B21) !important;
+    color: var(--uta-primary, #901B21) !important;
+}
+
+.alert-secondary {
+    background-color: rgba(255, 215, 0, 0.1) !important;
+    border-color: var(--uta-secondary, #FFD700) !important;
+    color: var(--uta-primary, #901B21) !important;
+}
+
+/* Cards */
+.card {
+    border: 1px solid rgba(144, 27, 33, 0.2) !important;
+    box-shadow: 0 4px 6px rgba(144, 27, 33, 0.1) !important;
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--uta-primary, #901B21) 0%, var(--uta-primary-dark, #7A1619) 100%) !important;
+    border-bottom: 2px solid var(--uta-secondary, #FFD700) !important;
+    color: var(--uta-white, #FFFFFF) !important;
+}
+
+.card-title {
+    color: var(--uta-primary, #901B21) !important;
+    font-weight: 600;
+}
+
+/* Formularios */
+.form-control:focus {
+    border-color: var(--uta-primary, #901B21) !important;
+    box-shadow: 0 0 0 0.2rem rgba(144, 27, 33, 0.25) !important;
+}
+
+.form-check-input:checked {
+    background-color: var(--uta-primary, #901B21) !important;
+    border-color: var(--uta-primary, #901B21) !important;
+}
+
+/* Tablas */
+.table-primary {
+    background-color: rgba(144, 27, 33, 0.1) !important;
+}
+
+.table thead th {
+    background: linear-gradient(135deg, var(--uta-primary, #901B21) 0%, var(--uta-primary-dark, #7A1619) 100%) !important;
+    color: var(--uta-white, #FFFFFF) !important;
+    border-bottom: 2px solid var(--uta-secondary, #FFD700) !important;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(144, 27, 33, 0.05) !important;
+}
+
+/* Enlaces */
+a {
+    color: var(#FFFFFF, #901B21) !important;
+}
+
+a:hover {
+    color: var(--uta-primary-dark, #7A1619) !important;
+}
+
+/* Badges */
+.badge-primary {
+    background-color: var(--uta-primary, #901B21) !important;
+    color: #FFFFFF !important;
+}
+
+.badge-secondary {
+    background-color: var(--uta-secondary, #FFD700) !important;
+    color: var(--uta-primary, #901B21) !important;
+}
+
+/* Progress bars */
+.progress-bar {
+    background: linear-gradient(135deg, var(--uta-primary, #901B21) 0%, var(--uta-primary-light, #A52A31) 100%) !important;
+}
+
+/* Spinners */
+.spinner-border-primary {
+    border-color: var(--uta-primary, #901B21) !important;
+}
+
+/* Modal */
+.modal-header {
+    background: linear-gradient(135deg, var(--uta-primary, #901B21) 0%, var(--uta-primary-dark, #7A1619) 100%) !important;
+    color: var(--uta-white, #FFFFFF) !important;
+    border-bottom: 2px solid var(--uta-secondary, #FFD700) !important;
+}
+
+.modal-footer {
+    border-top: 1px solid rgba(144, 27, 33, 0.2) !important;
+}
+
+/* Pagination */
+.page-item.active .page-link {
+    background-color: var(--uta-primary, #901B21) !important;
+    border-color: var(--uta-primary, #901B21) !important;
+    color: #FFFFFF !important;
+}
+
+.page-link {
+    color: var(--uta-primary, #901B21) !important;
+}
+
+.page-link:hover {
+    color: var(--uta-primary-dark, #7A1619) !important;
+    background-color: rgba(144, 27, 33, 0.1) !important;
+    border-color: var(--uta-primary, #901B21) !important;
+}
+
+/* Dropdowns */
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: rgba(144, 27, 33, 0.1) !important;
+    color: var(--uta-primary, #901B21) !important;
+}
+
+/* Toasts */
+.toast-header {
+    background: linear-gradient(135deg, var(--uta-primary, #901B21) 0%, var(--uta-primary-dark, #7A1619) 100%) !important;
+    color: var(--uta-white, #FFFFFF) !important;
+}
+
+/* Accordions */
+.accordion-button:not(.collapsed) {
+    background-color: rgba(144, 27, 33, 0.1) !important;
+    color: var(--uta-primary, #901B21) !important;
+}
+
+/* Offcanvas */
+.offcanvas-header {
+    background: linear-gradient(135deg, var(--uta-primary, #901B21) 0%, var(--uta-primary-dark, #7A1619) 100%) !important;
+    color: var(--uta-white, #FFFFFF) !important;
+}
+
+/* Utilidades adicionales UTA */
+.text-uta-primary {
+    color: var(--uta-primary, #901B21) !important;
+}
+
+.text-uta-secondary {
+    color: var(--uta-secondary, #FFD700) !important;
+}
+
+.bg-uta-primary {
+    background-color: var(--uta-primary, #901B21) !important;
+    color: #FFFFFF !important;
+}
+
+.bg-uta-secondary {
+    background-color: var(--uta-secondary, #FFD700) !important;
+}
+
+.border-uta-primary {
+    border-color: var(--uta-primary, #901B21) !important;
+}
+
+.border-uta-secondary {
+    border-color: var(--uta-secondary, #FFD700) !important;
+}
+
+/* Animaciones UTA */
+.fade-in-uta {
+    animation: fadeInUta 0.5s ease-in;
+}
+
+@keyframes fadeInUta {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.pulse-uta {
+    animation: pulseUta 2s ease-in-out infinite;
+}
+
+@keyframes pulseUta {
+    0% {
+        box-shadow: 0 0 0 0 rgba(144, 27, 33, 0.7);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(144, 27, 33, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(144, 27, 33, 0);
+    }
+}
