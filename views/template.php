@@ -31,6 +31,10 @@
             max-height: 150px;
             object-fit: cover;
             display: block;
+            opacity: 0;
+        }
+
+        .banner-img.ready {
             opacity: 1;
         }
 
@@ -45,6 +49,12 @@
             text-align: center;
             z-index: 2;
             opacity: 0.9;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #901B21 0%, #B22429 50%, #701418 100%);
         }
 
         .banner-placeholder i {
@@ -239,10 +249,9 @@
             if (placeholder && banner && !bannerLoaded) {
                 bannerLoaded = true;
 
-                // Ocultar placeholder inmediatamente
+                // Mostrar banner y ocultar placeholder simultáneamente
+                banner.classList.add('ready');
                 placeholder.style.display = 'none';
-                // Mostrar banner inmediatamente
-                banner.style.opacity = '1';
             }
         }
 
@@ -257,24 +266,24 @@
                 placeholder.style.display = 'block';
                 banner.style.display = 'none';
             }
-        }
-
-        // Optimización de carga del banner
+        } // Optimización de carga del banner
         document.addEventListener('DOMContentLoaded', function() {
             const bannerImg = document.getElementById('banner-img');
             const placeholder = document.getElementById('banner-placeholder');
 
-            // Verificar si la imagen ya está en cache
+            // Verificar si la imagen ya está en cache y cargada
             if (bannerImg && bannerImg.complete && bannerImg.naturalHeight !== 0) {
-                showBanner();
+                // Imagen ya está en caché, mostrar inmediatamente
+                bannerImg.classList.add('ready');
+                if (placeholder) placeholder.style.display = 'none';
+                bannerLoaded = true;
                 return;
             }
 
-            // Precargar la imagen de manera agresiva
+            // Si no está en caché, precarga la imagen
             const img = new Image();
             img.onload = function() {
-                if (bannerImg) {
-                    bannerImg.src = this.src;
+                if (bannerImg && !bannerLoaded) {
                     showBanner();
                 }
             };
