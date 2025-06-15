@@ -41,3 +41,65 @@ RewriteRule ^(.*)$ index.php?action=$1 [QSA,L]
     AddOutputFilterByType DEFLATE application/javascript
     AddOutputFilterByType DEFLATE application/x-javascript
 </IfModule>
+
+# =====================================
+# OPTIMIZACIÓN DE CACHE PARA BANNER UTA
+# =====================================
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    
+    # Cache del Banner UTA y otras imágenes por 30 días
+    ExpiresByType image/png "access plus 30 days"
+    ExpiresByType image/jpeg "access plus 30 days"
+    ExpiresByType image/jpg "access plus 30 days"
+    ExpiresByType image/gif "access plus 30 days"
+    ExpiresByType image/webp "access plus 30 days"
+    ExpiresByType image/svg+xml "access plus 30 days"
+    
+    # Cache de CSS y JS por 7 días
+    ExpiresByType text/css "access plus 7 days"
+    ExpiresByType application/javascript "access plus 7 days"
+    ExpiresByType text/javascript "access plus 7 days"
+    
+    # Cache de fuentes por 1 año
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType application/font-woff "access plus 1 year"
+    ExpiresByType application/font-woff2 "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+    # Headers de cache específicos para imágenes (incluyendo BannerUta.png)
+    <FilesMatch "\.(png|jpg|jpeg|gif|webp|svg)$">
+        Header set Cache-Control "public, max-age=2592000, immutable"
+        Header set Pragma "public"
+        Header append Vary Accept-Encoding
+        # ETag para validación eficiente
+        Header set ETag "W/\"banner-v1.0\""
+    </FilesMatch>
+    
+    # Headers específicos para el Banner UTA
+    <FilesMatch "BannerUta\.png$">
+        Header set Cache-Control "public, max-age=7776000, immutable"
+        Header add Link "</img/BannerUta.png>; rel=preload; as=image; type=image/png"
+        Header set X-Content-Type-Options "nosniff"
+    </FilesMatch>
+    
+    # Headers para CSS y JS
+    <FilesMatch "\.(css|js)$">
+        Header set Cache-Control "public, max-age=604800"
+        Header append Vary Accept-Encoding
+    </FilesMatch>
+</IfModule>
+
+# Headers de seguridad y rendimiento
+<IfModule mod_headers.c>
+    # Preload del banner en todas las páginas
+    Header always add Link "</img/BannerUta.png>; rel=preload; as=image; crossorigin=anonymous"
+    
+    # Headers de optimización
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-Content-Type-Options "nosniff"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

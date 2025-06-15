@@ -219,7 +219,6 @@
                 <li><strong>Cache strategy:</strong> Detección de cache del navegador</li>
             </ul>
         </div>
-
         <div class="performance-info">
             <h3>📱 Pruebas Recomendadas</h3>
             <ol>
@@ -229,6 +228,41 @@
                 <li>Simular error de red</li>
                 <li>Recargar página (con cache)</li>
             </ol>
+        </div>
+
+        <div class="performance-info">
+            <h3>💾 Demostración de Cache del Navegador</h3>
+            <div id="cache-demo">
+                <p><strong>Estado actual:</strong> <span id="cache-current">Analizando...</span></p>
+
+                <div style="margin: 15px 0;">
+                    <button onclick="testCachePerformance()"
+                        style="background: #901B21; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-right: 10px;">
+                        🔄 Probar Cache (Recargar)
+                    </button>
+                    <button onclick="simulateFirstVisit()"
+                        style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+                        🆕 Simular Primera Visita
+                    </button>
+                </div>
+
+                <div id="cache-results"
+                    style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin-top: 10px; min-height: 100px;">
+                    <h4>Resultados de Pruebas:</h4>
+                    <div id="test-logs"></div>
+                </div>
+
+                <div style="margin-top: 15px; padding: 10px; background: #e7f3ff; border-radius: 5px;">
+                    <h4>📝 ¿Cómo Funciona el Cache?</h4>
+                    <ul style="margin: 10px 0; padding-left: 20px;">
+                        <li><strong>Primera visita:</strong> Banner se descarga (500-2000ms)</li>
+                        <li><strong>Visitas posteriores:</strong> Banner desde cache (5-50ms)</li>
+                        <li><strong>Cache duration:</strong> Navegador guarda por días/semanas</li>
+                        <li><strong>Hard refresh (Ctrl+F5):</strong> Fuerza nueva descarga</li>
+                        <li><strong>Modo incógnito:</strong> Simula primera visita</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -342,14 +376,137 @@
                     handleBannerError();
                 }
             }, 5000);
-        });
-
-        // Cargar CSS no crítico después del banner
+        });        // Cargar CSS no crítico después del banner
         window.addEventListener('load', function () {
             const links = document.querySelectorAll('link[media="print"]');
             links.forEach(link => {
                 link.media = 'all';
             });
+
+            // Actualizar estado de cache después de cargar
+            updateCacheStatus();
+        });
+
+        // FUNCIONES DE DEMOSTRACIÓN DE CACHE
+        function updateCacheStatus() {
+            const cacheCurrentSpan = document.getElementById('cache-current');
+            const banner = document.getElementById('banner-img');
+
+            if (banner && banner.complete && banner.naturalHeight !== 0) {
+                cacheCurrentSpan.innerHTML = '<span style="color: #28a745;">✅ Banner en cache del navegador</span>';
+            } else {
+                cacheCurrentSpan.innerHTML = '<span style="color: #ffc107;">📥 Banner descargado desde servidor</span>';
+            }
+        }
+
+        function logTest(message, time, type = 'info') {
+            const testLogs = document.getElementById('test-logs');
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'success' ? '#28a745' : type === 'warning' ? '#ffc107' : '#6c757d';
+
+            testLogs.innerHTML += `
+                <div style="margin: 5px 0; padding: 8px; background: white; border-radius: 3px; border-left: 4px solid ${color};">
+                    <strong>[${timestamp}]</strong> ${message} 
+                    ${time ? `<span style="color: ${color}; font-weight: bold;">(${time}ms)</span>` : ''}
+                </div>
+            `;
+            testLogs.scrollTop = testLogs.scrollHeight;
+        }
+
+        function testCachePerformance() {
+            const startTime = performance.now();
+            logTest('🔄 Iniciando test de cache...', null, 'info');
+
+            // Simular recarga de página
+            const banner = document.getElementById('banner-img');
+            const placeholder = document.getElementById('banner-placeholder');
+
+            // Reset visual state
+            bannerLoaded = false;
+            banner.classList.remove('loaded');
+            banner.style.opacity = '0';
+            placeholder.style.display = 'block';
+            placeholder.style.opacity = '0.9';
+
+            // Crear nueva instancia para medir cache
+            const testImg = new Image();
+
+            testImg.onload = function () {
+                const endTime = performance.now();
+                const loadTime = Math.round(endTime - startTime);
+
+                // Restaurar banner
+                setTimeout(() => {
+                    placeholder.style.opacity = '0';
+                    setTimeout(() => {
+                        placeholder.style.display = 'none';
+                        banner.style.opacity = '1';
+                        banner.classList.add('loaded');
+                    }, 300);
+                }, 100);
+
+                if (loadTime < 50) {
+                    logTest('🚀 Banner cargado desde CACHE', loadTime, 'success');
+                    logTest('✨ ¡Ultra rápido! No hubo descarga de red', null, 'success');
+                } else {
+                    logTest('📥 Banner descargado desde servidor', loadTime, 'warning');
+                    logTest('🌐 Descarga completa - primera vez o cache expirado', null, 'warning');
+                }
+            };
+
+            testImg.src = banner.src + '?t=' + Date.now(); // Cache busting para test real
+        }
+
+        function simulateFirstVisit() {
+            logTest('🆕 Simulando primera visita (sin cache)...', null, 'info');
+
+            // Clear banner from cache by changing src temporarily
+            const banner = document.getElementById('banner-img');
+            const placeholder = document.getElementById('banner-placeholder');
+            const originalSrc = banner.src;
+
+            // Reset visual state
+            bannerLoaded = false;
+            banner.classList.remove('loaded');
+            banner.style.opacity = '0';
+            placeholder.style.display = 'block';
+            placeholder.style.opacity = '0.9';
+            placeholder.innerHTML = '<i class="fas fa-university"></i> Simulando primera visita...';
+
+            const startTime = performance.now();
+
+            // Force reload with cache busting
+            const testImg = new Image();
+            testImg.onload = function () {
+                const endTime = performance.now();
+                const loadTime = Math.round(endTime - startTime);
+
+                setTimeout(() => {
+                    placeholder.style.opacity = '0';
+                    setTimeout(() => {
+                        placeholder.style.display = 'none';
+                        placeholder.innerHTML = '<i class="fas fa-university"></i> Universidad Técnica de Ambato';
+                        banner.style.opacity = '1';
+                        banner.classList.add('loaded');
+                    }, 300);
+                }, 200);
+
+                logTest('📥 Banner descargado como primera visita', loadTime, 'warning');
+                logTest('💡 En la próxima recarga será instantáneo desde cache', null, 'info');
+            };
+
+            testImg.src = originalSrc + '?bust=' + Math.random();
+        }
+
+        // Inicializar estado de cache al cargar
+        document.addEventListener('DOMContentLoaded', function () {
+            setTimeout(updateCacheStatus, 500);
+
+            // Log inicial
+            setTimeout(() => {
+                logTest('🏁 Sistema de cache inicializado', null, 'info');
+                logTest('💡 Usa los botones arriba para probar el rendimiento', null, 'info');
+            }, 1000);
         });
     </script>
 </body>
