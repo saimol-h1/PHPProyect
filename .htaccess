@@ -70,7 +70,7 @@ RewriteRule ^(.*)$ index.php?action=$1 [QSA,L]
 </IfModule>
 
 <IfModule mod_headers.c>
-    # Headers de cache específicos para imágenes (incluyendo BannerUta.png)
+    # Headers de cache específicos para imágenes locales
     <FilesMatch "\.(png|jpg|jpeg|gif|webp|svg)$">
         Header set Cache-Control "public, max-age=2592000, immutable"
         Header set Pragma "public"
@@ -78,15 +78,7 @@ RewriteRule ^(.*)$ index.php?action=$1 [QSA,L]
         # ETag para validación eficiente
         Header set ETag "W/\"banner-v1.0\""
     </FilesMatch>
-    
-    # Headers específicos para el Banner UTA
-    <FilesMatch "BannerUta\.png$">
-        Header set Cache-Control "public, max-age=7776000, immutable"
-        Header add Link "</img/BannerUta.png>; rel=preload; as=image; type=image/png"
-        Header set X-Content-Type-Options "nosniff"
-    </FilesMatch>
-    
-    # Headers para CSS y JS
+      # Headers para CSS y JS
     <FilesMatch "\.(css|js)$">
         Header set Cache-Control "public, max-age=604800"
         Header append Vary Accept-Encoding
@@ -95,9 +87,6 @@ RewriteRule ^(.*)$ index.php?action=$1 [QSA,L]
 
 # Headers de seguridad y rendimiento
 <IfModule mod_headers.c>
-    # Preload del banner en todas las páginas
-    Header always add Link "</img/BannerUta.png>; rel=preload; as=image; crossorigin=anonymous"
-    
     # Headers de optimización
     Header set X-Frame-Options "SAMEORIGIN"
     Header set X-Content-Type-Options "nosniff"
