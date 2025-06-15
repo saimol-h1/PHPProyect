@@ -99,7 +99,7 @@
             </div>
         </div>
     </nav>
-    <section class="container-fluid mt-3">
+    <section class="container-fluid mt-0">
         <?php
         // El contenido se renderiza desde el controlador principal
         global $mvcController;
