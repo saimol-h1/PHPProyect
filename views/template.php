@@ -31,11 +31,6 @@
             max-height: 150px;
             object-fit: cover;
             display: block;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-        }
-
-        .banner-img.loaded {
             opacity: 1;
         }
 
@@ -53,25 +48,7 @@
         }
 
         .banner-placeholder i {
-            animation: bannerPulse 2s infinite;
             margin-right: 10px;
-        }
-
-        @keyframes bannerPulse {
-            0% {
-                opacity: 0.6;
-                transform: scale(1);
-            }
-
-            50% {
-                opacity: 1;
-                transform: scale(1.05);
-            }
-
-            100% {
-                opacity: 0.6;
-                transform: scale(1);
-            }
         }
 
         .user-overlay {
@@ -254,9 +231,7 @@
     <!-- Script de optimización del banner -->
     <script>
         // Variables globales para el banner
-        let bannerLoaded = false;
-
-        // Función para mostrar el banner cuando carga
+        let bannerLoaded = false; // Función para mostrar el banner cuando carga
         function showBanner() {
             const placeholder = document.getElementById('banner-placeholder');
             const banner = document.getElementById('banner-img');
@@ -264,15 +239,10 @@
             if (placeholder && banner && !bannerLoaded) {
                 bannerLoaded = true;
 
-                // Ocultar placeholder con animación
-                placeholder.style.transition = 'opacity 0.3s ease-out';
-                placeholder.style.opacity = '0';
-
-                setTimeout(() => {
-                    placeholder.style.display = 'none';
-                    // Mostrar banner con animación
-                    banner.classList.add('loaded');
-                }, 300);
+                // Ocultar placeholder inmediatamente
+                placeholder.style.display = 'none';
+                // Mostrar banner inmediatamente
+                banner.style.opacity = '1';
             }
         }
 
