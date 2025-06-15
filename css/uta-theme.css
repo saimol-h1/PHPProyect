@@ -73,7 +73,7 @@
 
 .card-header {
     background: linear-gradient(135deg, var(--uta-primary, #901B21) 0%, var(--uta-primary-dark, #7A1619) 100%) !important;
-    border-bottom: 2px solid var(--uta-secondary, #FFFFFF) !important;
+    border-bottom: 2px solid var(--uta-secondary, #FFD700) !important;
     color: var(--uta-white, #FFFFFF) !important;
 }
 

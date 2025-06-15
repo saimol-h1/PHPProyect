@@ -6,7 +6,7 @@
     position: relative;
     width: 100%;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(144, 27, 33, 0.3);
+
     /* border-bottom: 3px solid var(--uta-secondary, #FFD700); */
 }
 
@@ -169,7 +169,7 @@
 /* Mejoras para la navegación */
 .navbar-dark.bg-primary {
     background: linear-gradient(90deg, var(--uta-primary, #901B21) 0%, var(--uta-primary-dark, #7A1619) 100%) !important;
-    border-top: 2px solid var(--uta-secondary, #FFD700);
+    border-top: 2px solid var(--uta-secondary, #FFFFFF);
     box-shadow: 0 2px 4px rgba(144, 27, 33, 0.2);
 }
 
@@ -180,7 +180,7 @@
 }
 
 .navbar-dark .navbar-nav .nav-link:hover {
-    color: var(--uta-secondary, #FFD700) !important;
+    color: var(--uta-secondary, #FFFFFF) !important;
     transform: translateY(-1px);
 }
 
@@ -191,7 +191,7 @@
     left: 50%;
     width: 0;
     height: 2px;
-    background: var(--uta-secondary, #FFD700);
+    background: var(--uta-secondary, #FFFFFF);
     transition: all 0.3s ease;
     transform: translateX(-50%);
 }

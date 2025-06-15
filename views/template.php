@@ -25,7 +25,7 @@
     <header>
         <div class="container-fluid p-0 position-relative">
             <!-- Banner ocupa todo el ancho -->
-            <div class="banner-full-width uta-banner">
+            <div class="banner-full-width ">
                 <img src="<?php echo getUrl('img', 'BannerUta.png'); ?>"
                     alt="Universidad Técnica de Ambato"
                     class="img-fluid w-110 banner-full-logo"
