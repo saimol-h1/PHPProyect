@@ -8,7 +8,7 @@
     <title>UTA - Universidad Técnica de Ambato</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- PRELOAD CRÍTICO: Banner UTA desde Cloudinary CDN para carga prioritaria -->
-    <link rel="preload" href="https://res.cloudinary.com/dwwvecqnu/image/upload/v1749961171/srjxoupeycmg9yaanbz3.png" as="image" type="image/png">
+    <link rel="preload" href="https://res.cloudinary.com/dwwvecqnu/image/upload/f_auto,q_auto/srjxoupeycmg9yaanbz3" as="image" type="image/png">
 
     <!-- CSS crítico inline para el banner (evita esperar archivos CSS externos) -->
     <style>
@@ -160,11 +160,11 @@
         <div class="banner-container">
             <!-- Placeholder mientras carga el banner -->
             <div id="banner-placeholder" class="banner-placeholder">
-                <i class="fas fa-university"></i>
-                Universidad Técnica de Ambato
+                <i class=""></i>
+
             </div> <!-- Banner real con carga optimizada desde Cloudinary CDN -->
             <img id="banner-img"
-                src="https://res.cloudinary.com/dwwvecqnu/image/upload/v1749961171/srjxoupeycmg9yaanbz3.png"
+                src="https://res.cloudinary.com/dwwvecqnu/image/upload/f_auto,q_auto/srjxoupeycmg9yaanbz3"
                 alt="Universidad Técnica de Ambato"
                 class="banner-img"
                 loading="eager"
