@@ -171,7 +171,7 @@
 /* Mejoras para la navegación */
 .navbar-dark.bg-primary {
     background: linear-gradient(90deg, var(--uta-primary, #901B21) 0%, var(--uta-primary-dark, #7A1619) 100%) !important;
-    border-top: 2px solid var(--uta-secondary, #FFFFFF);
+    border-top: 0px solid var(--uta-secondary, #FFFFFF);
     box-shadow: 0 2px 4px rgba(144, 27, 33, 0.2);
 }
 
@@ -214,7 +214,7 @@
 }
 
 .banner-loading::before {
-    content: "🏛️ Cargando Universidad Técnica de Ambato...";
+    content: "";
     animation: pulse 2s ease-in-out infinite;
     color: #FFFFFF;
 }
