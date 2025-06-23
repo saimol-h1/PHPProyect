@@ -282,11 +282,22 @@
                     <i class="fas fa-exclamation-triangle me-2"></i>
                     <?php
                     switch ($_GET['error']) {
-                        case 'invalid':
-                            echo 'Usuario o contraseña incorrectos';
+                        case 'empty':
+                            echo 'Por favor, complete todos los campos.';
                             break;
-                        case 'required':
-                            echo 'Debe iniciar sesión para acceder a esta sección';
+                        case 'user_not_found':
+                            echo 'Usuario no encontrado.';
+                            break;
+                        case 'wrong_password':
+                            $attempts = isset($_GET['attempts']) ? $_GET['attempts'] : 0;
+                            echo 'Contraseña incorrecta. Le quedan ' . $attempts . ' intentos.';
+                            break;
+                        case 'account_locked':
+                            $user = isset($_GET['user']) ? $_GET['user'] : '';
+                            echo '¡CUENTA BLOQUEADA! El usuario "' . htmlspecialchars($user) . '" ha sido bloqueado por múltiples intentos fallidos.';
+                            break;
+                        case 'account_blocked':
+                            echo 'Su cuenta está bloqueada.';
                             break;
                         default:
                             echo 'Error de autenticación';
