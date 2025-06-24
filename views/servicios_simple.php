@@ -104,6 +104,8 @@ $es_admin = isAdmin();
     <!-- Buscador de cédula -->
     <div class="mb-3">
         <input type="text" class="form-control" id="busquedaCedula" placeholder="Buscar por cédula...">
+        <br>
+        <button id="btnReporteCedula" class="btn btn-primary mb-3" disabled>Ver Reporte de Cédula</button>
     </div>
 
     <!-- Lista de estudiantes -->
@@ -178,7 +180,7 @@ $es_admin = isAdmin();
 
             estudiantes.forEach(estudiante => {
                 html += `
-                <tr>
+                <tr class="fila-estudiante" data-cedula="${estudiante.cedula}">
                     <td>${estudiante.id}</td>
                     <td>${estudiante.nombres}</td>
                     <td>${estudiante.apellidos}</td>
@@ -208,6 +210,17 @@ $es_admin = isAdmin();
         }
 
         document.getElementById('tablaEstudiantes').innerHTML = html;
+
+        document.querySelectorAll('.fila-estudiante').forEach(fila => {
+        fila.addEventListener('click', function() {
+            // Quitar selección previa
+            document.querySelectorAll('.fila-estudiante').forEach(f => f.classList.remove('table-active'));
+            this.classList.add('table-active');
+            // Habilitar botón y guardar cédula seleccionada
+            document.getElementById('btnReporteCedula').disabled = false;
+            document.getElementById('btnReporteCedula').dataset.cedula = this.dataset.cedula;
+        });
+    })
     }
 
     // Funciones para el formulario (solo si es admin)
@@ -386,5 +399,12 @@ $es_admin = isAdmin();
             document.getElementById('tablaEstudiantes').innerHTML =
                 '<div class="alert alert-danger">Error de conexión</div>';
         });
+    });
+
+    document.getElementById('btnReporteCedula').addEventListener('click', function() {
+        const cedula = this.dataset.cedula;
+        if (cedula) {
+            window.open('reports/reporteCedula.php?cedula=' + encodeURIComponent(cedula), '_blank');
+        }
     });
 </script>
