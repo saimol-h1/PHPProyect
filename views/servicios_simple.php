@@ -27,6 +27,9 @@ $es_admin = isAdmin();
             <button class="btn btn-primary" onclick="cargarEstudiantes()">
                 <i class="fas fa-refresh"></i> Actualizar Lista
             </button>
+            <a type="button" class="btn btn-sm" href="reports/reporteGeneral.php">
+                <i class="fas fa-users"></i> Reporte de Estudiantes
+            </a>
         </div>
     </div>
 
@@ -97,6 +100,11 @@ $es_admin = isAdmin();
             </div>
         </div>
     <?php endif; ?>
+
+    <!-- Buscador de cédula -->
+    <div class="mb-3">
+        <input type="text" class="form-control" id="busquedaCedula" placeholder="Buscar por cédula...">
+    </div>
 
     <!-- Lista de estudiantes -->
     <div class="card">
@@ -345,4 +353,38 @@ $es_admin = isAdmin();
                 });
         });
     <?php endif; ?>
+    // Función para cargar reporte de estudiantes
+    function cargarRerporteEstudiantes() {
+        window.open('reports/reporteGeneral.php', '_blank');
+    }
+
+    // Buscar estudiantes por cédula en tiempo real
+    document.getElementById('busquedaCedula').addEventListener('input', function() {
+        const cedula = this.value.trim();
+        if (cedula === '') {
+            cargarEstudiantes(); // Si está vacío, carga todos
+            return;
+        }
+        fetch('models/selectCed.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'cedula=' + encodeURIComponent(cedula)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                mostrarTablaEstudiantes(data.data);
+            } else {
+                document.getElementById('tablaEstudiantes').innerHTML =
+                    '<div class="alert alert-danger">Error al buscar: ' + (data.error || 'Error desconocido') + '</div>';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('tablaEstudiantes').innerHTML =
+                '<div class="alert alert-danger">Error de conexión</div>';
+        });
+    });
 </script>
