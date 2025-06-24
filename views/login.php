@@ -288,6 +288,12 @@
                         case 'required':
                             echo 'Debe iniciar sesión para acceder a esta sección';
                             break;
+                        case 'inactive':
+                            echo 'Usuario inactivo. Contacte al administrador';
+                            break;
+                        case 'blocked':
+                            echo 'Usuario bloqueado por múltiples intentos fallidos. Contacte al administrador';
+                            break;
                         default:
                             echo 'Error de autenticación';
                     }
