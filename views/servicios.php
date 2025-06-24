@@ -46,6 +46,9 @@ $es_admin = isAdmin();
                                 <button type="button" class="btn btn-info" onclick="cargarEstudiantes()">
                                     <i class="fas fa-refresh"></i> Actualizar Lista
                                 </button>
+                                <a type="button" class="btn btn-sm" href="reports/reporteGeneral.php">
+                                    <i class="fas fa-users"></i> Reporte de Estudiantes
+                                </a>
                             </div>
                         <?php else: ?>
                             <!-- Botones de secretaria (solo lectura) -->
@@ -53,6 +56,9 @@ $es_admin = isAdmin();
                                 <button type="button" class="btn btn-info" onclick="cargarEstudiantes()">
                                     <i class="fas fa-refresh"></i> Actualizar Lista
                                 </button>
+                                <a type="button" class="btn btn-sm" href="reports/reporteGeneral.php">
+                                    <i class="fas fa-users"></i> Reporte de Estudiantes
+                                </a>
                                 <div class="alert alert-warning">
                                     <i class="fas fa-info-circle"></i> Modo solo lectura - Contacte al administrador para realizar cambios
                                 </div>
@@ -183,7 +189,6 @@ $es_admin = isAdmin();
 
         $(document).ready(function() {
             cargarEstudiantes();
-
             <?php if ($es_admin): ?>
                 // Form para agregar
                 $('#formAgregar').on('submit', function(e) {
@@ -328,6 +333,9 @@ $es_admin = isAdmin();
                 }
             }
         <?php endif; ?>
+        function cargarRerporteEstudiantes() {
+            window.open('reports/reporteGeneral.php', '_blank');
+        }
     </script>
 </body>
 
