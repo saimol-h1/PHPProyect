@@ -12,8 +12,6 @@ CREATE TABLE IF NOT EXISTS usuarios (
     nombre_completo VARCHAR(100) NOT NULL,
     email VARCHAR(100),
     estado ENUM('activo', 'inactivo') DEFAULT 'activo',
-    intentos_fallidos INT DEFAULT 0,
-    ultimo_intento_fallido TIMESTAMP NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
