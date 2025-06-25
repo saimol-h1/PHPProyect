@@ -24,12 +24,12 @@ $pdf->Ln();
 while ($row = $resultado->fetch_assoc()) {
     // Datos de la fila
     $data = [
-        imap_utf8($row['nombres']),
-        imap_utf8($row['apellidos']),
-        imap_utf8($row['cedula']),
-        imap_utf8($row['carrera']),
-        imap_utf8($row['email']),
-        imap_utf8($row['telefono'])
+        iconv('ISO-8859-1', 'UTF-8//TRANSLIT', $row['nombres']),
+        iconv('ISO-8859-1', 'UTF-8//TRANSLIT', $row['apellidos']),
+        iconv('ISO-8859-1', 'UTF-8//TRANSLIT', $row['cedula']),
+        iconv('ISO-8859-1', 'UTF-8//TRANSLIT', $row['carrera']),
+        iconv('ISO-8859-1', 'UTF-8//TRANSLIT', $row['email']),
+        iconv('ISO-8859-1', 'UTF-8//TRANSLIT', $row['telefono'])
     ];
     // Anchos de cada columna
     $widths = [20, 40, 30, 40, 60, 30];
