@@ -22,12 +22,12 @@ $pdf->Ln();
 while ($row = $resultado->fetch_assoc()) {
     // Datos de la fila
     $data = [
-        utf8_decode($row['nombres']),
-        utf8_decode($row['apellidos']),
-        utf8_decode($row['cedula']),
-        utf8_decode($row['carrera']),
-        utf8_decode($row['email']),
-        utf8_decode($row['telefono'])
+        iconv('ISO-8859-1', 'UTF-8', $row['nombres']),
+        iconv('ISO-8859-1', 'UTF-8', $row['apellidos']),
+        iconv('ISO-8859-1', 'UTF-8', $row['cedula']),
+        iconv('ISO-8859-1', 'UTF-8', $row['carrera']),
+        iconv('ISO-8859-1', 'UTF-8', $row['email']),
+        iconv('ISO-8859-1', 'UTF-8', $row['telefono'])
     ];
     // Anchos de cada columna
     $widths = [20, 40, 30, 40, 60, 30];
