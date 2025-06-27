@@ -152,6 +152,55 @@
         }
 
         /* Media Queries para Responsividad */
+
+        /* Pantalla Flow AMOLED DotDisplay CrystalRes 1.5K de 6.67" (2712 × 1220, 446 PPP) */
+        @media screen and (max-width: 2712px) and (min-width: 1221px) and (orientation: landscape),
+        screen and (max-width: 1220px) and (min-width: 1100px) and (orientation: portrait) {
+            .banner-container {
+                min-height: 140px;
+                padding: 8px;
+            }
+
+            .banner-img {
+                max-height: 180px;
+                min-height: 130px;
+            }
+
+            .banner-placeholder {
+                font-size: 1.8rem;
+                padding: 15px;
+            }
+
+            .banner-placeholder i {
+                margin-right: 12px;
+                font-size: 2rem;
+            }
+
+            .user-overlay {
+                top: 15px;
+                right: 20px;
+                padding: 12px 20px;
+                border-radius: 25px;
+                backdrop-filter: blur(15px);
+            }
+
+            .user-overlay .text-white {
+                font-size: 1.1rem;
+                line-height: 1.3;
+            }
+
+            .user-overlay .text-white small {
+                font-size: 0.85rem;
+                margin-top: 3px;
+            }
+
+            .user-overlay .btn {
+                font-size: 0.9rem;
+                padding: 0.4rem 0.8rem;
+                margin-top: 5px;
+            }
+        }
+
         @media (max-width: 1200px) {
             .banner-container {
                 min-height: 110px;
@@ -263,6 +312,52 @@
                 font-size: 0.7rem;
                 padding: 0.15rem 0.3rem;
                 margin-top: 3px;
+            }
+        }
+
+        @media (max-width: 390px) {
+            .banner-container {
+                min-height: 75px;
+                padding: 3px;
+            }
+
+            .banner-img {
+                max-height: 95px;
+                min-height: 75px;
+            }
+
+            .banner-placeholder {
+                font-size: 0.95rem;
+                padding: 8px;
+            }
+
+            .banner-placeholder i {
+                margin-right: 8px;
+                font-size: 1.1rem;
+            }
+
+            .user-overlay {
+                margin: 6px auto 0;
+                padding: 6px 10px;
+                border-radius: 10px;
+                width: 96%;
+                max-width: 280px;
+            }
+
+            .user-overlay .text-white {
+                font-size: 0.8rem;
+                line-height: 1.2;
+            }
+
+            .user-overlay .text-white small {
+                font-size: 0.65rem;
+                margin-top: 2px;
+            }
+
+            .user-overlay .btn {
+                font-size: 0.7rem;
+                padding: 0.15rem 0.35rem;
+                margin-top: 4px;
             }
         }
 
