@@ -220,12 +220,12 @@
                         <i class="fas fa-user"></i>
                         <?php echo htmlspecialchars($_SESSION['nombre_completo'] ?? 'Usuario'); ?>
                         <small class="d-block" style="color: #E0E0E0; font-size: 0.7rem;">
-                            <?php echo ucfirst($_SESSION['tipo_usuario'] ?? 'usuario'); ?>
+                            <?php echo ucfirst($_SESSION['usuario_tipo'] ?? 'usuario'); ?>
                         </small>
                     </span>
-                    <a href="<?php echo getUrl('', 'logout.php'); ?>" class="btn btn-sm ms-2">
+                    <!-- <a href="<?php echo getUrl('', 'logout.php'); ?>" class="btn btn-sm ms-2">
                         <i class="fas fa-sign-out-alt"></i> Salir
-                    </a>
+                    </a> -->
                 </div>
             <?php endif; ?>
         </div>
