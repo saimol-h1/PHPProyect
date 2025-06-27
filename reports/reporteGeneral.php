@@ -2,6 +2,33 @@
 require('../fpdf186/fpdf.php');
 require('../models/conexion.php');
 
+// Función para convertir UTF-8 (reemplazo de utf8_decode deprecado)
+function convertToLatin1($text)
+{
+    if (function_exists('mb_convert_encoding')) {
+        return mb_convert_encoding($text, 'ISO-8859-1', 'UTF-8');
+    } else {
+        // Fallback para caracteres comunes en español
+        $replacements = [
+            'á' => 'a',
+            'é' => 'e',
+            'í' => 'i',
+            'ó' => 'o',
+            'ú' => 'u',
+            'Á' => 'A',
+            'É' => 'E',
+            'Í' => 'I',
+            'Ó' => 'O',
+            'Ú' => 'U',
+            'ñ' => 'n',
+            'Ñ' => 'N',
+            'ü' => 'u',
+            'Ü' => 'U'
+        ];
+        return strtr($text, $replacements);
+    }
+}
+
 // Clase personalizada para el PDF
 class UniversityPDF extends FPDF
 {
@@ -24,14 +51,14 @@ class UniversityPDF extends FPDF
         $this->SetFont('Arial', 'B', 18);
         $this->SetY(8);
         $this->SetX(50); // Margen izquierdo para centrar entre logos
-        $this->Cell(197, 8, utf8_decode('UNIVERSIDAD TÉCNICA DE AMBATO'), 0, 1, 'C');
+        $this->Cell(197, 8, convertToLatin1('UNIVERSIDAD TÉCNICA DE AMBATO'), 0, 1, 'C');
 
         // Subtítulo
         $this->SetFont('Arial', '', 12);
         $this->SetX(50);
-        $this->Cell(197, 6, utf8_decode('FACULTAD DE INGENIERÍA EN SISTEMAS'), 0, 1, 'C');
+        $this->Cell(197, 6, convertToLatin1('FACULTAD DE INGENIERÍA EN SISTEMAS'), 0, 1, 'C');
         $this->SetX(50);
-        $this->Cell(197, 6, utf8_decode('SISTEMA DE GESTIÓN ESTUDIANTIL'), 0, 1, 'C');
+        $this->Cell(197, 6, convertToLatin1('SISTEMA DE GESTIÓN ESTUDIANTIL'), 0, 1, 'C');
 
         // Línea decorativa (centrada entre logos)
         $this->SetDrawColor(255, 255, 255);
@@ -60,13 +87,13 @@ class UniversityPDF extends FPDF
         $this->SetFont('Arial', 'I', 8);
         $this->SetTextColor(100, 100, 100);
         $this->Ln(3);
-        $this->Cell(0, 4, utf8_decode('Universidad Técnica de Ambato - Av. Los Chasquis y Río Payamino'), 0, 1, 'C');
-        $this->Cell(0, 4, utf8_decode('Teléfono: (03) 2521081 - Email: info@uta.edu.ec'), 0, 1, 'C');
+        $this->Cell(0, 4, convertToLatin1('Universidad Técnica de Ambato - Av. Los Chasquis y Río Payamino'), 0, 1, 'C');
+        $this->Cell(0, 4, convertToLatin1('Teléfono: (03) 2521081 - Email: info@uta.edu.ec'), 0, 1, 'C');
 
         // Número de página
         $this->SetTextColor(0, 0, 0);
         $this->SetFont('Arial', '', 8);
-        $this->Cell(0, 4, utf8_decode('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'R');
+        $this->Cell(0, 4, convertToLatin1('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'R');
 
         // Fecha de generación
         $this->SetX(10);
@@ -83,14 +110,14 @@ $totalEstudiantes = $resultado->num_rows;
 $pdf = new UniversityPDF();
 $pdf->AliasNbPages();
 $pdf->AddPage('L');
-$pdf->SetTitle(utf8_decode('Reporte General de Estudiantes - UTA'));
-$pdf->SetAuthor(utf8_decode('Universidad Técnica de Ambato'));
-$pdf->SetSubject(utf8_decode('Listado de Estudiantes Registrados'));
+$pdf->SetTitle(convertToLatin1('Reporte General de Estudiantes - UTA'));
+$pdf->SetAuthor(convertToLatin1('Universidad Técnica de Ambato'));
+$pdf->SetSubject(convertToLatin1('Listado de Estudiantes Registrados'));
 
 // Información del reporte
 $pdf->SetFont('Arial', 'B', 16);
 $pdf->SetTextColor(144, 27, 33);
-$pdf->Cell(0, 10, utf8_decode('REPORTE GENERAL DE ESTUDIANTES'), 0, 1, 'C');
+$pdf->Cell(0, 10, convertToLatin1('REPORTE GENERAL DE ESTUDIANTES'), 0, 1, 'C');
 
 $pdf->SetFont('Arial', '', 10);
 $pdf->SetTextColor(0, 0, 0);
@@ -100,10 +127,10 @@ $pdf->Ln(5);
 $pdf->SetFillColor(240, 240, 240);
 $pdf->Rect(10, $pdf->GetY(), 277, 15, 'F');
 $pdf->SetFont('Arial', 'B', 10);
-$pdf->Cell(60, 6, utf8_decode('RESUMEN ESTADÍSTICO:'), 0, 0, 'L');
+$pdf->Cell(60, 6, convertToLatin1('RESUMEN ESTADÍSTICO:'), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
 $pdf->Cell(50, 6, 'Total de Estudiantes: ' . $totalEstudiantes, 0, 0, 'L');
-$pdf->Cell(80, 6, utf8_decode('Fecha de Generación: ') . date('d/m/Y'), 0, 0, 'L');
+$pdf->Cell(80, 6, convertToLatin1('Fecha de Generación: ') . date('d/m/Y'), 0, 0, 'L');
 date_default_timezone_set('America/Guayaquil');
 $pdf->Cell(0, 6, 'Hora: ' . date('H:i:s'), 0, 1, 'L');
 $pdf->Ln(10);
@@ -118,10 +145,10 @@ $pdf->SetDrawColor(128, 128, 128);
 $pdf->Cell(15, 8, 'ID', 1, 0, 'C', true);
 $pdf->Cell(35, 8, 'NOMBRES', 1, 0, 'C', true);
 $pdf->Cell(35, 8, 'APELLIDOS', 1, 0, 'C', true);
-$pdf->Cell(25, 8, utf8_decode('CÉDULA'), 1, 0, 'C', true);
+$pdf->Cell(25, 8, convertToLatin1('CÉDULA'), 1, 0, 'C', true);
 $pdf->Cell(40, 8, 'CARRERA', 1, 0, 'C', true);
 $pdf->Cell(50, 8, 'EMAIL', 1, 0, 'C', true);
-$pdf->Cell(25, 8, utf8_decode('TELÉFONO'), 1, 0, 'C', true);
+$pdf->Cell(25, 8, convertToLatin1('TELÉFONO'), 1, 0, 'C', true);
 $pdf->Cell(15, 8, 'SEM.', 1, 0, 'C', true);
 $pdf->Cell(27, 8, 'F. NACIMIENTO', 1, 1, 'C', true);
 
@@ -141,11 +168,11 @@ while ($row = $resultado->fetch_assoc()) {
 
     // Convertir datos para evitar problemas de codificación
     $id = $row['id'] ?? 'N/A';
-    $nombres = utf8_decode($row['nombres'] ?? 'N/A');
-    $apellidos = utf8_decode($row['apellidos'] ?? 'N/A');
+    $nombres = convertToLatin1($row['nombres'] ?? 'N/A');
+    $apellidos = convertToLatin1($row['apellidos'] ?? 'N/A');
     $cedula = $row['cedula'] ?? 'N/A';
-    $carrera = utf8_decode($row['carrera'] ?? 'N/A');
-    $email = utf8_decode($row['email'] ?? 'N/A');
+    $carrera = convertToLatin1($row['carrera'] ?? 'N/A');
+    $email = convertToLatin1($row['email'] ?? 'N/A');
     $telefono = $row['telefono'] ?? 'N/A';
     $semestre = $row['semestre'] ?? 'N/A';
     $fecha_nacimiento = $row['fecha_nacimiento'] ?? 'N/A';
@@ -176,10 +203,10 @@ while ($row = $resultado->fetch_assoc()) {
         $pdf->Cell(15, 8, 'ID', 1, 0, 'C', true);
         $pdf->Cell(35, 8, 'NOMBRES', 1, 0, 'C', true);
         $pdf->Cell(35, 8, 'APELLIDOS', 1, 0, 'C', true);
-        $pdf->Cell(25, 8, utf8_decode('CÉDULA'), 1, 0, 'C', true);
+        $pdf->Cell(25, 8, convertToLatin1('CÉDULA'), 1, 0, 'C', true);
         $pdf->Cell(40, 8, 'CARRERA', 1, 0, 'C', true);
         $pdf->Cell(50, 8, 'EMAIL', 1, 0, 'C', true);
-        $pdf->Cell(25, 8, utf8_decode('TELÉFONO'), 1, 0, 'C', true);
+        $pdf->Cell(25, 8, convertToLatin1('TELÉFONO'), 1, 0, 'C', true);
         $pdf->Cell(15, 8, 'SEM.', 1, 0, 'C', true);
         $pdf->Cell(27, 8, 'F. NACIMIENTO', 1, 1, 'C', true);
 
@@ -205,20 +232,20 @@ while ($row = $resultado->fetch_assoc()) {
 if ($totalEstudiantes == 0) {
     $pdf->SetFont('Arial', 'I', 12);
     $pdf->SetTextColor(128, 128, 128);
-    $pdf->Cell(0, 20, utf8_decode('No hay estudiantes registrados en el sistema'), 0, 1, 'C');
+    $pdf->Cell(0, 20, convertToLatin1('No hay estudiantes registrados en el sistema'), 0, 1, 'C');
 }
 
 // Resumen final
 $pdf->Ln(10);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->SetTextColor(144, 27, 33);
-$pdf->Cell(0, 6, utf8_decode('INFORMACIÓN ADICIONAL:'), 0, 1, 'L');
+$pdf->Cell(0, 6, convertToLatin1('INFORMACIÓN ADICIONAL:'), 0, 1, 'L');
 
 $pdf->SetFont('Arial', '', 9);
 $pdf->SetTextColor(0, 0, 0);
-$pdf->Cell(0, 5, utf8_decode('* Este reporte contiene la información completa de todos los estudiantes registrados en el sistema.'), 0, 1, 'L');
-$pdf->Cell(0, 5, utf8_decode('* Los datos están ordenados alfabéticamente por apellidos y nombres.'), 0, 1, 'L');
-$pdf->Cell(0, 5, utf8_decode('* Para consultas específicas, contacte con la Secretaría Académica.'), 0, 1, 'L');
+$pdf->Cell(0, 5, convertToLatin1('* Este reporte contiene la información completa de todos los estudiantes registrados en el sistema.'), 0, 1, 'L');
+$pdf->Cell(0, 5, convertToLatin1('* Los datos están ordenados alfabéticamente por apellidos y nombres.'), 0, 1, 'L');
+$pdf->Cell(0, 5, convertToLatin1('* Para consultas específicas, contacte con la Secretaría Académica.'), 0, 1, 'L');
 
 // Espacio para firmas
 $pdf->Ln(15);
@@ -228,7 +255,7 @@ $pdf->Cell(90, 5, '', 0, 1, 'C');
 $pdf->Line(30, $pdf->GetY(), 80, $pdf->GetY());
 $pdf->Line(150, $pdf->GetY(), 200, $pdf->GetY());
 $pdf->Ln(2);
-$pdf->Cell(90, 5, utf8_decode('Secretario(a) Académico(a)'), 0, 0, 'C');
-$pdf->Cell(90, 5, utf8_decode('Director(a) de Carrera'), 0, 1, 'C');
+$pdf->Cell(90, 5, convertToLatin1('Secretario(a) Académico(a)'), 0, 0, 'C');
+$pdf->Cell(90, 5, convertToLatin1('Director(a) de Carrera'), 0, 1, 'C');
 
 $pdf->Output('I', 'Reporte_General_Estudiantes_UTA.pdf');

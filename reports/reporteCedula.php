@@ -2,6 +2,33 @@
 require('../fpdf186/fpdf.php');
 require('../models/conexion.php');
 
+// Función para convertir UTF-8 (reemplazo de utf8_decode deprecado)
+function convertToLatin1($text)
+{
+    if (function_exists('mb_convert_encoding')) {
+        return mb_convert_encoding($text, 'ISO-8859-1', 'UTF-8');
+    } else {
+        // Fallback para caracteres comunes en español
+        $replacements = [
+            'á' => 'a',
+            'é' => 'e',
+            'í' => 'i',
+            'ó' => 'o',
+            'ú' => 'u',
+            'Á' => 'A',
+            'É' => 'E',
+            'Í' => 'I',
+            'Ó' => 'O',
+            'Ú' => 'U',
+            'ñ' => 'n',
+            'Ñ' => 'N',
+            'ü' => 'u',
+            'Ü' => 'U'
+        ];
+        return strtr($text, $replacements);
+    }
+}
+
 // Clase personalizada para el PDF
 class UniversityStudentPDF extends FPDF
 {
@@ -30,14 +57,14 @@ class UniversityStudentPDF extends FPDF
         $this->SetFont('Arial', 'B', 18);
         $this->SetY(8);
         $this->SetX(50); // Margen izquierdo para centrar entre logos
-        $this->Cell(197, 8, utf8_decode('UNIVERSIDAD TÉCNICA DE AMBATO'), 0, 1, 'C');
+        $this->Cell(197, 8, convertToLatin1('UNIVERSIDAD TÉCNICA DE AMBATO'), 0, 1, 'C');
 
         // Subtítulo
         $this->SetFont('Arial', '', 12);
         $this->SetX(50);
-        $this->Cell(197, 6, utf8_decode('FACULTAD DE INGENIERÍA EN SISTEMAS'), 0, 1, 'C');
+        $this->Cell(197, 6, convertToLatin1('FACULTAD DE INGENIERÍA EN SISTEMAS'), 0, 1, 'C');
         $this->SetX(50);
-        $this->Cell(197, 6, utf8_decode('SISTEMA DE GESTIÓN ESTUDIANTIL'), 0, 1, 'C');
+        $this->Cell(197, 6, convertToLatin1('SISTEMA DE GESTIÓN ESTUDIANTIL'), 0, 1, 'C');
 
         // Línea decorativa (centrada entre logos)
         $this->SetDrawColor(255, 255, 255);
@@ -66,13 +93,13 @@ class UniversityStudentPDF extends FPDF
         $this->SetFont('Arial', 'I', 8);
         $this->SetTextColor(100, 100, 100);
         $this->Ln(3);
-        $this->Cell(0, 4, utf8_decode('Universidad Técnica de Ambato - Av. Los Chasquis y Río Payamino'), 0, 1, 'C');
-        $this->Cell(0, 4, utf8_decode('Teléfono: (03) 2521081 - Email: info@uta.edu.ec'), 0, 1, 'C');
+        $this->Cell(0, 4, convertToLatin1('Universidad Técnica de Ambato - Av. Los Chasquis y Río Payamino'), 0, 1, 'C');
+        $this->Cell(0, 4, convertToLatin1('Teléfono: (03) 2521081 - Email: info@uta.edu.ec'), 0, 1, 'C');
 
         // Número de página
         $this->SetTextColor(0, 0, 0);
         $this->SetFont('Arial', '', 8);
-        $this->Cell(0, 4, utf8_decode('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'R');
+        $this->Cell(0, 4, convertToLatin1('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'R');
 
         // Fecha de generación
         $this->SetX(10);
@@ -105,14 +132,14 @@ $pdf = new UniversityStudentPDF();
 $pdf->setEstudiante($estudiante);
 $pdf->AliasNbPages();
 $pdf->AddPage('L');
-$pdf->SetTitle(utf8_decode('Reporte Individual de Estudiante - UTA'));
-$pdf->SetAuthor(utf8_decode('Universidad Técnica de Ambato'));
-$pdf->SetSubject(utf8_decode('Información del Estudiante: ' . $estudiante['nombres'] . ' ' . $estudiante['apellidos']));
+$pdf->SetTitle(convertToLatin1('Reporte Individual de Estudiante - UTA'));
+$pdf->SetAuthor(convertToLatin1('Universidad Técnica de Ambato'));
+$pdf->SetSubject(convertToLatin1('Información del Estudiante: ' . $estudiante['nombres'] . ' ' . $estudiante['apellidos']));
 
 // Título del reporte
 $pdf->SetFont('Arial', 'B', 16);
 $pdf->SetTextColor(144, 27, 33);
-$pdf->Cell(0, 10, utf8_decode('REPORTE INDIVIDUAL DE ESTUDIANTE'), 0, 1, 'C');
+$pdf->Cell(0, 10, convertToLatin1('REPORTE INDIVIDUAL DE ESTUDIANTE'), 0, 1, 'C');
 
 $pdf->SetFont('Arial', '', 10);
 $pdf->SetTextColor(0, 0, 0);
@@ -122,29 +149,29 @@ $pdf->Ln(5);
 $pdf->SetFillColor(240, 240, 240);
 $pdf->Rect(10, $pdf->GetY(), 277, 15, 'F');
 $pdf->SetFont('Arial', 'B', 10);
-$pdf->Cell(60, 6, utf8_decode('INFORMACIÓN DEL REPORTE:'), 0, 0, 'L');
+$pdf->Cell(60, 6, convertToLatin1('INFORMACIÓN DEL REPORTE:'), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(80, 6, utf8_decode('Cédula Consultada: ') . $cedula, 0, 0, 'L');
-$pdf->Cell(80, 6, utf8_decode('Fecha de Generación: ') . date('d/m/Y'), 0, 0, 'L');
+$pdf->Cell(80, 6, convertToLatin1('Cédula Consultada: ') . $cedula, 0, 0, 'L');
+$pdf->Cell(80, 6, convertToLatin1('Fecha de Generación: ') . date('d/m/Y'), 0, 0, 'L');
 $pdf->Cell(0, 6, 'Hora: ' . date('H:i:s'), 0, 1, 'L');
 $pdf->Ln(15);
 
 // Sección de datos personales
 $pdf->SetFont('Arial', 'B', 14);
 $pdf->SetTextColor(144, 27, 33);
-$pdf->Cell(0, 8, utf8_decode('DATOS PERSONALES'), 0, 1, 'L');
+$pdf->Cell(0, 8, convertToLatin1('DATOS PERSONALES'), 0, 1, 'L');
 $pdf->SetTextColor(0, 0, 0);
 $pdf->Ln(5);
 
 // Convertir datos para caracteres especiales
-$nombres = utf8_decode($estudiante['nombres'] ?? 'N/A');
-$apellidos = utf8_decode($estudiante['apellidos'] ?? 'N/A');
+$nombres = convertToLatin1($estudiante['nombres'] ?? 'N/A');
+$apellidos = convertToLatin1($estudiante['apellidos'] ?? 'N/A');
 $cedula_est = $estudiante['cedula'] ?? 'N/A';
-$carrera = utf8_decode($estudiante['carrera'] ?? 'N/A');
-$email = utf8_decode($estudiante['email'] ?? 'N/A');
+$carrera = convertToLatin1($estudiante['carrera'] ?? 'N/A');
+$email = convertToLatin1($estudiante['email'] ?? 'N/A');
 $telefono = $estudiante['telefono'] ?? 'N/A';
 $semestre = $estudiante['semestre'] ?? 'N/A';
-$direccion = utf8_decode($estudiante['direccion'] ?? 'N/A');
+$direccion = convertToLatin1($estudiante['direccion'] ?? 'N/A');
 $fecha_nacimiento = $estudiante['fecha_nacimiento'] ?? 'N/A';
 
 // Formatear fecha de nacimiento
@@ -185,7 +212,7 @@ $pdf->Cell(105, 8, $apellidos, 0, 1, 'L');
 
 $pdf->SetX(10);
 $pdf->SetFont('Arial', 'B', 10);
-$pdf->Cell(30, 8, utf8_decode('Cédula:'), 0, 0, 'L');
+$pdf->Cell(30, 8, convertToLatin1('Cédula:'), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
 $pdf->Cell(105, 8, $cedula_est, 0, 1, 'L');
 
@@ -208,7 +235,7 @@ $pdf->Cell(112, 8, $email, 0, 1, 'L');
 
 $pdf->SetX(145);
 $pdf->SetFont('Arial', 'B', 10);
-$pdf->Cell(30, 8, utf8_decode('Teléfono:'), 0, 0, 'L');
+$pdf->Cell(30, 8, convertToLatin1('Teléfono:'), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
 $pdf->Cell(112, 8, $telefono, 0, 1, 'L');
 
@@ -222,12 +249,12 @@ $pdf->SetX(145);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(30, 8, 'F. Nacimiento:', 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$edad_texto = isset($edad) ? " ($edad " . utf8_decode('años') . ")" : "";
+$edad_texto = isset($edad) ? " ($edad " . convertToLatin1('años') . ")" : "";
 $pdf->Cell(112, 8, $fecha_nacimiento . $edad_texto, 0, 1, 'L');
 
 $pdf->SetX(145);
 $pdf->SetFont('Arial', 'B', 10);
-$pdf->Cell(30, 8, utf8_decode('Dirección:'), 0, 0, 'L');
+$pdf->Cell(30, 8, convertToLatin1('Dirección:'), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
 $pdf->Cell(112, 8, $direccion, 0, 1, 'L');
 
@@ -236,7 +263,7 @@ $pdf->Ln(15);
 // Sección de información académica
 $pdf->SetFont('Arial', 'B', 14);
 $pdf->SetTextColor(144, 27, 33);
-$pdf->Cell(0, 8, utf8_decode('INFORMACIÓN ACADÉMICA'), 0, 1, 'L');
+$pdf->Cell(0, 8, convertToLatin1('INFORMACIÓN ACADÉMICA'), 0, 1, 'L');
 $pdf->SetTextColor(0, 0, 0);
 $pdf->Ln(5);
 
@@ -245,8 +272,8 @@ $pdf->SetFont('Arial', 'B', 10);
 $pdf->SetFillColor(144, 27, 33);
 $pdf->SetTextColor(255, 255, 255);
 
-$pdf->Cell(90, 8, utf8_decode('ESTADO ACADÉMICO'), 1, 0, 'C', true);
-$pdf->Cell(90, 8, utf8_decode('INFORMACIÓN DE CONTACTO'), 1, 0, 'C', true);
+$pdf->Cell(90, 8, convertToLatin1('ESTADO ACADÉMICO'), 1, 0, 'C', true);
+$pdf->Cell(90, 8, convertToLatin1('INFORMACIÓN DE CONTACTO'), 1, 0, 'C', true);
 $pdf->Cell(87, 8, 'DATOS ADICIONALES', 1, 1, 'C', true);
 
 $pdf->SetTextColor(0, 0, 0);
@@ -254,14 +281,14 @@ $pdf->SetFont('Arial', '', 10);
 $pdf->SetFillColor(250, 250, 250);
 
 // Fila 1
-$pdf->Cell(90, 8, utf8_decode('Semestre Actual: ') . $semestre, 1, 0, 'L', true);
+$pdf->Cell(90, 8, convertToLatin1('Semestre Actual: ') . $semestre, 1, 0, 'L', true);
 $pdf->Cell(90, 8, 'Email: ' . $email, 1, 0, 'L', true);
-$pdf->Cell(87, 8, utf8_decode('Fecha Registro: ') . date('d/m/Y'), 1, 1, 'L', true);
+$pdf->Cell(87, 8, convertToLatin1('Fecha Registro: ') . date('d/m/Y'), 1, 1, 'L', true);
 
 // Fila 2
 $pdf->SetFillColor(255, 255, 255);
 $pdf->Cell(90, 8, 'Carrera: ' . $carrera, 1, 0, 'L', true);
-$pdf->Cell(90, 8, utf8_decode('Teléfono: ') . $telefono, 1, 0, 'L', true);
+$pdf->Cell(90, 8, convertToLatin1('Teléfono: ') . $telefono, 1, 0, 'L', true);
 $pdf->Cell(87, 8, 'ID Sistema: ' . $estudiante['id'], 1, 1, 'L', true);
 
 $pdf->Ln(20);
@@ -274,10 +301,10 @@ $pdf->SetTextColor(0, 0, 0);
 $pdf->Ln(5);
 
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(0, 6, utf8_decode('* Este reporte contiene la información completa del estudiante consultado.'), 0, 1, 'L');
-$pdf->Cell(0, 6, utf8_decode('* Los datos mostrados corresponden al estado actual en el sistema.'), 0, 1, 'L');
-$pdf->Cell(0, 6, utf8_decode('* Para modificaciones, contacte con la Secretaría Académica.'), 0, 1, 'L');
-$pdf->Cell(0, 6, utf8_decode('* Este documento es válido solo para consulta informativa.'), 0, 1, 'L');
+$pdf->Cell(0, 6, convertToLatin1('* Este reporte contiene la información completa del estudiante consultado.'), 0, 1, 'L');
+$pdf->Cell(0, 6, convertToLatin1('* Los datos mostrados corresponden al estado actual en el sistema.'), 0, 1, 'L');
+$pdf->Cell(0, 6, convertToLatin1('* Para modificaciones, contacte con la Secretaría Académica.'), 0, 1, 'L');
+$pdf->Cell(0, 6, convertToLatin1('* Este documento es válido solo para consulta informativa.'), 0, 1, 'L');
 
 // Espacio para firmas
 $pdf->Ln(25);
@@ -287,7 +314,7 @@ $pdf->Cell(90, 5, '', 0, 1, 'C');
 $pdf->Line(30, $pdf->GetY(), 80, $pdf->GetY());
 $pdf->Line(150, $pdf->GetY(), 200, $pdf->GetY());
 $pdf->Ln(2);
-$pdf->Cell(90, 5, utf8_decode('Secretario(a) Académico(a)'), 0, 0, 'C');
-$pdf->Cell(90, 5, utf8_decode('Director(a) de Carrera'), 0, 1, 'C');
+$pdf->Cell(90, 5, convertToLatin1('Secretario(a) Académico(a)'), 0, 0, 'C');
+$pdf->Cell(90, 5, convertToLatin1('Director(a) de Carrera'), 0, 1, 'C');
 
 $pdf->Output('I', 'Reporte_Estudiante_' . $cedula . '_UTA.pdf');
