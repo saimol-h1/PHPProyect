@@ -11,8 +11,8 @@ class UniversityPDF extends FPDF
         // Logo (si existe)
         // $this->Image('logo.png', 10, 6, 30);
 
-        // Color azul universitario para el fondo del encabezado
-        $this->SetFillColor(25, 25, 112); // Azul marino
+        // Color universitario para el fondo del encabezado
+        $this->SetFillColor(144, 27, 33); // Color #901B21 UTA
         $this->Rect(0, 0, 297, 35, 'F');
 
         // Texto del encabezado en blanco
@@ -47,7 +47,7 @@ class UniversityPDF extends FPDF
         $this->SetY(-25);
 
         // Línea decorativa
-        $this->SetDrawColor(25, 25, 112);
+        $this->SetDrawColor(144, 27, 33);
         $this->SetLineWidth(0.5);
         $this->Line(10, $this->GetY(), 287, $this->GetY());
 
@@ -84,7 +84,7 @@ $pdf->SetSubject(utf8_decode('Listado de Estudiantes Registrados'));
 
 // Información del reporte
 $pdf->SetFont('Arial', 'B', 16);
-$pdf->SetTextColor(25, 25, 112);
+$pdf->SetTextColor(144, 27, 33);
 $pdf->Cell(0, 10, utf8_decode('REPORTE GENERAL DE ESTUDIANTES'), 0, 1, 'C');
 
 $pdf->SetFont('Arial', '', 10);
@@ -99,12 +99,13 @@ $pdf->Cell(60, 6, utf8_decode('RESUMEN ESTADÍSTICO:'), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
 $pdf->Cell(50, 6, 'Total de Estudiantes: ' . $totalEstudiantes, 0, 0, 'L');
 $pdf->Cell(80, 6, utf8_decode('Fecha de Generación: ') . date('d/m/Y'), 0, 0, 'L');
+date_default_timezone_set('America/Guayaquil');
 $pdf->Cell(0, 6, 'Hora: ' . date('H:i:s'), 0, 1, 'L');
 $pdf->Ln(10);
 
 // Encabezados de tabla
 $pdf->SetFont('Arial', 'B', 9);
-$pdf->SetFillColor(25, 25, 112);
+$pdf->SetFillColor(144, 27, 33);
 $pdf->SetTextColor(255, 255, 255);
 $pdf->SetDrawColor(128, 128, 128);
 
@@ -164,7 +165,7 @@ while ($row = $resultado->fetch_assoc()) {
 
         // Repetir encabezados
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->SetFillColor(25, 25, 112);
+        $pdf->SetFillColor(144, 27, 33);
         $pdf->SetTextColor(255, 255, 255);
 
         $pdf->Cell(15, 8, 'ID', 1, 0, 'C', true);
@@ -205,14 +206,14 @@ if ($totalEstudiantes == 0) {
 // Resumen final
 $pdf->Ln(10);
 $pdf->SetFont('Arial', 'B', 10);
-$pdf->SetTextColor(25, 25, 112);
+$pdf->SetTextColor(144, 27, 33);
 $pdf->Cell(0, 6, utf8_decode('INFORMACIÓN ADICIONAL:'), 0, 1, 'L');
 
 $pdf->SetFont('Arial', '', 9);
 $pdf->SetTextColor(0, 0, 0);
-$pdf->Cell(0, 5, utf8_decode('• Este reporte contiene la información completa de todos los estudiantes registrados en el sistema.'), 0, 1, 'L');
-$pdf->Cell(0, 5, utf8_decode('• Los datos están ordenados alfabéticamente por apellidos y nombres.'), 0, 1, 'L');
-$pdf->Cell(0, 5, utf8_decode('• Para consultas específicas, contacte con la Secretaría Académica.'), 0, 1, 'L');
+$pdf->Cell(0, 5, utf8_decode('* Este reporte contiene la información completa de todos los estudiantes registrados en el sistema.'), 0, 1, 'L');
+$pdf->Cell(0, 5, utf8_decode('* Los datos están ordenados alfabéticamente por apellidos y nombres.'), 0, 1, 'L');
+$pdf->Cell(0, 5, utf8_decode('* Para consultas específicas, contacte con la Secretaría Académica.'), 0, 1, 'L');
 
 // Espacio para firmas
 $pdf->Ln(15);
