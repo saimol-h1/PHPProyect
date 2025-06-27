@@ -188,6 +188,38 @@ $es_admin = isAdmin();
             </div>
         </div>
     </div>
+
+    <!-- MODAL CONFIRMACIÓN ELIMINAR -->
+    <div class="modal fade" id="modalConfirmarEliminar" tabindex="-1" aria-labelledby="modalConfirmarEliminarLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="modalConfirmarEliminarLabel">
+                        <i class="fas fa-exclamation-triangle"></i> Confirmar Eliminación
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <i class="fas fa-trash-alt fa-3x text-danger mb-3"></i>
+                        <h5>¿Estás seguro de eliminar este estudiante?</h5>
+                        <p class="text-muted">Esta acción no se puede deshacer.</p>
+                        <div id="estudianteAEliminar" class="alert alert-info">
+                            <!-- Aquí se mostrará la información del estudiante -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                    <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -575,36 +607,85 @@ $es_admin = isAdmin();
         }
 
         function eliminarEstudiante(id) {
-            if (confirm('¿Estás seguro de eliminar este estudiante? Esta acción no se puede deshacer.')) {
-                fetch('models/eliminar.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        body: `id=${id}`
-                    })
-                    .then(response => response.text())
-                    .then(text => {
-                        const jsonStart = text.indexOf('{');
-                        const cleanText = jsonStart !== -1 ? text.substring(jsonStart) : text;
-                        try {
-                            return JSON.parse(cleanText);
-                        } catch (e) {
-                            throw new Error('Respuesta inválida del servidor');
-                        }
-                    })
-                    .then(data => {
-                        if (data.success) {
-                            cargarEstudiantes();
-                            alert('Estudiante eliminado correctamente.');
-                        } else {
-                            alert('Error: ' + (data.error || 'No se pudo eliminar el estudiante'));
-                        }
-                    })
-                    .catch(error => {
-                        alert('Error de conexión al eliminar: ' + error.message);
-                    });
-            }
+            // Obtener información del estudiante desde la tabla
+            const fila = document.querySelector(`button[onclick="eliminarEstudiante(${id})"]`).closest('tr');
+            const celdas = fila.querySelectorAll('td');
+            const nombres = celdas[1].textContent;
+            const apellidos = celdas[2].textContent;
+            const cedula = celdas[3].textContent;
+
+            // Mostrar información en el modal
+            document.getElementById('estudianteAEliminar').innerHTML = `
+                <strong>${nombres} ${apellidos}</strong><br>
+                <small class="text-muted">Cédula: ${cedula}</small>
+            `;
+
+            // Configurar el botón de confirmación
+            document.getElementById('btnConfirmarEliminar').onclick = function() {
+                ejecutarEliminacion(id);
+            };
+
+            // Mostrar modal de confirmación
+            var modal = new bootstrap.Modal(document.getElementById('modalConfirmarEliminar'));
+            modal.show();
+        }
+
+        function ejecutarEliminacion(id) {
+            fetch('models/eliminar.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `id=${id}`
+                })
+                .then(response => response.text())
+                .then(text => {
+                    const jsonStart = text.indexOf('{');
+                    const cleanText = jsonStart !== -1 ? text.substring(jsonStart) : text;
+                    try {
+                        return JSON.parse(cleanText);
+                    } catch (e) {
+                        throw new Error('Respuesta inválida del servidor');
+                    }
+                })
+                .then(data => {
+                    // Cerrar modal de confirmación
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('modalConfirmarEliminar'));
+                    if (modal) modal.hide();
+
+                    if (data.success) {
+                        cargarEstudiantes();
+                        // Mostrar mensaje de éxito en un toast o alert temporal
+                        mostrarNotificacion('Estudiante eliminado correctamente.', 'success');
+                    } else {
+                        mostrarNotificacion('Error: ' + (data.error || 'No se pudo eliminar el estudiante'), 'danger');
+                    }
+                })
+                .catch(error => {
+                    // Cerrar modal de confirmación
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('modalConfirmarEliminar'));
+                    if (modal) modal.hide();
+                    mostrarNotificacion('Error de conexión al eliminar: ' + error.message, 'danger');
+                });
+        }
+
+        function mostrarNotificacion(mensaje, tipo) {
+            // Crear notificación temporal tipo toast
+            const notificacion = document.createElement('div');
+            notificacion.className = `alert alert-${tipo} alert-dismissible fade show position-fixed`;
+            notificacion.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            notificacion.innerHTML = `
+                ${mensaje}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(notificacion);
+
+            // Auto-eliminar después de 3 segundos
+            setTimeout(() => {
+                if (notificacion.parentNode) {
+                    notificacion.remove();
+                }
+            }, 3000);
         }
 
         document.getElementById('formEstudiante').addEventListener('submit', function(e) {

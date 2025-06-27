@@ -42,6 +42,8 @@
         .container-fluid {
             margin-top: 10px;
             padding-top: 10px;
+            margin-bottom: 20px;
+            /* Añadido para evitar solapamiento con footer */
         }
 
         /* Espaciado especial para formularios de login */
