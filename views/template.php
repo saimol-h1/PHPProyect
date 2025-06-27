@@ -171,7 +171,7 @@
     </style>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="<?php echo getUrl('img', 'favicon.svg'); ?>">
+    <link rel="icon" type="image/svg+xml" sizes="32x32" href="<?php echo getUrl('img', 'escudo-uta232.png'); ?>">
 
     <!-- CSS no crítico carga después -->
     <link rel="stylesheet" href="<?php echo getUrl('css', 'style.css'); ?>" media="print" onload="this.media='all'">
