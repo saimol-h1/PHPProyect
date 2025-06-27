@@ -10,7 +10,8 @@ $es_admin = isAdmin();
 ?>
 
 <div class="container-fluid">
-    <h2 class="mb-4">🎓 Gestión de Estudiantes</h2> <div class="alert alert-info mb-4">
+    <h2 class="mb-4">🎓 Gestión de Estudiantes</h2>
+    <div class="alert alert-info mb-4">
         <strong>👤 Bienvenido:</strong> <?php echo htmlspecialchars($usuario_info['nombre_completo'] ?? 'Usuario'); ?>
         <span class="badge bg-primary"><?php echo ucfirst($usuario_info['tipo_usuario'] ?? 'usuario'); ?></span>
     </div>
@@ -18,131 +19,153 @@ $es_admin = isAdmin();
     <div class="row mb-4">
         <div class="col-md-12">
             <?php if ($es_admin): ?>
-                <button class="btn btn-success me-2" onclick="mostrarFormularioEstudiante()"> <i class="fas fa-plus"></i> Agregar Estudiante
+                <button class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#modalEstudiante">
+                    <i class="fas fa-plus"></i> Agregar Estudiante
                 </button>
-                <button class="btn btn-warning me-2" onclick="mostrarFormularioSecretaria()">
+                <button class="btn btn-warning me-2" data-bs-toggle="modal" data-bs-target="#modalSecretaria">
                     <i class="fas fa-plus"></i> Agregar Secretaria
                 </button>
             <?php endif; ?>
             <button class="btn btn-primary" onclick="cargarEstudiantes()">
                 <i class="fas fa-refresh"></i> Actualizar Lista
             </button>
-            <a type="button" class="btn btn-sm" href="reports/reporteGeneral.php" target="_blank"> <i class="fas fa-users"></i> Reporte de Estudiantes
+            <a type="button" class="btn btn-sm" href="reports/reporteGeneral.php" target="_blank">
+                <i class="fas fa-users"></i> Reporte de Estudiantes
             </a>
         </div>
     </div>
 
-    <?php if ($es_admin): ?>
-        <div id="formularioEstudiante" class="card mb-4" style="display: none;">
-            <div class="card-header">
-                <h5 id="tituloFormularioEstudiante">📝 Agregar Nuevo Estudiante</h5> </div>
-            <div class="card-body">
-                <form id="formEstudiante">
-                    <input type="hidden" id="estudianteId" name="id">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="nombres" class="form-label">Nombres:</label>
-                            <input type="text" class="form-control" id="nombres" name="nombres" required pattern="[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+" title="Solo letras">
-                            <div class="invalid-feedback">Solo se permiten letras.</div>
+    <!-- MODAL ESTUDIANTE -->
+    <div class="modal fade" id="modalEstudiante" tabindex="-1" aria-labelledby="modalEstudianteLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEstudianteLabel">📝 Agregar Nuevo Estudiante</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="msgEstudiante"></div>
+                    <form id="formEstudiante" novalidate>
+                        <input type="hidden" id="estudianteId" name="id">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="nombres" class="form-label">Nombres:</label>
+                                <input type="text" class="form-control" id="nombres" name="nombres" required pattern="[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+" title="Solo letras">
+                                <div class="invalid-feedback">Solo se permiten letras.</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="apellidos" class="form-label">Apellidos:</label>
+                                <input type="text" class="form-control" id="apellidos" name="apellidos" required pattern="[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+" title="Solo letras">
+                                <div class="invalid-feedback">Solo se permiten letras.</div>
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="apellidos" class="form-label">Apellidos:</label>
-                            <input type="text" class="form-control" id="apellidos" name="apellidos" required pattern="[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+" title="Solo letras">
-                            <div class="invalid-feedback">Solo se permiten letras.</div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="cedula" class="form-label">Cédula:</label>
+                                <input type="text" class="form-control" id="cedula" name="cedula" required maxlength="10" pattern="[0-9]{10}" title="Debe ser 10 dígitos numéricos">
+                                <div class="invalid-feedback">La cédula debe ser 10 dígitos numéricos.</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="carrera" class="form-label">Carrera:</label>
+                                <input type="text" class="form-control" id="carrera" name="carrera" required pattern="[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+" title="Solo letras">
+                                <div class="invalid-feedback">Solo se permiten letras.</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="cedula" class="form-label">Cédula:</label>
-                            <input type="text" class="form-control" id="cedula" name="cedula" required maxlength="10" pattern="[0-9]{10}" title="Debe ser 10 dígitos numéricos">
-                            <div class="invalid-feedback">La cédula debe ser 10 dígitos numéricos.</div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="email" class="form-label">Email:</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                                <div class="invalid-feedback">Por favor, introduce un email válido.</div>
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="carrera" class="form-label">Carrera:</label>
-                            <input type="text" class="form-control" id="carrera" name="carrera" required pattern="[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+" title="Solo letras">
-                            <div class="invalid-feedback">Solo se permiten letras.</div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="telefono" class="form-label">Teléfono:</label>
+                                <input type="text" class="form-control" id="telefono" name="telefono" maxlength="10" pattern="[0-9]{10}" title="Debe ser 10 dígitos numéricos">
+                                <div class="invalid-feedback">El teléfono debe ser 10 dígitos numéricos.</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="semestre" class="form-label">Semestre:</label>
+                                <input type="number" class="form-control" id="semestre" name="semestre" min="0" max="10" required>
+                                <div class="invalid-feedback">El semestre debe ser un número entre 0 y 10.</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <label for="email" class="form-label">Email:</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
-                            <div class="invalid-feedback">Por favor, introduce un email válido.</div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento:</label>
+                                <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" required>
+                                <div class="invalid-feedback" id="feedbackFechaNacimiento">Debe ser mayor de 16 años.</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="direccion" class="form-label">Dirección:</label>
+                                <input type="text" class="form-control" id="direccion" name="direccion">
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="telefono" class="form-label">Teléfono:</label>
-                            <input type="text" class="form-control" id="telefono" name="telefono" maxlength="10" pattern="[0-9]{10}" title="Debe ser 10 dígitos numéricos">
-                            <div class="invalid-feedback">El teléfono debe ser 10 dígitos numéricos.</div>
+                        <div class="d-flex gap-2 justify-content-end">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save"></i> Guardar
+                            </button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="semestre" class="form-label">Semestre:</label>
-                            <input type="number" class="form-control" id="semestre" name="semestre" min="0" max="10" required> <div class="invalid-feedback">El semestre debe ser un número entre 0 y 10.</div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento:</label>
-                            <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" required>
-                            <div class="invalid-feedback" id="feedbackFechaNacimiento">Debe ser mayor de 16 años.</div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="direccion" class="form-label">Dirección:</label>
-                            <input type="text" class="form-control" id="direccion" name="direccion">
-                        </div>
-                    </div>
-                    <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-success">
-                            <i class="fas fa-save"></i> Guardar
-                        </button>
-                        <button type="button" class="btn btn-secondary" onclick="ocultarFormularioEstudiante()"> <i class="fas fa-times"></i> Cancelar
-                        </button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
+    </div>
 
-        <div id="formularioSecretaria" class="card mb-4" style="display: none;">
-            <div class="card-header">
-                <h5 id="tituloFormularioSecretaria">📝 Agregar Nueva Secretaria</h5> </div>
-            <div class="card-body">
-                <form id="formSecretaria">
-                    <input type="hidden" id="secretariaId" name="id">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="usuario_secretaria" class="form-label">Usuario</label> <input type="text" class="form-control" id="usuario_secretaria" name="usuario" required>
-                            <div class="invalid-feedback">El usuario es requerido.</div>
+    <!-- MODAL SECRETARIA -->
+    <div class="modal fade" id="modalSecretaria" tabindex="-1" aria-labelledby="modalSecretariaLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalSecretariaLabel">📝 Agregar Nueva Secretaria</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="msgSecretaria"></div>
+                    <form id="formSecretaria" novalidate>
+                        <input type="hidden" id="secretariaId" name="id">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="usuario_secretaria" class="form-label">Usuario</label>
+                                <input type="text" class="form-control" id="usuario_secretaria" name="usuario" required>
+                                <div class="invalid-feedback">El usuario es requerido.</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="clave_secretaria" class="form-label">Contraseña</label>
+                                <input type="password" class="form-control" id="clave_secretaria" name="clave" required minlength="6">
+                                <div class="invalid-feedback">La contraseña debe tener al menos 6 caracteres.</div>
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="clave_secretaria" class="form-label">Contraseña</label> <input type="password" class="form-control" id="clave_secretaria" name="clave" required minlength="6"> <div class="invalid-feedback">La contraseña debe tener al menos 6 caracteres.</div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="nombre_secretaria" class="form-label">Nombre Completo:</label>
+                                <input type="text" class="form-control" id="nombre_secretaria" name="nombre" required pattern="[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+" title="Solo letras y espacios">
+                                <div class="invalid-feedback">Solo se permiten letras y espacios.</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <label for="nombre_secretaria" class="form-label">Nombre Completo:</label> <input type="text" class="form-control" id="nombre_secretaria" name="nombre" required 
-                                pattern="[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+" title="Solo letras y espacios">
-                            <div class="invalid-feedback">Solo se permiten letras y espacios.</div> 
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="email_secretaria" class="form-label">Email:</label>
+                                <input type="email" class="form-control" id="email_secretaria" name="email" required>
+                                <div class="invalid-feedback">Por favor, introduce un email válido.</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <label for="email_secretaria" class="form-label">Email:</label> <input type="email" class="form-control" id="email_secretaria" name="email" required>
-                            <div class="invalid-feedback">Por favor, introduce un email válido.</div>
+                        <div class="d-flex gap-2 justify-content-end">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save"></i> Guardar
+                            </button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
                         </div>
-                    </div>
-                    <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-success">
-                            <i class="fas fa-save"></i> Guardar
-                        </button>
-                        <button type="button" class="btn btn-secondary" onclick="ocultarFormularioSecretaria()">
-                            <i class="fas fa-times"></i> Cancelar
-                        </button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
-    <?php endif; ?>
+    </div>
 
     <div class="mb-3">
         <input type="text" class="form-control" id="busquedaCedula" placeholder="Buscar por cédula...">
@@ -185,11 +208,12 @@ $es_admin = isAdmin();
         // Permitir letras (mayúsculas y minúsculas), espacios, y teclas de control (como backspace, delete, flechas)
         // Incluye códigos para letras acentuadas y Ñ/ñ
         if (!((charCode >= 65 && charCode <= 90) || // A-Z
-              (charCode >= 97 && charCode <= 122) || // a-z
-              charCode === 32 || // Espacio
-              charCode === 209 || charCode === 241 || // Ñ, ñ (códigos comunes)
-              (charCode >= 192 && charCode <= 255 && charCode !== 215 && charCode !== 247)) // Caracteres extendidos para acentos, pero excluyendo × (215) y ÷ (247)
-             && charCode > 31 // Teclas de control (BackSpace, Tab, Enter, Shift, Ctrl, Alt, CapsLock, Esc, PageUp, PageDown, End, Home, Left Arrow, Up Arrow, Right Arrow, Down Arrow, Insert, Delete)
+                (charCode >= 97 && charCode <= 122) || // a-z
+                charCode === 32 || // Espacio
+                charCode === 209 || charCode === 241 || // Ñ, ñ (códigos comunes)
+                (charCode >= 192 && charCode <= 255 && charCode !== 215 && charCode !== 247)) // Caracteres extendidos para acentos, pero excluyendo × (215) y ÷ (247)
+            &&
+            charCode > 31 // Teclas de control (BackSpace, Tab, Enter, Shift, Ctrl, Alt, CapsLock, Esc, PageUp, PageDown, End, Home, Left Arrow, Up Arrow, Right Arrow, Down Arrow, Insert, Delete)
         ) {
             event.preventDefault();
         }
@@ -207,8 +231,8 @@ $es_admin = isAdmin();
         let esValida = true;
 
         if (fechaNacimientoInput.value === '') {
-             esValida = false; // Campo requerido
-             feedbackFechaNacimiento.textContent = 'Este campo es requerido.';
+            esValida = false; // Campo requerido
+            feedbackFechaNacimiento.textContent = 'Este campo es requerido.';
         } else if (edad < 16 || (edad === 16 && mes < 0) || (edad === 16 && mes === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
             esValida = false;
             feedbackFechaNacimiento.textContent = 'Debe ser mayor de 16 años.';
@@ -262,7 +286,7 @@ $es_admin = isAdmin();
     // Cargar estudiantes al cargar la página
     document.addEventListener('DOMContentLoaded', function() {
         cargarEstudiantes();
-        
+
         // Inicializar validación de Bootstrap en formularios (con listeners genéricos)
         const forms = document.querySelectorAll('form'); // Seleccionar todos los formularios
         Array.from(forms).forEach(form => {
@@ -288,31 +312,49 @@ $es_admin = isAdmin();
         });
 
         // --- APLICAR EVENT LISTENERS PARA CONTROL DE TECLADO Y FEEDBACK VISUAL ---
-        if (esAdmin) { 
+        if (esAdmin) {
             // Formulario Estudiante
             document.getElementById('nombres').addEventListener('keypress', allowOnlyLetters);
-            document.getElementById('nombres').addEventListener('input', function() { this.classList.toggle('is-invalid', !this.checkValidity()); this.classList.toggle('is-valid', this.checkValidity()); });
+            document.getElementById('nombres').addEventListener('input', function() {
+                this.classList.toggle('is-invalid', !this.checkValidity());
+                this.classList.toggle('is-valid', this.checkValidity());
+            });
 
             document.getElementById('apellidos').addEventListener('keypress', allowOnlyLetters);
-            document.getElementById('apellidos').addEventListener('input', function() { this.classList.toggle('is-invalid', !this.checkValidity()); this.classList.toggle('is-valid', this.checkValidity()); });
-            
+            document.getElementById('apellidos').addEventListener('input', function() {
+                this.classList.toggle('is-invalid', !this.checkValidity());
+                this.classList.toggle('is-valid', this.checkValidity());
+            });
+
             document.getElementById('cedula').addEventListener('keypress', allowOnlyNumbers);
-            document.getElementById('cedula').addEventListener('input', function() { this.classList.toggle('is-invalid', !this.checkValidity()); this.classList.toggle('is-valid', this.checkValidity()); });
+            document.getElementById('cedula').addEventListener('input', function() {
+                this.classList.toggle('is-invalid', !this.checkValidity());
+                this.classList.toggle('is-valid', this.checkValidity());
+            });
 
             document.getElementById('carrera').addEventListener('keypress', allowOnlyLetters);
-            document.getElementById('carrera').addEventListener('input', function() { this.classList.toggle('is-invalid', !this.checkValidity()); this.classList.toggle('is-valid', this.checkValidity()); });
+            document.getElementById('carrera').addEventListener('input', function() {
+                this.classList.toggle('is-invalid', !this.checkValidity());
+                this.classList.toggle('is-valid', this.checkValidity());
+            });
 
-            document.getElementById('email').addEventListener('input', function() { this.classList.toggle('is-invalid', !this.checkValidity()); this.classList.toggle('is-valid', this.checkValidity()); });
-            
+            document.getElementById('email').addEventListener('input', function() {
+                this.classList.toggle('is-invalid', !this.checkValidity());
+                this.classList.toggle('is-valid', this.checkValidity());
+            });
+
             document.getElementById('telefono').addEventListener('keypress', allowOnlyNumbers);
-            document.getElementById('telefono').addEventListener('input', function() { this.classList.toggle('is-invalid', !this.checkValidity()); this.classList.toggle('is-valid', this.checkValidity()); });
-            
+            document.getElementById('telefono').addEventListener('input', function() {
+                this.classList.toggle('is-invalid', !this.checkValidity());
+                this.classList.toggle('is-valid', this.checkValidity());
+            });
+
             // Semestre usa su propia función de validación
             document.getElementById('semestre').addEventListener('input', validarSemestre);
             document.getElementById('semestre').addEventListener('change', validarSemestre); // También al cambiar el valor completo
-            
+
             // Fecha de nacimiento usa su propia función de validación
-            document.getElementById('fecha_nacimiento').addEventListener('change', validarEdad); 
+            document.getElementById('fecha_nacimiento').addEventListener('change', validarEdad);
 
 
             // Formulario Secretaria
@@ -324,7 +366,7 @@ $es_admin = isAdmin();
                 this.classList.toggle('is-invalid', !this.checkValidity());
                 this.classList.toggle('is-valid', this.checkValidity());
             });
-            
+
             // Nombre Completo de Secretaria - Control de teclado y feedback visual
             document.getElementById('nombre_secretaria').addEventListener('keypress', allowOnlyLetters);
             document.getElementById('nombre_secretaria').addEventListener('input', function() {
@@ -432,112 +474,103 @@ $es_admin = isAdmin();
     // Funciones para el formulario (solo si es admin)
     <?php if ($es_admin): ?>
 
-        function mostrarFormularioEstudiante() { // Renombrado a Estudiante
-            document.getElementById('formularioEstudiante').style.display = 'block';
-            document.getElementById('tituloFormularioEstudiante').textContent = '📝 Agregar Nuevo Estudiante'; // Usar el ID correcto
+        function mostrarFormularioEstudiante() {
             document.getElementById('formEstudiante').reset();
             document.getElementById('estudianteId').value = '';
-            document.getElementById('cedula').removeAttribute('readonly'); // Asegurarse de que sea editable para nuevo
-            document.getElementById('formEstudiante').classList.remove('was-validated'); // Reset validación
-            establecerFechaNacimientoMaxima(); // Establecer fecha máxima para mayores de 16
-
-            // Limpiar estados de validación de Bootstrap al abrir el formulario
-            document.getElementById('nombres').classList.remove('is-valid', 'is-invalid');
-            document.getElementById('apellidos').classList.remove('is-valid', 'is-invalid');
-            document.getElementById('cedula').classList.remove('is-valid', 'is-invalid');
-            document.getElementById('carrera').classList.remove('is-valid', 'is-invalid');
-            document.getElementById('email').classList.remove('is-valid', 'is-invalid');
-            document.getElementById('telefono').classList.remove('is-valid', 'is-invalid');
-            document.getElementById('semestre').classList.remove('is-valid', 'is-invalid'); 
-            document.getElementById('fecha_nacimiento').classList.remove('is-valid', 'is-invalid');
-            document.getElementById('feedbackFechaNacimiento').textContent = 'Debe ser mayor de 16 años.'; // Restablecer mensaje
+            document.getElementById('cedula').removeAttribute('readonly');
+            document.getElementById('formEstudiante').classList.remove('was-validated');
+            document.getElementById('msgEstudiante').innerHTML = '';
+            document.getElementById('modalEstudianteLabel').textContent = '📝 Agregar Nuevo Estudiante';
+            establecerFechaNacimientoMaxima();
+            // Limpiar validaciones visuales
+            ['nombres', 'apellidos', 'cedula', 'carrera', 'email', 'telefono', 'semestre', 'fecha_nacimiento', 'direccion'].forEach(id => {
+                let el = document.getElementById(id);
+                if (el) el.classList.remove('is-valid', 'is-invalid');
+            });
+            document.getElementById('feedbackFechaNacimiento').textContent = 'Debe ser mayor de 16 años.';
+            var modal = new bootstrap.Modal(document.getElementById('modalEstudiante'));
+            modal.show();
         }
 
         function mostrarFormularioSecretaria() {
-            document.getElementById('formularioSecretaria').style.display = 'block';
-            document.getElementById('tituloFormularioSecretaria').textContent = '📝 Agregar Nueva Secretaria'; // Usar el ID correcto
             document.getElementById('formSecretaria').reset();
             document.getElementById('secretariaId').value = '';
-            document.getElementById('formSecretaria').classList.remove('was-validated'); // Reset validación
-
-            // Limpiar estados de validación de Bootstrap al abrir el formulario de secretaria
-            document.getElementById('usuario_secretaria').classList.remove('is-valid', 'is-invalid');
-            document.getElementById('clave_secretaria').classList.remove('is-valid', 'is-invalid');
-            document.getElementById('nombre_secretaria').classList.remove('is-valid', 'is-invalid'); // Limpieza del campo 'nombre'
-            document.getElementById('email_secretaria').classList.remove('is-valid', 'is-invalid');
+            document.getElementById('formSecretaria').classList.remove('was-validated');
+            document.getElementById('msgSecretaria').innerHTML = '';
+            document.getElementById('modalSecretariaLabel').textContent = '📝 Agregar Nueva Secretaria';
+            ['usuario_secretaria', 'clave_secretaria', 'nombre_secretaria', 'email_secretaria'].forEach(id => {
+                let el = document.getElementById(id);
+                if (el) el.classList.remove('is-valid', 'is-invalid');
+            });
+            var modal = new bootstrap.Modal(document.getElementById('modalSecretaria'));
+            modal.show();
         }
 
-        function ocultarFormularioEstudiante() { // Renombrado a Estudiante
-            document.getElementById('formularioEstudiante').style.display = 'none';
+        function ocultarFormularioEstudiante() {
+            var modal = bootstrap.Modal.getInstance(document.getElementById('modalEstudiante'));
+            if (modal) modal.hide();
         }
 
-        function ocultarFormularioSecretaria() { // Renombrado a Secretaria
-            document.getElementById('formularioSecretaria').style.display = 'none';
+        function ocultarFormularioSecretaria() {
+            var modal = bootstrap.Modal.getInstance(document.getElementById('modalSecretaria'));
+            if (modal) modal.hide();
         }
 
+        // Función para establecer la fecha de nacimiento máxima (mayor de 16 años)
+        function establecerFechaNacimientoMaxima() {
+            const hoy = new Date();
+            const fechaMinimaNacimiento = new Date(hoy.getFullYear() - 16, hoy.getMonth(), hoy.getDate());
+            const yyyy = fechaMinimaNacimiento.getFullYear();
+            const mm = String(fechaMinimaNacimiento.getMonth() + 1).padStart(2, '0');
+            const dd = String(fechaMinimaNacimiento.getDate()).padStart(2, '0');
+            document.getElementById('fecha_nacimiento').setAttribute('max', `${yyyy}-${mm}-${dd}`);
+        }
 
         function editarEstudiante(id) {
-            // Cargar datos del estudiante para edición
+            // Limpiar validaciones visuales y mensajes
+            document.getElementById('formEstudiante').classList.remove('was-validated');
+            document.getElementById('msgEstudiante').innerHTML = '';
+            ['nombres', 'apellidos', 'cedula', 'carrera', 'email', 'telefono', 'semestre', 'fecha_nacimiento', 'direccion'].forEach(idf => {
+                let el = document.getElementById(idf);
+                if (el) el.classList.remove('is-valid', 'is-invalid');
+            });
+            document.getElementById('feedbackFechaNacimiento').textContent = 'Debe ser mayor de 16 años.';
             fetch(`models/editar.php?id=${id}`)
-                .then(response => response.text()) // Primero obtener como texto
+                .then(response => response.text())
                 .then(text => {
-                    // Limpiar posibles warnings de PHP antes del JSON
                     const jsonStart = text.indexOf('{');
                     const cleanText = jsonStart !== -1 ? text.substring(jsonStart) : text;
-
                     try {
                         return JSON.parse(cleanText);
                     } catch (e) {
-                        console.error('Error parsing JSON:', cleanText);
                         throw new Error('Respuesta inválida del servidor');
                     }
                 })
                 .then(data => {
                     if (data.success) {
                         const estudiante = data.data;
-
-                        // Llenar el formulario con los datos del estudiante
                         document.getElementById('estudianteId').value = estudiante.id;
                         document.getElementById('nombres').value = estudiante.nombres;
                         document.getElementById('apellidos').value = estudiante.apellidos;
                         document.getElementById('cedula').value = estudiante.cedula;
-                        document.getElementById('cedula').setAttribute('readonly', true); // Bloquear edición de cédula
+                        document.getElementById('cedula').setAttribute('readonly', 'readonly');
                         document.getElementById('carrera').value = estudiante.carrera;
                         document.getElementById('email').value = estudiante.email;
-                        document.getElementById('telefono').value = estudiante.telefono || '';
-                        document.getElementById('semestre').value = estudiante.semestre || '';
-                        document.getElementById('fecha_nacimiento').value = estudiante.fecha_nacimiento || '';
-                        document.getElementById('direccion').value = estudiante.direccion || '';
-
-                        // Cambiar título y mostrar formulario
-                        document.getElementById('tituloFormularioEstudiante').textContent = '✏️ Editar Estudiante'; // Usar el ID correcto
-                        document.getElementById('formularioEstudiante').style.display = 'block';
-                        document.getElementById('formEstudiante').classList.remove('was-validated'); // Reset validación
-
-                        // Limpiar estados de validación de Bootstrap al abrir el formulario
-                        document.getElementById('nombres').classList.remove('is-valid', 'is-invalid');
-                        document.getElementById('apellidos').classList.remove('is-valid', 'is-invalid');
-                        document.getElementById('cedula').classList.remove('is-valid', 'is-invalid');
-                        document.getElementById('carrera').classList.remove('is-valid', 'is-invalid');
-                        document.getElementById('email').classList.remove('is-valid', 'is-invalid');
-                        document.getElementById('telefono').classList.remove('is-valid', 'is-invalid');
-                        document.getElementById('semestre').classList.remove('is-valid', 'is-invalid'); 
-                        document.getElementById('fecha_nacimiento').classList.remove('is-valid', 'is-invalid');
-                        document.getElementById('feedbackFechaNacimiento').textContent = 'Debe ser mayor de 16 años.'; // Restablecer mensaje
-
-
-                        // Scroll hacia el formulario
-                        document.getElementById('formularioEstudiante').scrollIntoView({
-                            behavior: 'smooth'
-                        });
-                        establecerFechaNacimientoMaxima(); // Re-establecer fecha máxima
+                        document.getElementById('telefono').value = estudiante.telefono;
+                        document.getElementById('semestre').value = estudiante.semestre;
+                        document.getElementById('fecha_nacimiento').value = estudiante.fecha_nacimiento;
+                        document.getElementById('direccion').value = estudiante.direccion;
+                        document.getElementById('modalEstudianteLabel').textContent = '📝 Editar Estudiante';
+                        establecerFechaNacimientoMaxima();
+                        // Mostrar el modal correctamente
+                        var modal = new bootstrap.Modal(document.getElementById('modalEstudiante'));
+                        modal.show();
                     } else {
-                        alert('Error al cargar los datos del estudiante: ' + data.message);
+                        document.getElementById('msgEstudiante').innerHTML = '<div class="alert alert-danger">' + (data.error || 'No se pudo cargar el estudiante') + '</div>';
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error de conexión al cargar los datos del estudiante: ' + error.message);
+                    document.getElementById('msgEstudiante').innerHTML = '<div class="alert alert-danger">Error de conexión al cargar los datos: ' + error.message + '</div>';
                 });
         }
 
@@ -546,185 +579,111 @@ $es_admin = isAdmin();
                 fetch('models/eliminar.php', {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'Content-Type': 'application/x-www-form-urlencoded'
                         },
                         body: `id=${id}`
                     })
-                    .then(response => response.text()) // Primero obtener como texto
+                    .then(response => response.text())
                     .then(text => {
-                        // Limpiar posibles warnings de PHP antes del JSON
                         const jsonStart = text.indexOf('{');
                         const cleanText = jsonStart !== -1 ? text.substring(jsonStart) : text;
-
                         try {
                             return JSON.parse(cleanText);
                         } catch (e) {
-                            console.error('Error parsing JSON:', cleanText);
                             throw new Error('Respuesta inválida del servidor');
                         }
                     })
                     .then(data => {
                         if (data.success) {
-                            alert('Estudiante eliminado: ' + (data.eliminado || 'Exitosamente'));
-                            cargarEstudiantes(); // Recargar la lista
+                            cargarEstudiantes();
+                            alert('Estudiante eliminado correctamente.');
                         } else {
-                            alert('Error al eliminar estudiante: ' + data.message);
+                            alert('Error: ' + (data.error || 'No se pudo eliminar el estudiante'));
                         }
                     })
                     .catch(error => {
-                        console.error('Error:', error);
-                        alert('Error de conexión al eliminar estudiante: ' + error.message);
+                        alert('Error de conexión al eliminar: ' + error.message);
                     });
             }
-        } 
-        
-        // --- Funciones de Validación y Ayuda (las que ya teníamos) ---
-
-        // Función para establecer la fecha de nacimiento máxima (mayor de 16 años)
-        function establecerFechaNacimientoMaxima() {
-            const hoy = new Date();
-            const fechaMinimaNacimiento = new Date(hoy.getFullYear() - 16, hoy.getMonth(), hoy.getDate());
-            const yyyy = fechaMinimaNacimiento.getFullYear();
-            const mm = String(fechaMinimaNacimiento.getMonth() + 1).padStart(2, '0'); // Enero es 0!
-            const dd = String(fechaMinimaNacimiento.getDate()).padStart(2, '0');
-            document.getElementById('fecha_nacimiento').setAttribute('max', `${yyyy}-${mm}-${dd}`);
         }
 
-        // Función para validar la edad
-        function validarEdad() {
-            const fechaNacimientoInput = document.getElementById('fecha_nacimiento');
-            const feedbackFechaNacimiento = document.getElementById('feedbackFechaNacimiento');
-            const fechaNacimiento = new Date(fechaNacimientoInput.value);
-            const hoy = new Date();
-            const edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
-            const mes = hoy.getMonth() - fechaNacimiento.getMonth();
-
-            let esValida = true;
-
-            if (fechaNacimientoInput.value === '') {
-                 esValida = false; // Campo requerido
-                 feedbackFechaNacimiento.textContent = 'Este campo es requerido.';
-            } else if (edad < 16 || (edad === 16 && mes < 0) || (edad === 16 && mes === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
-                esValida = false;
-                feedbackFechaNacimiento.textContent = 'Debe ser mayor de 16 años.';
-            } else {
-                feedbackFechaNacimiento.textContent = ''; // Limpiar mensaje de error
-            }
-
-            if (!esValida) {
-                fechaNacimientoInput.classList.remove('is-valid');
-                fechaNacimientoInput.classList.add('is-invalid');
-            } else {
-                fechaNacimientoInput.classList.remove('is-invalid');
-                fechaNacimientoInput.classList.add('is-valid');
-            }
-            return esValida;
-        }
-
-        // Manejar envío del formulario de estudiante
         document.getElementById('formEstudiante').addEventListener('submit', function(e) {
             e.preventDefault();
-
-            // Ejecutar validación de todos los campos
             let formValido = true;
-            // Asegúrate de que todas las validaciones personalizadas se ejecuten
-            if (!validarSemestre()) formValido = false; 
+            if (!validarSemestre()) formValido = false;
             if (!validarEdad()) formValido = false;
-
-            // Luego, la validación HTML5 general
-            if (!this.checkValidity()) { 
-                formValido = false;
-            }
-
-            // Aplicar clases de Bootstrap para mostrar validación
+            if (!this.checkValidity()) formValido = false;
             this.classList.add('was-validated');
-
-            if (!formValido) {
-                return; // Detener el envío si el formulario no es válido
-            }
-
+            if (!formValido) return;
             const formData = new FormData(this);
             const estudianteId = document.getElementById('estudianteId').value;
-
             const url = estudianteId ? 'models/editar.php' : 'models/guardar.php';
-            const accion = estudianteId ? 'actualizado' : 'creado';
-
             fetch(url, {
                     method: 'POST',
                     body: formData
                 })
-                .then(response => response.text()) // Primero obtener como texto
+                .then(response => response.text())
                 .then(text => {
                     const jsonStart = text.indexOf('{');
                     const cleanText = jsonStart !== -1 ? text.substring(jsonStart) : text;
-
                     try {
                         return JSON.parse(cleanText);
                     } catch (e) {
-                        console.error('Error parsing JSON:', cleanText);
                         throw new Error('Respuesta inválida del servidor');
                     }
                 })
                 .then(data => {
                     if (data.success) {
-                        alert(`Estudiante ${accion} exitosamente: ` + (data.estudiante || data.message));
-                        ocultarFormularioEstudiante(); // Ahora usa el nombre correcto
-                        cargarEstudiantes(); // Recargar la lista
+                        document.getElementById('msgEstudiante').innerHTML = '<div class="alert alert-success">' + (data.message || 'Estudiante guardado correctamente.') + '</div>';
+                        cargarEstudiantes();
+                        // Resetear el título del modal para próxima vez
+                        document.getElementById('modalEstudianteLabel').textContent = '📝 Agregar Nuevo Estudiante';
+                        setTimeout(() => {
+                            ocultarFormularioEstudiante();
+                        }, 1200);
                     } else {
-                        alert('Error al guardar estudiante: ' + data.message);
+                        document.getElementById('msgEstudiante').innerHTML = '<div class="alert alert-danger">' + (data.error || 'Error al guardar estudiante.') + '</div>';
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error de conexión al guardar estudiante: ' + error.message);
+                    document.getElementById('msgEstudiante').innerHTML = '<div class="alert alert-danger">Error de conexión: ' + error.message + '</div>';
                 });
         });
-
-
-        // Manejar envío del formulario de secretaria
         document.getElementById('formSecretaria').addEventListener('submit', function(e) {
             e.preventDefault();
-
-            // Validación básica de Bootstrap para el formulario de secretaria
             if (!this.checkValidity()) {
-                e.stopPropagation();
-            }
-            this.classList.add('was-validated');
-
-            if (!this.checkValidity()) {
+                this.classList.add('was-validated');
                 return;
             }
-
             const formData = new FormData(this);
-            
             fetch('models/guardarSecretaria.php', {
                     method: 'POST',
                     body: formData
                 })
-                .then(response => response.text()) // Primero obtener como texto
+                .then(response => response.text())
                 .then(text => {
                     const jsonStart = text.indexOf('{');
                     const cleanText = jsonStart !== -1 ? text.substring(jsonStart) : text;
-
                     try {
                         return JSON.parse(cleanText);
                     } catch (e) {
-                        console.error('Error parsing JSON:', cleanText);
                         throw new Error('Respuesta inválida del servidor');
                     }
                 })
                 .then(data => {
                     if (data.success) {
-                        alert('Secretaria creada exitosamente: ' + (data.secretaria || data.message));
-                        ocultarFormularioSecretaria(); // Ahora usa el nombre correcto
-                        // No recargamos estudiantes aquí porque es para secretarias
+                        document.getElementById('msgSecretaria').innerHTML = '<div class="alert alert-success">' + (data.message || 'Secretaria guardada correctamente.') + '</div>';
+                        // Resetear el título del modal para próxima vez
+                        document.getElementById('modalSecretariaLabel').textContent = '📝 Agregar Nueva Secretaria';
+                        setTimeout(() => {
+                            ocultarFormularioSecretaria();
+                        }, 1200);
                     } else {
-                        alert('Error al guardar secretaria: ' + data.message);
+                        document.getElementById('msgSecretaria').innerHTML = '<div class="alert alert-danger">' + (data.error || 'Error al guardar secretaria.') + '</div>';
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error de conexión al guardar secretaria: ' + error.message);
+                    document.getElementById('msgSecretaria').innerHTML = '<div class="alert alert-danger">Error de conexión: ' + error.message + '</div>';
                 });
         });
     <?php endif; ?>
