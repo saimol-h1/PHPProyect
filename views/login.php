@@ -328,15 +328,7 @@
 
             <div class="divider"></div>
 
-            <div class="credentials-info text-center">
-                <strong><i class="fas fa-info-circle me-2"></i>Usuarios de Prueba</strong>
-                <div class="credential-item">
-                    <strong>Administrador:</strong> admin / admin123
-                </div>
-                <div class="credential-item">
-                    <strong>Secretaria:</strong> secretaria1 / secret123
-                </div>
-            </div>
+
 
             <div class="text-center mt-4">
                 <a href="<?php echo getUrl('root', 'index.php'); ?>" class="btn btn-outline-secondary">

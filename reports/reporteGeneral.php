@@ -16,8 +16,6 @@ class UniversityPDF extends FPDF
         // Logo izquierdo
         $this->Image('https://res.cloudinary.com/dwwvecqnu/image/upload/v1751034779/logo-uta_gofi9e.png', 15, 5, 20, 27);
 
-        // Logo derecho
-        $this->Image('https://res.cloudinary.com/dwwvecqnu/image/upload/v1751034779/logo-uta_gofi9e.png', 257, 5, 20, 27);
 
         // Texto del encabezado en blanco
         $this->SetTextColor(255, 255, 255);
