@@ -271,7 +271,8 @@
 <div class="login-page-container">
     <div class="login-card fade-in">
         <div class="login-header">
-            <img src="<?php echo getUrl('img', 'escudo-uta.svg'); ?>" alt="UTA" style="width: 60px; height: 60px; margin-bottom: 10px; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));">
+            <img src="https://res.cloudinary.com/dwwvecqnu/image/upload/v1751034779/logo-uta_gofi9e.png" alt="UTA" style="width: 60px; height: 80px; margin-bottom: 10px; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));">
+
             <h3 class="login-title">Universidad Técnica de Ambato</h3>
             <p>Sistema de Gestión Académica</p>
         </div>
@@ -327,15 +328,7 @@
 
             <div class="divider"></div>
 
-            <div class="credentials-info text-center">
-                <strong><i class="fas fa-info-circle me-2"></i>Usuarios de Prueba</strong>
-                <div class="credential-item">
-                    <strong>Administrador:</strong> admin / admin123
-                </div>
-                <div class="credential-item">
-                    <strong>Secretaria:</strong> secretaria1 / secret123
-                </div>
-            </div>
+
 
             <div class="text-center mt-4">
                 <a href="<?php echo getUrl('root', 'index.php'); ?>" class="btn btn-outline-secondary">

@@ -87,18 +87,18 @@ try {
         // Encriptar la contraseña usando MD5 (manteniendo tu método de hash existente)
         $clave_encriptada = md5($clave);
 
-        // Tu consulta INSERT que usa prepared statements (como estaba en tu código original)
+        // Tu consulta INSERT que usa prepared statements
         // Pasamos $nombres (que es tu $_POST['nombre']) al prepared statement para la columna 'nombre_completo'
-        $sql = "INSERT INTO usuarios (usuario, password, tipo_usuario, nombre_completo, email, estado, fecha_registro, fecha_actualizacion) 
-                VALUES (?, ?, ?, ?, ?, ?, NOW(), NULL)";
+        // Según la estructura de la tabla: id, usuario, password, tipo_usuario, nombre_completo, email, estado, fecha_creacion, ultima_conexion
+        $sql = "INSERT INTO usuarios (usuario, password, tipo_usuario, nombre_completo, email, estado) 
+                VALUES (?, ?, ?, ?, ?, ?)";
 
         $stmt = mysqli_prepare($conn, $sql);
         if (!$stmt) {
             throw new Exception("Error al preparar la consulta: " . mysqli_error($conn));
         }
 
-        // Bind de parámetros (los valores ya han sido escapados por mysqli_real_escape_string donde es relevante)
-        // El cuarto parámetro es $nombres, que corresponde a tu $_POST['nombre']
+        // Bind de parámetros - solo 6 parámetros para las 6 columnas
         mysqli_stmt_bind_param(
             $stmt,
             "ssssss",

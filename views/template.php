@@ -42,6 +42,8 @@
         .container-fluid {
             margin-top: 10px;
             padding-top: 10px;
+            margin-bottom: 20px;
+            /* Añadido para evitar solapamiento con footer */
         }
 
         /* Espaciado especial para formularios de login */
@@ -169,7 +171,7 @@
     </style>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="<?php echo getUrl('img', 'favicon.svg'); ?>">
+    <link rel="icon" type="image/svg+xml" sizes="32x32" href="<?php echo getUrl('img', 'escudo-uta232.png'); ?>">
 
     <!-- CSS no crítico carga después -->
     <link rel="stylesheet" href="<?php echo getUrl('css', 'style.css'); ?>" media="print" onload="this.media='all'">
@@ -220,12 +222,12 @@
                         <i class="fas fa-user"></i>
                         <?php echo htmlspecialchars($_SESSION['nombre_completo'] ?? 'Usuario'); ?>
                         <small class="d-block" style="color: #E0E0E0; font-size: 0.7rem;">
-                            <?php echo ucfirst($_SESSION['tipo_usuario'] ?? 'usuario'); ?>
+                            <?php echo ucfirst($_SESSION['usuario_tipo'] ?? 'usuario'); ?>
                         </small>
                     </span>
-                    <a href="<?php echo getUrl('', 'logout.php'); ?>" class="btn btn-sm ms-2">
+                    <!-- <a href="<?php echo getUrl('', 'logout.php'); ?>" class="btn btn-sm ms-2">
                         <i class="fas fa-sign-out-alt"></i> Salir
-                    </a>
+                    </a> -->
                 </div>
             <?php endif; ?>
         </div>
