@@ -11,9 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: ../index.php?action=login&error=empty');
         exit();
     }
-
     // Buscar usuario en la base de datos
-    $sql = "SELECT id, usuario, password, tipo_usuario, nombre_completo, estado FROM usuarios WHERE usuario = ? AND estado = 'activo'";
+    $sql = "SELECT id, usuario, password, tipo_usuario, nombre_completo, estado FROM usuarios WHERE usuario = ?";
     $stmt = mysqli_prepare($conn, $sql);
     mysqli_stmt_bind_param($stmt, "s", $usuario);
     mysqli_stmt_execute($stmt);
@@ -21,6 +20,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($row = mysqli_fetch_assoc($result)) {
         // Verificar contraseña (usando MD5 como está en la BD)
+        if ($row['estado'] !== 'activo') {
+            // Usuario inactivo
+            header('Location: ../index.php?action=login&error=inactive');
+            exit();
+        }
         if (md5($password) === $row['password']) {
             // Login exitoso - crear sesión
             $_SESSION['usuario_id'] = $row['id'];
@@ -35,6 +39,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             exit();
         } else {
+            $_SESSION['contador_fallos'] = isset($_SESSION['contador_fallos']) ? $_SESSION['contador_fallos'] + 1 : 1;
+            if ($_SESSION['contador_fallos'] >= 3) {
+                // Bloquear usuario después de 3 intentos fallidos
+                $sql = "UPDATE usuarios SET estado = 'inactivo' WHERE id = ?";
+                $stmt = mysqli_prepare($conn, $sql);
+                mysqli_stmt_bind_param($stmt, "i", $row['id']);
+                mysqli_stmt_execute($stmt);
+                mysqli_stmt_close($stmt);
+                header('Location: ../index.php?action=login&error=blocked');
+                exit();
+            }
             // Contraseña incorrecta
             header('Location: ../index.php?action=login&error=invalid');
             exit();

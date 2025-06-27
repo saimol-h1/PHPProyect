@@ -12,3 +12,6 @@ Thumbs.db
 
 # Configuración local (si existe)
 config/local.php
+
+# Archivo SQL de la base de datos
+*.sql

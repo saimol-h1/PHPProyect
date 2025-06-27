@@ -43,9 +43,15 @@ $es_admin = isAdmin();
                                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAgregar">
                                     <i class="fas fa-plus"></i> Agregar Estudiante
                                 </button>
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAgregarSecretaria">
+                                    <i class="fas fa-plus"></i> Agregar Secretaria
+                                </button>
                                 <button type="button" class="btn btn-info" onclick="cargarEstudiantes()">
                                     <i class="fas fa-refresh"></i> Actualizar Lista
                                 </button>
+                                <a type="button" class="btn btn-sm" href="reports/reporteGeneral.php">
+                                    <i class="fas fa-users"></i> Reporte de Estudiantes
+                                </a>
                             </div>
                         <?php else: ?>
                             <!-- Botones de secretaria (solo lectura) -->
@@ -53,6 +59,9 @@ $es_admin = isAdmin();
                                 <button type="button" class="btn btn-info" onclick="cargarEstudiantes()">
                                     <i class="fas fa-refresh"></i> Actualizar Lista
                                 </button>
+                                <a type="button" class="btn btn-sm" href="reports/reporteGeneral.php">
+                                    <i class="fas fa-users"></i> Reporte de Estudiantes
+                                </a>
                                 <div class="alert alert-warning">
                                     <i class="fas fa-info-circle"></i> Modo solo lectura - Contacte al administrador para realizar cambios
                                 </div>
@@ -95,6 +104,46 @@ $es_admin = isAdmin();
     <?php if ($es_admin): ?>
         <!-- Modal para agregar estudiante -->
         <div class="modal fade" id="modalAgregar" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Agregar Nuevo Estudiante</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form id="formAgregar">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="cedula" class="form-label">Cédula</label>
+                                <input type="text" class="form-control" id="cedula" name="cedula" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="nombre" name="nombre" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="apellido" class="form-label">Apellido</label>
+                                <input type="text" class="form-control" id="apellido" name="apellido" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="direccion" class="form-label">Dirección</label>
+                                <textarea class="form-control" id="direccion" name="direccion" rows="2"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="telefono" class="form-label">Teléfono</label>
+                                <input type="text" class="form-control" id="telefono" name="telefono">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-success">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para agregar Secretaria -->
+        <div class="modal fade" id="modalAgregarSecretaria" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -183,7 +232,6 @@ $es_admin = isAdmin();
 
         $(document).ready(function() {
             cargarEstudiantes();
-
             <?php if ($es_admin): ?>
                 // Form para agregar
                 $('#formAgregar').on('submit', function(e) {
@@ -328,6 +376,9 @@ $es_admin = isAdmin();
                 }
             }
         <?php endif; ?>
+        function cargarRerporteEstudiantes() {
+            window.open('reports/reporteGeneral.php', '_blank');
+        }
     </script>
 </body>
 

@@ -23,10 +23,16 @@ $es_admin = isAdmin();
                 <button class="btn btn-success me-2" onclick="mostrarFormulario()">
                     <i class="fas fa-plus"></i> Agregar Estudiante
                 </button>
+                <button class="btn btn-warning me-2" onclick="mostrarFormularioSecretaria()">
+                    <i class="fas fa-plus"></i> Agregar Secretaria
+                </button>
             <?php endif; ?>
             <button class="btn btn-primary" onclick="cargarEstudiantes()">
                 <i class="fas fa-refresh"></i> Actualizar Lista
             </button>
+            <a type="button" class="btn btn-sm" href="reports/reporteGeneral.php">
+                <i class="fas fa-users"></i> Reporte de Estudiantes
+            </a>
         </div>
     </div>
 
@@ -96,7 +102,55 @@ $es_admin = isAdmin();
                 </form>
             </div>
         </div>
+
+        <div id="formularioSecretaria" class="card mb-4" style="display: none;">
+            <div class="card-header">
+                <h5 id="tituloFormulario">📝 Agregar Nueva Secretaria</h5>
+            </div>
+            <div class="card-body">
+                <form id="formSecretaria">
+                    <input type="hidden" id="secretariaId" name="id">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="usuario" class="form-label">Usuario</label>
+                            <input type="text" class="form-control" id="usuario" name="usuario" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="clave" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="clave" name="clave" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="nombre" class="form-label">Nombre Completo:</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="email" class="form-label">Email:</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Guardar
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="ocultarFormulario()">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     <?php endif; ?>
+
+    <!-- Buscador de cédula -->
+    <div class="mb-3">
+        <input type="text" class="form-control" id="busquedaCedula" placeholder="Buscar por cédula...">
+        <br>
+        <button id="btnReporteCedula" class="btn btn-primary mb-3" disabled>Ver Reporte de Cédula</button>
+    </div>
 
     <!-- Lista de estudiantes -->
     <div class="card">
@@ -124,7 +178,9 @@ $es_admin = isAdmin();
     // Cargar estudiantes al cargar la página
     document.addEventListener('DOMContentLoaded', function() {
         cargarEstudiantes();
-    }); // Función para cargar estudiantes
+    }); 
+
+     // Función para cargar estudiantes
     function cargarEstudiantes() {
         fetch('models/select.php')
             .then(response => response.json())
@@ -170,7 +226,7 @@ $es_admin = isAdmin();
 
             estudiantes.forEach(estudiante => {
                 html += `
-                <tr>
+                <tr class="fila-estudiante" data-cedula="${estudiante.cedula}">
                     <td>${estudiante.id}</td>
                     <td>${estudiante.nombres}</td>
                     <td>${estudiante.apellidos}</td>
@@ -200,6 +256,17 @@ $es_admin = isAdmin();
         }
 
         document.getElementById('tablaEstudiantes').innerHTML = html;
+
+        document.querySelectorAll('.fila-estudiante').forEach(fila => {
+        fila.addEventListener('click', function() {
+            // Quitar selección previa
+            document.querySelectorAll('.fila-estudiante').forEach(f => f.classList.remove('table-active'));
+            this.classList.add('table-active');
+            // Habilitar botón y guardar cédula seleccionada
+            document.getElementById('btnReporteCedula').disabled = false;
+            document.getElementById('btnReporteCedula').dataset.cedula = this.dataset.cedula;
+        });
+    })
     }
 
     // Funciones para el formulario (solo si es admin)
@@ -210,10 +277,19 @@ $es_admin = isAdmin();
             document.getElementById('tituloFormulario').textContent = '📝 Agregar Nuevo Estudiante';
             document.getElementById('formEstudiante').reset();
             document.getElementById('estudianteId').value = '';
+            // Establecer fecha actual cada vez que se abre el formulario
+            establecerFechaActual();
+        }
+
+        function mostrarFormularioSecretaria() {
+            document.getElementById('formularioSecretaria').style.display = 'block';
+            document.getElementById('formSecretaria').reset();
+            document.getElementById('secretariaId').value = '';
         }
 
         function ocultarFormulario() {
             document.getElementById('formularioEstudiante').style.display = 'none';
+            document.getElementById('formularioSecretaria').style.display = 'none';
         }
 
         function editarEstudiante(id) {
@@ -344,5 +420,84 @@ $es_admin = isAdmin();
                     alert('Error de conexión al guardar estudiante: ' + error.message);
                 });
         });
+
+        // Manejar envío del formulario de secretaria
+        document.getElementById('formSecretaria').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            
+            fetch('models/guardarSecretaria.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text()) // Primero obtener como texto
+                .then(text => {
+                    // Limpiar posibles warnings de PHP antes del JSON
+                    const jsonStart = text.indexOf('{');
+                    const cleanText = jsonStart !== -1 ? text.substring(jsonStart) : text;
+
+                    try {
+                        return JSON.parse(cleanText);
+                    } catch (e) {
+                        console.error('Error parsing JSON:', cleanText);
+                        throw new Error('Respuesta inválida del servidor');
+                    }
+                })
+                .then(data => {
+                    if (data.success) {
+                        alert('Secretaria creada exitosamente: ' + (data.secretaria || data.message));
+                        ocultarFormulario();
+                        // No recargamos estudiantes aquí porque es para secretarias
+                    } else {
+                        alert('Error al guardar secretaria: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error de conexión al guardar secretaria: ' + error.message);
+                });
+        });
     <?php endif; ?>
+    // Función para cargar reporte de estudiantes
+    function cargarRerporteEstudiantes() {
+        window.open('reports/reporteGeneral.php', '_blank');
+    }
+
+    // Buscar estudiantes por cédula en tiempo real
+    document.getElementById('busquedaCedula').addEventListener('input', function() {
+        const cedula = this.value.trim();
+        if (cedula === '') {
+            cargarEstudiantes(); // Si está vacío, carga todos
+            return;
+        }
+        fetch('models/selectCed.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'cedula=' + encodeURIComponent(cedula)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                mostrarTablaEstudiantes(data.data);
+            } else {
+                document.getElementById('tablaEstudiantes').innerHTML =
+                    '<div class="alert alert-danger">Error al buscar: ' + (data.error || 'Error desconocido') + '</div>';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('tablaEstudiantes').innerHTML =
+                '<div class="alert alert-danger">Error de conexión</div>';
+        });
+    });
+
+    document.getElementById('btnReporteCedula').addEventListener('click', function() {
+        const cedula = this.dataset.cedula;
+        if (cedula) {
+            window.open('reports/reporteCedula.php?cedula=' + encodeURIComponent(cedula), '_blank');
+        }
+    });
 </script>

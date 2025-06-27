@@ -12,6 +12,60 @@
 
     <!-- CSS crítico inline para el banner (evita esperar archivos CSS externos) -->
     <style>
+        /* Eliminar espacios en blanco */
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Eliminar espacios de elementos */
+        * {
+            box-sizing: border-box;
+        }
+
+        .container-fluid {
+            margin: 0;
+            padding: 0;
+            flex: 1;
+        }
+
+        /* Margen específico para evitar solapamiento con navbar */
+        .container-fluid {
+            margin-top: 10px;
+            padding-top: 10px;
+        }
+
+        /* Espaciado especial para formularios de login */
+        .login-container,
+        .auth-container {
+            margin-top: 40px;
+            padding-top: 30px;
+        }
+
+        /* Asegurar separación de navbar en todas las páginas */
+        .container-fluid>.row:first-child,
+        .container-fluid>.col:first-child,
+        .container-fluid>div:first-child,
+        .container-fluid>form:first-child {
+            margin-top: 20px;
+        }
+
+        /* Formularios específicos */
+        form.login-form,
+        .card.login-card,
+        .login-wrapper {
+            margin-top: 30px;
+        }
+
         .banner-container {
             position: relative;
             width: 100%;
@@ -226,7 +280,8 @@
             </div>
         </div>
     </nav>
-    <section class="container-fluid mt-0">
+
+    <section class="container-fluid">
         <?php
         // El contenido se renderiza desde el controlador principal
         global $mvcController;
