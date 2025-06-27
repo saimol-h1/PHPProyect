@@ -9,6 +9,49 @@ $usuario_info = getUsuarioInfo();
 $es_admin = isAdmin();
 ?>
 
+<style>
+    /* Mejorar visibilidad de fila seleccionada */
+    .fila-estudiante {
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .fila-estudiante:hover {
+        background-color: #f8d7da !important;
+        /* rojo claro Bootstrap */
+    }
+
+    .fila-estudiante.table-active {
+        background-color: #c82333 !important;
+        /* rojo oscuro Bootstrap */
+        color: #fff !important;
+        font-weight: 500;
+    }
+
+    .fila-estudiante.table-active td {
+        background-color: #c82333 !important;
+        color: #fff !important;
+    }
+
+    .fila-estudiante.table-active:hover,
+    .fila-estudiante.table-active:hover td {
+        background-color: #a71d2a !important;
+        /* rojo más oscuro */
+        color: #fff !important;
+    }
+
+    /* Botones en fila seleccionada */
+    .fila-estudiante.table-active .btn {
+        border-color: #fff;
+        color: #fff;
+    }
+
+    .fila-estudiante.table-active .btn:hover {
+        background-color: #fff;
+        color: #c82333;
+    }
+</style>
+
 <div class="container-fluid">
     <h2 class="mb-4">🎓 Gestión de Estudiantes</h2>
     <div class="alert alert-info mb-4">
