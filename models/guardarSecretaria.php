@@ -6,7 +6,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
 // Incluir configuración híbrida
-require_once '../config/database_hybrid.php';
+require_once '../config/database.php';
 require_once '../config/auth.php';
 
 // Verificar que el usuario esté logueado y sea admin
@@ -37,7 +37,7 @@ try {
         $email = mysqli_real_escape_string($conn, trim($_POST['email']));
         $tipo_usuario = 'secretaria'; // Asignar tipo de usuario fijo
         $estado = 'activo'; // Asignar estado activo por defecto
-        
+
         $errors = []; // Array para almacenar mensajes de error
 
         // --- VALIDACIONES ADICIONALES DE ENTRADA ---
@@ -46,12 +46,12 @@ try {
         if (strlen($clave) < 6) {
             $errors[] = "La contraseña debe tener al menos 6 caracteres.";
         }
-        
+
         // 2. Validar formato de email
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors[] = "El formato del email no es válido.";
         }
-        
+
         // 3. Validar Nombre Completo (solo letras y espacios)
         // Aplicamos la validación a la variable $nombres que contiene el $_POST['nombre']
         if (!preg_match('/^[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+$/u', $nombres)) {
@@ -83,14 +83,14 @@ try {
             echo json_encode(['success' => false, 'message' => implode(" ", $errors)]);
             exit;
         }
-        
+
         // Encriptar la contraseña usando MD5 (manteniendo tu método de hash existente)
         $clave_encriptada = md5($clave);
 
         // Tu consulta INSERT que usa prepared statements (como estaba en tu código original)
         // Pasamos $nombres (que es tu $_POST['nombre']) al prepared statement para la columna 'nombre_completo'
         $sql = "INSERT INTO usuarios (usuario, password, tipo_usuario, nombre_completo, email, estado, fecha_registro, fecha_actualizacion) 
-                VALUES (?, ?, ?, ?, ?, ?, NOW(), NULL)"; 
+                VALUES (?, ?, ?, ?, ?, ?, NOW(), NULL)";
 
         $stmt = mysqli_prepare($conn, $sql);
         if (!$stmt) {
@@ -99,8 +99,15 @@ try {
 
         // Bind de parámetros (los valores ya han sido escapados por mysqli_real_escape_string donde es relevante)
         // El cuarto parámetro es $nombres, que corresponde a tu $_POST['nombre']
-        mysqli_stmt_bind_param($stmt, "ssssss", 
-            $usuario, $clave_encriptada, $tipo_usuario, $nombres, $email, $estado
+        mysqli_stmt_bind_param(
+            $stmt,
+            "ssssss",
+            $usuario,
+            $clave_encriptada,
+            $tipo_usuario,
+            $nombres,
+            $email,
+            $estado
         );
 
         if (mysqli_stmt_execute($stmt)) {
@@ -115,7 +122,6 @@ try {
             echo json_encode(['success' => false, 'message' => 'Error: ' . mysqli_stmt_error($stmt)]);
         }
         mysqli_stmt_close($stmt);
-
     } else {
         echo json_encode(['success' => false, 'message' => 'Método no permitido']);
     }
@@ -128,4 +134,3 @@ try {
         mysqli_close($conn);
     }
 }
-?>

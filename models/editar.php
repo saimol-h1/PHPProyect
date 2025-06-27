@@ -6,7 +6,7 @@ header('Access-Control-Allow-Methods: GET, POST, PUT, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
 // Incluir configuración híbrida
-require_once '../config/database_hybrid.php';
+require_once '../config/database.php';
 require_once '../config/auth.php';
 
 // Verificar que el usuario esté logueado y sea admin
@@ -48,7 +48,7 @@ try {
     // Actualizar estudiante (POST/PUT)
     if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'PUT') {
         $id = mysqli_real_escape_string($conn, trim($data['id'] ?? ''));
-        $cedula_from_data = mysqli_real_escape_string($conn, trim($data['cedula'] ?? '')); 
+        $cedula_from_data = mysqli_real_escape_string($conn, trim($data['cedula'] ?? ''));
         $nombres = mysqli_real_escape_string($conn, trim($data['nombres'] ?? ''));
         $apellidos = mysqli_real_escape_string($conn, trim($data['apellidos'] ?? ''));
         $email = mysqli_real_escape_string($conn, trim($data['email'] ?? ''));
@@ -163,4 +163,3 @@ try {
         mysqli_close($conn);
     }
 }
-?>

@@ -6,7 +6,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
 // Incluir configuración híbrida
-require_once '../config/database_hybrid.php';
+require_once '../config/database.php';
 require_once '../config/auth.php';
 
 // Verificar que el usuario esté logueado y sea admin
@@ -33,7 +33,7 @@ try {
         $direccion = mysqli_real_escape_string($conn, trim($_POST['direccion'] ?? ''));
         $estado = 'activo'; // Estado por defecto
 
-        $errors = []; 
+        $errors = [];
 
         if (empty($nombres) || !preg_match('/^[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+$/u', $nombres)) {
             $errors[] = "Los nombres solo deben contener letras y espacios y no pueden estar vacíos.";
@@ -61,7 +61,7 @@ try {
             $check_sql = "SELECT id FROM estudiantes WHERE cedula='$cedula'";
             $check_result = mysqli_query($conn, $check_sql);
             if (!$check_result) {
-                 throw new Exception("Error al verificar la cédula: " . mysqli_error($conn));
+                throw new Exception("Error al verificar la cédula: " . mysqli_error($conn));
             }
             if (mysqli_num_rows($check_result) > 0) {
                 $errors[] = "Ya existe un estudiante con esa cédula.";
@@ -84,7 +84,7 @@ try {
             if (mysqli_num_rows($check_email_result) > 0) {
                 $errors[] = "Ya existe un estudiante con ese email.";
             }
-        }       
+        }
 
         if (!empty($telefono) && !preg_match('/^[0-9]{10}$/', $telefono)) {
             $errors[] = "El teléfono debe ser de 10 dígitos numéricos o estar vacío.";
@@ -92,9 +92,9 @@ try {
 
         $semestre_int = filter_var($semestre, FILTER_VALIDATE_INT);
         if ($semestre_int === false || $semestre_int < 1 || $semestre_int > 10) {
-             if (!empty($semestre)) { // Solo añadir error si se intenta enviar un valor inválido o está fuera de rango
+            if (!empty($semestre)) { // Solo añadir error si se intenta enviar un valor inválido o está fuera de rango
                 $errors[] = "El semestre debe ser un número entero entre 1 y 10.";
-             }
+            }
         } else {
             $semestre = $semestre_int; // Usar el valor validado
         }

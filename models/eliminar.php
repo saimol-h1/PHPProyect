@@ -6,7 +6,7 @@ header('Access-Control-Allow-Methods: GET, POST, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
 // Incluir configuración híbrida
-require_once '../config/database_hybrid.php';
+require_once '../config/database.php';
 require_once '../config/auth.php';
 
 // Verificar que el usuario esté logueado y sea admin
