@@ -19,10 +19,10 @@ $es_admin = isAdmin();
     <div class="row mb-4">
         <div class="col-md-12">
             <?php if ($es_admin): ?>
-                <button class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#modalEstudiante">
+                <button class="btn btn-success me-2" onclick="mostrarFormularioEstudiante()">
                     <i class="fas fa-plus"></i> Agregar Estudiante
                 </button>
-                <button class="btn btn-warning me-2" data-bs-toggle="modal" data-bs-target="#modalSecretaria">
+                <button class="btn btn-warning me-2" onclick="mostrarFormularioSecretaria()">
                     <i class="fas fa-plus"></i> Agregar Secretaria
                 </button>
             <?php endif; ?>
@@ -94,7 +94,7 @@ $es_admin = isAdmin();
                             <div class="col-md-6 mb-3">
                                 <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento:</label>
                                 <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" required>
-                                <div class="invalid-feedback" id="feedbackFechaNacimiento">Debe ser mayor de 16 años.</div>
+                                <div class="invalid-feedback" id="feedbackFechaNacimiento">Debe tener al menos 19 años.</div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="direccion" class="form-label">Dirección:</label>
@@ -251,7 +251,7 @@ $es_admin = isAdmin();
         }
     }
 
-    // Función para validar la edad (mayor de 16 años)
+
     function validarEdad() {
         const fechaNacimientoInput = document.getElementById('fecha_nacimiento');
         const feedbackFechaNacimiento = document.getElementById('feedbackFechaNacimiento');
@@ -548,7 +548,7 @@ $es_admin = isAdmin();
             if (modal) modal.hide();
         }
 
-        // Función para establecer la fecha de nacimiento máxima (mayor de 16 años)
+        // Función para establecer la fecha de nacimiento máxima (al menos 16 años)
         function establecerFechaNacimientoMaxima() {
             const hoy = new Date();
             const fechaMinimaNacimiento = new Date(hoy.getFullYear() - 16, hoy.getMonth(), hoy.getDate());
@@ -566,7 +566,7 @@ $es_admin = isAdmin();
                 let el = document.getElementById(idf);
                 if (el) el.classList.remove('is-valid', 'is-invalid');
             });
-            document.getElementById('feedbackFechaNacimiento').textContent = 'Debe ser mayor de 16 años.';
+            document.getElementById('feedbackFechaNacimiento').textContent = 'Debe tener al menos 16 años.';
             fetch(`models/editar.php?id=${id}`)
                 .then(response => response.text())
                 .then(text => {

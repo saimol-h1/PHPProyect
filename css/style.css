@@ -137,6 +137,11 @@ h1 {
     margin-bottom: 20px;
 }
 
+h5 {
+    color: var(--uta-white);
+    font-weight: 600;
+}
+
 /* Responsive design */
 @media screen and (max-width: 600px) {
     nav li {
