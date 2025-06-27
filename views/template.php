@@ -86,8 +86,10 @@
             min-height: 100px;
             max-height: 150px;
             object-fit: cover;
+            object-position: center;
             display: block;
             opacity: 0;
+            transition: opacity 0.3s ease-in-out;
         }
 
         .banner-img.ready {
@@ -127,6 +129,7 @@
             border-radius: 20px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
         }
 
         .user-overlay .text-white {
@@ -140,6 +143,7 @@
             padding: 0.25rem 0.5rem;
             border: 1px solid #E0E0E0;
             color: #FFFFFF;
+            transition: all 0.3s ease;
         }
 
         .user-overlay .btn:hover {
@@ -147,25 +151,143 @@
             color: #901B21;
         }
 
+        /* Media Queries para Responsividad */
+        @media (max-width: 1200px) {
+            .banner-container {
+                min-height: 110px;
+            }
+
+            .banner-img {
+                max-height: 140px;
+            }
+
+            .user-overlay {
+                padding: 6px 12px;
+            }
+
+            .user-overlay .text-white {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .banner-container {
+                min-height: 100px;
+            }
+
+            .banner-img {
+                max-height: 130px;
+            }
+
+            .user-overlay {
+                top: 8px;
+                right: 10px;
+                padding: 5px 10px;
+            }
+
+            .user-overlay .text-white {
+                font-size: 0.8rem;
+            }
+
+            .user-overlay .btn {
+                font-size: 0.75rem;
+                padding: 0.2rem 0.4rem;
+            }
+        }
+
         @media (max-width: 768px) {
             .banner-container {
                 min-height: 80px;
+                flex-direction: column;
+                padding: 5px;
             }
 
             .banner-img {
                 max-height: 100px;
+                min-height: 80px;
             }
 
             .banner-placeholder {
                 font-size: 1rem;
+                padding: 10px;
             }
 
             .user-overlay {
                 position: static;
-                margin: 5px;
+                margin: 5px auto 0;
                 text-align: center;
-                border-radius: 0;
+                border-radius: 15px;
+                background: rgba(144, 27, 33, 0.95);
                 border-top: 2px solid #E0E0E0;
+                width: 95%;
+                max-width: 300px;
+            }
+
+            .user-overlay .text-white {
+                font-size: 0.85rem;
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            .user-overlay .text-white small {
+                font-size: 0.7rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .banner-container {
+                min-height: 70px;
+            }
+
+            .banner-img {
+                max-height: 90px;
+                min-height: 70px;
+            }
+
+            .banner-placeholder {
+                font-size: 0.9rem;
+                padding: 8px;
+            }
+
+            .user-overlay {
+                margin: 8px auto 0;
+                padding: 8px 12px;
+                border-radius: 12px;
+            }
+
+            .user-overlay .text-white {
+                font-size: 0.8rem;
+            }
+
+            .user-overlay .btn {
+                font-size: 0.7rem;
+                padding: 0.15rem 0.3rem;
+                margin-top: 3px;
+            }
+        }
+
+        @media (max-width: 320px) {
+            .banner-container {
+                min-height: 60px;
+            }
+
+            .banner-img {
+                max-height: 80px;
+                min-height: 60px;
+            }
+
+            .banner-placeholder {
+                font-size: 0.8rem;
+                padding: 5px;
+            }
+
+            .user-overlay {
+                width: 98%;
+                padding: 6px 8px;
+            }
+
+            .user-overlay .text-white {
+                font-size: 0.75rem;
             }
         }
     </style>
@@ -203,8 +325,8 @@
         <div class="banner-container">
             <!-- Placeholder mientras carga el banner -->
             <div id="banner-placeholder" class="banner-placeholder">
-                <i class=""></i>
-
+                <i class="fas fa-university"></i>
+                <span>Universidad Técnica de Ambato</span>
             </div> <!-- Banner real con carga optimizada desde Cloudinary CDN -->
             <img id="banner-img"
                 src="https://res.cloudinary.com/dwwvecqnu/image/upload/f_auto,q_auto/srjxoupeycmg9yaanbz3"
