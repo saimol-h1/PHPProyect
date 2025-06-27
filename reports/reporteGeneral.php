@@ -8,30 +8,37 @@ class UniversityPDF extends FPDF
     // Encabezado de página
     function Header()
     {
-        // Logo (si existe)
-        // $this->Image('logo.png', 10, 6, 30);
-
         // Color universitario para el fondo del encabezado
         $this->SetFillColor(144, 27, 33); // Color #901B21 UTA
         $this->Rect(0, 0, 297, 35, 'F');
 
+        // Logos en los extremos
+        // Logo izquierdo
+        $this->Image('https://res.cloudinary.com/dwwvecqnu/image/upload/v1751034779/logo-uta_gofi9e.png', 15, 5, 20, 27);
+
+        // Logo derecho
+        $this->Image('https://res.cloudinary.com/dwwvecqnu/image/upload/v1751034779/logo-uta_gofi9e.png', 257, 5, 20, 27);
+
         // Texto del encabezado en blanco
         $this->SetTextColor(255, 255, 255);
 
-        // Título principal
+        // Título principal (centrado entre los logos)
         $this->SetFont('Arial', 'B', 18);
         $this->SetY(8);
-        $this->Cell(0, 8, utf8_decode('UNIVERSIDAD TÉCNICA DE AMBATO'), 0, 1, 'C');
+        $this->SetX(50); // Margen izquierdo para centrar entre logos
+        $this->Cell(197, 8, utf8_decode('UNIVERSIDAD TÉCNICA DE AMBATO'), 0, 1, 'C');
 
         // Subtítulo
         $this->SetFont('Arial', '', 12);
-        $this->Cell(0, 6, utf8_decode('FACULTAD DE INGENIERÍA EN SISTEMAS'), 0, 1, 'C');
-        $this->Cell(0, 6, utf8_decode('SISTEMA DE GESTIÓN ESTUDIANTIL'), 0, 1, 'C');
+        $this->SetX(50);
+        $this->Cell(197, 6, utf8_decode('FACULTAD DE INGENIERÍA EN SISTEMAS'), 0, 1, 'C');
+        $this->SetX(50);
+        $this->Cell(197, 6, utf8_decode('SISTEMA DE GESTIÓN ESTUDIANTIL'), 0, 1, 'C');
 
-        // Línea decorativa
+        // Línea decorativa (centrada entre logos)
         $this->SetDrawColor(255, 255, 255);
         $this->SetLineWidth(1);
-        $this->Line(50, 32, 247, 32);
+        $this->Line(60, 32, 237, 32);
 
         // Resetear colores
         $this->SetTextColor(0, 0, 0);
