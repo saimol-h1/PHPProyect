@@ -17,7 +17,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 // Configurar tiempo de expiración de sesión (10 minutos = 600 segundos)
-define('SESSION_TIMEOUT', 60); // 10 minutos en segundos
+define('SESSION_TIMEOUT', 600); // 10 minutos en segundos
 
 /**
  * Verificar y manejar la expiración de sesión
