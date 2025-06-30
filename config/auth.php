@@ -16,11 +16,59 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+// Configurar tiempo de expiración de sesión (10 minutos = 600 segundos)
+define('SESSION_TIMEOUT', 60); // 10 minutos en segundos
+
+/**
+ * Verificar y manejar la expiración de sesión
+ */
+function checkSessionTimeout()
+{
+    if (isset($_SESSION['last_activity'])) {
+        $inactive_time = time() - $_SESSION['last_activity'];
+
+        if ($inactive_time > SESSION_TIMEOUT) {
+            // Sesión expirada
+            session_unset();
+            session_destroy();
+
+            // Redirigir al login con mensaje de sesión expirada
+            if (!headers_sent()) {
+                header('Location: index.php?action=login&expired=1');
+                exit();
+            }
+            return false;
+        }
+    }
+
+    // Actualizar tiempo de última actividad
+    $_SESSION['last_activity'] = time();
+    return true;
+}
+
+/**
+ * Obtener tiempo restante de sesión en segundos
+ */
+function getSessionTimeRemaining()
+{
+    if (isset($_SESSION['last_activity'])) {
+        $elapsed = time() - $_SESSION['last_activity'];
+        $remaining = SESSION_TIMEOUT - $elapsed;
+        return max(0, $remaining);
+    }
+    return 0;
+}
+
 /**
  * Verificar si el usuario está logueado
  */
 function isLoggedIn()
 {
+    // Verificar expiración de sesión primero
+    if (!checkSessionTimeout()) {
+        return false;
+    }
+
     return isset($_SESSION['usuario_id']) && isset($_SESSION['usuario_tipo']);
 }
 
@@ -116,6 +164,62 @@ function mostrarUsuarioLogueado()
 }
 
 /**
+ * Mostrar información del usuario logueado con tiempo de sesión
+ */
+function mostrarUsuarioLogueadoConTiempo()
+{
+    if (isLoggedIn()) {
+        $info = getUsuarioInfo();
+        $tipoCapitalizado = ucfirst($info['tipo_usuario'] ?? 'usuario');
+        $timeRemaining = getSessionTimeRemaining();
+        $minutesRemaining = floor($timeRemaining / 60);
+        $secondsRemaining = $timeRemaining % 60;
+
+        echo "<div class='usuario-logueado alert alert-info mb-0 d-flex justify-content-between align-items-center'>";
+        echo "<div>";
+        echo "<i class='fas fa-user'></i> Bienvenido {$tipoCapitalizado}: <strong>{$info['nombre_completo']}</strong>";
+        echo "</div>";
+        echo "<div class='d-flex align-items-center'>";
+        echo "<span class='badge bg-warning text-dark me-2' id='session-timer'>";
+        echo "<i class='fas fa-clock'></i> {$minutesRemaining}:" . sprintf('%02d', $secondsRemaining);
+        echo "</span>";
+        echo "<a href='logout.php' class='btn btn-sm btn-outline-danger'>Cerrar Sesión</a>";
+        echo "</div>";
+        echo "</div>";
+
+        // JavaScript para actualizar el contador en tiempo real
+        echo "<script>
+        let sessionTimeRemaining = {$timeRemaining};
+        const sessionTimer = document.getElementById('session-timer');
+        
+        function updateSessionTimer() {
+            if (sessionTimeRemaining <= 0) {
+                alert('Su sesión ha expirado. Será redirigido al login.');
+                window.location.href = 'index.php?action=login&expired=1';
+                return;
+            }
+            
+            const minutes = Math.floor(sessionTimeRemaining / 60);
+            const seconds = sessionTimeRemaining % 60;
+            sessionTimer.innerHTML = '<i class=\"fas fa-clock\"></i> ' + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+            
+            // Cambiar color cuando quedan menos de 2 minutos
+            if (sessionTimeRemaining <= 120) {
+                sessionTimer.className = 'badge bg-danger text-white me-2';
+            } else if (sessionTimeRemaining <= 300) {
+                sessionTimer.className = 'badge bg-warning text-dark me-2';
+            }
+            
+            sessionTimeRemaining--;
+        }
+        
+        // Actualizar cada segundo
+        setInterval(updateSessionTimer, 1000);
+        </script>";
+    }
+}
+
+/**
  * Función de login
  */
 function login($usuario, $password)
@@ -143,10 +247,23 @@ function login($usuario, $password)
             $_SESSION['usuario_tipo'] = $row['tipo_usuario'];
             $_SESSION['nombre_completo'] = $row['nombre_completo'];
             $_SESSION['login_time'] = time();
+            $_SESSION['last_activity'] = time(); // Inicializar tiempo de última actividad
 
             return true;
         }
     }
 
+    return false;
+}
+
+/**
+ * Extender sesión (llamar desde AJAX para mantener sesión activa)
+ */
+function extendSession()
+{
+    if (isLoggedIn()) {
+        $_SESSION['last_activity'] = time();
+        return true;
+    }
     return false;
 }

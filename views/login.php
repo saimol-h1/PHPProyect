@@ -278,25 +278,29 @@
         </div>
 
         <div class="card-body">
-            <?php if (isset($_GET['error'])): ?>
+            <?php if (isset($_GET['error']) || isset($_GET['expired'])): ?>
                 <div class="alert alert-danger fade-in" role="alert">
                     <i class="fas fa-exclamation-triangle me-2"></i>
                     <?php
-                    switch ($_GET['error']) {
-                        case 'invalid':
-                            echo 'Usuario o contraseña incorrectos';
-                            break;
-                        case 'required':
-                            echo 'Debe iniciar sesión para acceder a esta sección';
-                            break;
-                        case 'inactive':
-                            echo 'Usuario inactivo. Contacte al administrador';
-                            break;
-                        case 'blocked':
-                            echo 'Usuario bloqueado por múltiples intentos fallidos. Contacte al administrador';
-                            break;
-                        default:
-                            echo 'Error de autenticación';
+                    if (isset($_GET['expired'])) {
+                        echo 'Su sesión ha expirado por inactividad (10 minutos). Por favor, inicie sesión nuevamente.';
+                    } else {
+                        switch ($_GET['error']) {
+                            case 'invalid':
+                                echo 'Usuario o contraseña incorrectos';
+                                break;
+                            case 'required':
+                                echo 'Debe iniciar sesión para acceder a esta sección';
+                                break;
+                            case 'inactive':
+                                echo 'Usuario inactivo. Contacte al administrador';
+                                break;
+                            case 'blocked':
+                                echo 'Usuario bloqueado por múltiples intentos fallidos. Contacte al administrador';
+                                break;
+                            default:
+                                echo 'Error de autenticación';
+                        }
                     }
                     ?>
                 </div>
