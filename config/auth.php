@@ -100,6 +100,24 @@ function logout()
     exit();
 }
 
+function logoutTimeout()
+{
+    // Iniciar sesión si no está iniciada
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    session_unset();
+    session_destroy();
+
+    // Limpiar buffer si existe antes de redirigir
+    if (ob_get_level()) {
+        ob_clean();
+    }
+
+    header('Location: index.php?action=login&error=timeout');
+    exit();
+}
+
 /**
  * Mostrar información del usuario logueado (para incluir en templates)
  */
@@ -151,22 +169,3 @@ function login($usuario, $password)
     return false;
 }
 
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-
-if (!defined('TIEMPO_MAXIMO_INACTIVIDAD')) {
-    define('TIEMPO_MAXIMO_INACTIVIDAD', 20); // 10 minutos
-}
-
-if (isset($_SESSION['login_time'])) {
-    $inactivo = time() - $_SESSION['login_time'];
-    if ($inactivo > TIEMPO_MAXIMO_INACTIVIDAD) {
-        session_unset();
-        session_destroy();
-        header("Location: index.php?action=login&error=timeout");
-        exit();
-    } else {
-        $_SESSION['login_time'] = time(); // PHP reinicia aquí
-    }
-}

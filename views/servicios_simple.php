@@ -858,45 +858,55 @@ $es_admin = isAdmin();
         }
     });
     // Tiempo máximo en segundos (debe coincidir con PHP)
-    const MAX_INACTIVIDAD = 20;
+    const MAX_INACTIVIDAD = 10;
 
     let tiempoActivo = 0;
     let tiempoRestante = MAX_INACTIVIDAD;
+    let timeoutId; // Para manejar el timeout
 
     function mostrarTiempo() {
         console.clear();
         console.log(`⏱️ Tiempo activo: ${tiempoActivo}s`);
         console.log(`⌛ Tiempo restante: ${tiempoRestante}s`);
 
-        tiempoActivo += 2;
-        tiempoRestante -= 2;
+        tiempoActivo += 1;
+        tiempoRestante -= 1;
 
         // Expiró el tiempo, redirigir automáticamente
         if (tiempoRestante <= 0) {
-            console.warn("⛔ Sesión expirada. Redirigiendo...");
-            window.location.href = "index.php?action=login&error=timeout";
+            window.location.href = 'models/timeout.php';
         }
     }
 
     // Reinicia contador si hay actividad
-    function reiniciarContador(e) {
-        if (e && typeof e.preventDefault === 'function') {
-            e.preventDefault(); // evita recarga si el evento viene de <a> o <form>
-        }
-
+    function reiniciarContador() {
         tiempoActivo = 0;
         tiempoRestante = MAX_INACTIVIDAD;
+    }
 
-        // Solo llamar a keepalive si la sesión sigue
-        fetch('keepalive.php')
-            .catch(err => console.warn("Keepalive falló"));
+    // Detectar actividad del usuario con throttling para evitar demasiadas llamadas
+    let lastActivity = 0;
+    function handleActivity(e) {
+        if (document.querySelector('.modal.show')) return; // No renovar si está en un modal abierto
+
+        const now = Date.now();
+        if (now - lastActivity > 1000) {
+            lastActivity = now;
+            reiniciarContador();
+        }
+        // Solo evitar comportamiento por defecto si viene de un form o botón
+        if (e && e.target && ['submit', 'button'].includes(e.target.type)) {
+            e.preventDefault();
+        }
+        
+        reiniciarContador();
     }
 
     // Detectar actividad del usuario
-    ['click', 'mousemove', 'keydown', 'scroll'].forEach(evento => {
-        document.addEventListener(evento, reiniciarContador);
+    ['click', 'keydown', 'scroll'].forEach(evento => {
+        document.addEventListener(evento, handleActivity, { passive: true });
     });
 
     // Ejecutar cada 2 segundos
-    setInterval(mostrarTiempo, 2000);
+    setInterval(mostrarTiempo, 1000);
 </script>
