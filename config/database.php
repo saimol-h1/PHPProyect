@@ -41,8 +41,8 @@ if (isset($_ENV['RAILWAY_ENVIRONMENT']) || isset($_ENV['MYSQL_HOST']) || isset($
         $host = "localhost";
         $username = "root";
         $password = "";
-        $database = "cuarto";
-        $port = 9040;
+        $database = "cuarto1";
+        $port = 3306;
         $environment = 'development';
     } else {
         // Configuración para hosting gratuito (InfinityFree, etc.)

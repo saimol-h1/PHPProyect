@@ -1,4 +1,7 @@
 <?php
+require_once 'config/auth.php';
+requireLogin();
+
 // Verificar que el usuario esté logueado para acceder a servicios
 if (!isLoggedIn()) {
     echo "<div class='alert alert-warning'>Debes iniciar sesión para acceder a esta sección.</div>";
@@ -7,6 +10,7 @@ if (!isLoggedIn()) {
 
 $usuario_info = getUsuarioInfo();
 $es_admin = isAdmin();
+
 ?>
 
 <style>
@@ -853,4 +857,46 @@ $es_admin = isAdmin();
             window.open('reports/reporteCedula.php?cedula=' + encodeURIComponent(cedula), '_blank');
         }
     });
+    // Tiempo máximo en segundos (debe coincidir con PHP)
+    const MAX_INACTIVIDAD = 20;
+
+    let tiempoActivo = 0;
+    let tiempoRestante = MAX_INACTIVIDAD;
+
+    function mostrarTiempo() {
+        console.clear();
+        console.log(`⏱️ Tiempo activo: ${tiempoActivo}s`);
+        console.log(`⌛ Tiempo restante: ${tiempoRestante}s`);
+
+        tiempoActivo += 2;
+        tiempoRestante -= 2;
+
+        // Expiró el tiempo, redirigir automáticamente
+        if (tiempoRestante <= 0) {
+            console.warn("⛔ Sesión expirada. Redirigiendo...");
+            window.location.href = "index.php?action=login&error=timeout";
+        }
+    }
+
+    // Reinicia contador si hay actividad
+    function reiniciarContador(e) {
+        if (e && typeof e.preventDefault === 'function') {
+            e.preventDefault(); // evita recarga si el evento viene de <a> o <form>
+        }
+
+        tiempoActivo = 0;
+        tiempoRestante = MAX_INACTIVIDAD;
+
+        // Solo llamar a keepalive si la sesión sigue
+        fetch('keepalive.php')
+            .catch(err => console.warn("Keepalive falló"));
+    }
+
+    // Detectar actividad del usuario
+    ['click', 'mousemove', 'keydown', 'scroll'].forEach(evento => {
+        document.addEventListener(evento, reiniciarContador);
+    });
+
+    // Ejecutar cada 2 segundos
+    setInterval(mostrarTiempo, 2000);
 </script>

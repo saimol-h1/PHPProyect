@@ -295,6 +295,9 @@
                         case 'blocked':
                             echo 'Usuario bloqueado por múltiples intentos fallidos. Contacte al administrador';
                             break;
+                        case 'timeout':
+                            echo 'La sesión ha expirado por inactividad';
+                            break;
                         default:
                             echo 'Error de autenticación';
                     }
