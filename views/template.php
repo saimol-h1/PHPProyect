@@ -597,6 +597,26 @@
 
     <!-- jQuery carga después -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <?php
+    // Redirección automática al login cuando la sesión expire (cliente)
+    if (function_exists('isLoggedIn') && isLoggedIn()) {
+        if (function_exists('getSessionTimeRemaining')) {
+            $timeRemaining = getSessionTimeRemaining();
+            echo "<script>
+                let sessionTimeRemaining = {$timeRemaining};
+                function updateSessionTimerAuto() {
+                    if (sessionTimeRemaining <= 0) {
+                        window.location.href = 'index.php?action=login&expired=1';
+                        return;
+                    }
+                    sessionTimeRemaining--;
+                }
+                setInterval(updateSessionTimerAuto, 1000);
+            </script>";
+        }
+    }
+    ?>
 </body>
 
 </html>
