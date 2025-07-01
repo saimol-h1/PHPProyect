@@ -65,47 +65,6 @@
                 </div>
             </div>
 
-            <?php if (isLoggedIn()): ?>
-                <div class="card">
-                    <div class="card-header">
-                        <h5><i class="fas fa-envelope me-2"></i>Enviar Mensaje</h5>
-                    </div>
-                    <div class="card-body">
-                        <form id="contactForm">
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="nombre" class="form-label">Nombre:</label>
-                                    <input type="text" class="form-control" id="nombre" name="nombre"
-                                        value="<?php echo htmlspecialchars($_SESSION['nombre_completo']); ?>" required>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="email" class="form-label">Email:</label>
-                                    <input type="email" class="form-control" id="email" name="email" required>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="asunto" class="form-label">Asunto:</label>
-                                <input type="text" class="form-control" id="asunto" name="asunto" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="mensaje" class="form-label">Mensaje:</label>
-                                <textarea class="form-control" id="mensaje" name="mensaje" rows="5" required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-paper-plane me-2"></i>Enviar Mensaje
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            <?php else: ?>
-                <div class="alert alert-info text-center">
-                    <h5>📝 ¿Quieres enviarnos un mensaje?</h5>
-                    <p class="mb-2">Inicia sesión para acceder al formulario de contacto</p>
-                    <a href="<?php echo getActionUrl('login'); ?>" class="btn btn-primary">
-                        <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
-                    </a>
-                </div>
-            <?php endif; ?>
         </div>
     </div>
 </div>
