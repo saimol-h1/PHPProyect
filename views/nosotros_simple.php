@@ -68,26 +68,7 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <i class="fas fa-users fa-2x text-primary mb-2"></i>
-                            <h5>25,000+</h5>
-                            <p class="mb-0">Estudiantes</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <i class="fas fa-graduation-cap fa-2x text-warning mb-2"></i>
-                            <h5>50+</h5>
-                            <p class="mb-0">Carreras</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
         </div>
     </div>
 </div>
