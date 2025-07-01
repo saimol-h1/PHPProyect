@@ -81,15 +81,6 @@
                 <div class="col-md-4 mb-3">
                     <div class="card text-center">
                         <div class="card-body">
-                            <i class="fas fa-chalkboard-teacher fa-2x text-success mb-2"></i>
-                            <h5>1,500+</h5>
-                            <p class="mb-0">Docentes</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <div class="card text-center">
-                        <div class="card-body">
                             <i class="fas fa-graduation-cap fa-2x text-warning mb-2"></i>
                             <h5>50+</h5>
                             <p class="mb-0">Carreras</p>
